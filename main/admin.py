@@ -3,9 +3,10 @@ from .models import Category, Product
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug'] # поля, которые будут отображаться в админке
+    list_display = ['name', 'available', 'slug'] # поля, которые будут отображаться в админке
     prepopulated_fields = {'slug': ('name',)} # автоматическое заполнение поля slug по полю name
     search_fields = ['name']
+    list_editable = ['available'] # поля, которые можно редактировать
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

@@ -7,6 +7,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Категория') # название категории
     slug = models.SlugField(max_length=100, unique=True, verbose_name='url') # человекочитаемый URL 
     image = models.ImageField(upload_to='images/category/', blank=True)
+    available = models.BooleanField(default=True, verbose_name='Доступность') 
 
     class Meta:
         ordering = ('name',)
