@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+
+{% block style %} 
+{% endblock style %} 
+
+{% block content %}
+<section class="obout">
+  <div>
+    ТУТ будет СЛОГАН и ЛОГОТИП (Либо прокручивающиее меню с картинками и
+    подробной информацией услуг)
+  </div>
+</section>
+
+<section class="help">
+  <div>
+    <h2>Чем вам помочь</h2>
+  </div>
+  <div>
+    <h3>Мне нужно --> Выплывающий список всех услуг (желательно с поиском)</h3>
+    
+  </div>
+</section>
+
+<section class="category">
+  <div>
+    <p>Тут рассказываем о том чем занимаемся и карточки с услугами</p>
+  </div>
+  <div class="category-container">
+    {% for category in categories %}
+    <div class="category-card" style="">
+      <div class="category-image-container" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+        {% if category.image %}
+        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image" style="
+        width: calc(25% - 15px);
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      </div>
+      <h3> {{category.name}}</h3>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class='booking'>
+  <button>Вызвать мастера</button>
+  <p>Добавить модальное окно</p>
+</section>
+
+
+{% endblock content %}
