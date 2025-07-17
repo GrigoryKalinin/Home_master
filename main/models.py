@@ -23,7 +23,7 @@ class Category(models.Model):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_list_by_category", args=[self.slug])
+        return reverse("main:product_by_category", args=[self.slug])
     
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Категория') # связь с категорией
@@ -50,4 +50,4 @@ class Product(models.Model):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_detail", args=[self.id, self.slug])
+        return reverse("main:product_detail", args=[self.slug])
