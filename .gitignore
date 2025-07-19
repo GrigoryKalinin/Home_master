@@ -6,3 +6,4 @@ media/
 .vscode/
 technical_spec_backend.md
 technical_spec_frontend.md
+static/images/

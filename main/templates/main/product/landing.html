@@ -4,50 +4,164 @@
 {% endblock style %} 
 
 {% block content %}
-<section class="obout">
-  <div>
-    ТУТ будет СЛОГАН и ЛОГОТИП (Либо прокручивающиее меню с картинками и
-    подробной информацией услуг)
-  </div>
+
+<!-- Герой-секция -->
+<section class="hero">
+<div class="container">
+    <h1>Профессиональный ремонт и обслуживание</h1>
+    <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
+    <button class="btn btn-primary">Заказать услугу</button>
+</div>
 </section>
 
-<section class="help">
-  <div>
-    <h2>Чем вам помочь</h2>
-  </div>
-  <div>
-    <h3>Мне нужно --> Выплывающий список всех услуг (желательно с поиском)</h3>
-    
-  </div>
-</section>
-
-<section class="category">
-  <div>
-    <p>Тут рассказываем о том чем занимаемся и карточки с услугами</p>
-  </div>
-  <div class="category-container">
-    {% for category in categories %}
-    <div class="category-card" style="">
-      <div class="category-image-container" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-        {% if category.image %}
-        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image" style="
-        width: calc(25% - 15px);
-        height: 200px;
-        object-fit: cover;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      </div>
-      <h3> {{category.name}}</h3>
-      {% endif %}
+<!-- Услуги -->
+<section class="services">
+<div class="container">
+    <div class="section-title">
+        <h2>Наши услуги</h2>
+        <p>Мы предлагаем широкий спектр услуг по ремонту и обслуживанию для вашего удобства</p>
     </div>
-    {% endfor %}
-  </div>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/plumbing.jpg');"></div>
+            <div class="service-content">
+                <h3>Сантехника</h3>
+                <p>Установка, ремонт и обслуживание сантехнического оборудования любой сложности.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/electric.jpg');"></div>
+            <div class="service-content">
+                <h3>Электрика</h3>
+                <p>Полный спектр электромонтажных работ от установки розеток до полной замены проводки.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/carpentry.jpg');"></div>
+            <div class="service-content">
+                <h3>Плотницкие работы</h3>
+                <p>Изготовление и ремонт мебели, установка дверей, монтаж деревянных конструкций.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/painting.jpg');"></div>
+            <div class="service-content">
+                <h3>Малярные работы</h3>
+                <p>Профессиональная покраска стен, потолков, фасадов с гарантией качества.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/cleaning.jpg');"></div>
+            <div class="service-content">
+                <h3>Уборка</h3>
+                <p>Генеральная и поддерживающая уборка помещений любой площади.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-img" style="background-image: url('https://example.com/assembly.jpg');"></div>
+            <div class="service-content">
+                <h3>Сборка мебели</h3>
+                <p>Качественная сборка мебели от IKEA и других производителей.</p>
+                <button class="btn btn-secondary">Подробнее</button>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
 
-<section class='booking'>
-  <button>Вызвать мастера</button>
-  <p>Добавить модальное окно</p>
+<!-- О нас -->
+<section class="about">
+<div class="container">
+    <div class="about-content">
+        <div class="about-text">
+            <h2>О нашей компании</h2>
+            <p>Мы - команда профессиональных мастеров с многолетним опытом работы в сфере ремонта и обслуживания. Наша компания была основана в 2010 году и с тех пор мы помогли тысячам клиентов решить их бытовые проблемы.</p>
+            <p>Наши мастера проходят строгий отбор и регулярное обучение, чтобы предоставлять вам услуги высочайшего качества. Мы используем только проверенные материалы и инструменты от ведущих производителей.</p>
+            <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
+            <button class="btn btn-outline">Узнать больше</button>
+        </div>
+        <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div>
+    </div>
+</div>
 </section>
 
+<!-- Отзывы -->
+<section class="testimonials">
+<div class="container">
+    <div class="section-title">
+        <h2>Отзывы наших клиентов</h2>
+        <p>Что говорят о нас люди, которые уже воспользовались нашими услугами</p>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>"Очень доволен работой мастера по сантехнике. Приехал вовремя, быстро нашел проблему и устранил ее. Цена соответствовала озвученной заранее. Рекомендую!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar" style="background-image: url('https://example.com/avatar1.jpg');"></div>
+                <div class="author-info">
+                    <h4>Александр Петров</h4>
+                    <p>Москва</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>"Заказывала сборку кухни из IKEA. Мастер приехал точно в назначенное время, работал аккуратно и профессионально. Кухня собрана идеально, все работает. Спасибо!"</p>
+            <div class="testimonial-author">
+                <div class="author-avatar" style="background-image: url('https://example.com/avatar2.jpg');"></div>
+                <div class="author-info">
+                    <h4>Елена Смирнова</h4>
+                    <p>Санкт-Петербург</p>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+            </div>
+            <p>"Вызвал электрика для замены проводки в квартире. Работа выполнена качественно, все аккуратно, мусор убрали после себя. Цена немного выше средней, но качество того стоит."</p>
+            <div class="testimonial-author">
+                <div class="author-avatar" style="background-image: url('https://example.com/avatar3.jpg');"></div>
+                <div class="author-info">
+                    <h4>Дмитрий Иванов</h4>
+                    <p>Казань</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+<div class="container">
+    <h2>Готовы помочь вам прямо сейчас!</h2>
+    <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
+    <button class="btn btn-primary">Оставить заявку</button>
+</div>
+</section>
 
 {% endblock content %}
+
+TODO перебрать базовые стили по шлаблонам. 

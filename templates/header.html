@@ -1,13 +1,36 @@
-{% load static%}
-<a href="{% url 'main:landing' %}">Home Master</a>
-<ul>
-    <li> <a href="">О нас</a></li>
-    <li> <a href="">Контакты</a></li>
-    <li> <a href="">Услуги</a></li>
-    <li> <a href="">Отзывы</a></li>
-    <li> <a href="">Заказ</a></li>
-    <ul>
-        <li> <a href="">Стать мастером</a></li>
-        <li> <a href="">Вызвать мастера</a></li>
-    </ul>
-</ul>
+{% load static %}
+<div class="header-top">
+    <div class="container">
+        <div class="header-contact">
+            <a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+            <a href="mailto:info@repairservice.com"><i class="fas fa-envelope"></i> info@repairservice.com</a>
+        </div>
+        <div class="header-social">
+            <a href="#"><i class="fab fa-vk"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+</div>
+<div class="header-main">
+    <div class="container">
+        <a href="#" class="logo"> 
+            <img src="{% static "images/logo_2.png" %}" alt="" height="100">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Услуги</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Отзывы</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+        <button class="btn btn-primary">Заказать звонок</button>
+        <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+    </div>
+</div>
+<script src="{% static "js/header.js" %}"></script>
+
+
+TODO    Настроить нормально шапку как в барбершопе.
