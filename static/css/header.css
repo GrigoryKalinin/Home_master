@@ -82,7 +82,7 @@ nav a:hover {
   cursor: pointer;
 }
 
-/* Адаптивность только для шапки */
+/* Адаптивность */
 @media (max-width: 992px) {
   /* Средние устройства (планшеты) */
   .header-main .container {
@@ -106,19 +106,21 @@ nav a:hover {
   }
   
   nav ul {
-    display: none; /* Скрываем основное меню */
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: white;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: white;
+      flex-direction: column;
+      padding: 20px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      z-index: 1000
   }
   
-  nav ul.show {
-    display: flex; /* Показываем меню при активации */
+  /* Активное состояние мобильного меню */
+  nav ul.mobile-menu-open {
+      display: flex !important;
   }
   
   .mobile-menu-btn {
@@ -126,7 +128,14 @@ nav a:hover {
   }
   
   .logo {
-    font-size: 20px; /* Уменьшаем размер логотипа */
+      font-size: 20px; /* Уменьшаем размер логотипа */
+  }
+}
+
+@media (min-width: 769px) {
+  /* Десктопная версия - принудительно показываем меню */
+  nav ul {
+      display: flex !important;
   }
 }
 
