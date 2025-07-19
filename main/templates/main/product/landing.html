@@ -8,6 +8,7 @@
 <!-- Герой-секция -->
 <section class="hero">
 <div class="container">
+    <!-- TODO информация и ссылка на заявку -->
     <h1>Профессиональный ремонт и обслуживание</h1>
     <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
     <button class="btn btn-primary">Заказать услугу</button>
@@ -30,7 +31,7 @@
                     <img src="{{category.image.url}}" alt="{{category.name}}"> 
                 </div>
                 -->
-                <!-- TODO поработать с визуализацией -->
+                <!-- TODO поработать с визуализацией (всё должно быть на одном уровне) -->
                 <div class="service-content">
                     <h3>{{category.name}}</h3>
                     {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
@@ -46,6 +47,7 @@
 </section>
 
 <!-- О нас -->
+<!-- TODO информация о компании добавить ссылку на кнопку "узнать больше"-->
 <section class="about" id="about">
 <div class="container">
     <div class="about-content">
@@ -62,6 +64,7 @@
 </section>
 
 <!-- Отзывы -->
+<!-- TODO сделать редерин отзывов с бд -->
 <section class="testimonials" id="reviews">
 <div class="container">
     <div class="section-title">
@@ -129,6 +132,7 @@
 <div class="container">
     <h2>Готовы помочь вам прямо сейчас!</h2>
     <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
+    <!-- TODO сделать ссылку на форму заявки -->
     <button class="btn btn-primary">Оставить заявку</button>
 </div>
 </section>
