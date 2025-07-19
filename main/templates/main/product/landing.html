@@ -15,67 +15,38 @@
 </section>
 
 <!-- Услуги -->
-<section class="services">
+<section class="services" id="services">
 <div class="container">
     <div class="section-title">
         <h2>Наши услуги</h2>
         <p>Мы предлагаем широкий спектр услуг по ремонту и обслуживанию для вашего удобства</p>
     </div>
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/plumbing.jpg');"></div>
-            <div class="service-content">
-                <h3>Сантехника</h3>
-                <p>Установка, ремонт и обслуживание сантехнического оборудования любой сложности.</p>
-                <button class="btn btn-secondary">Подробнее</button>
+
+    <div class='services-grid'>
+        {% for category in categories %}
+            <div class='service-card'>
+                <!-- TODO решить проблему с размером фотографии
+                <div class="service-img">
+                    <img src="{{category.image.url}}" alt="{{category.name}}"> 
+                </div>
+                -->
+                <!-- TODO поработать с визуализацией -->
+                <div class="service-content">
+                    <h3>{{category.name}}</h3>
+                    {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
+                        <p>{{product.name}}</p>
+                    {% endfor %}
+                    <button class='btn btn-secondary'>Подробнее</button>
+                </div>
             </div>
-        </div>
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/electric.jpg');"></div>
-            <div class="service-content">
-                <h3>Электрика</h3>
-                <p>Полный спектр электромонтажных работ от установки розеток до полной замены проводки.</p>
-                <button class="btn btn-secondary">Подробнее</button>
-            </div>
-        </div>
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/carpentry.jpg');"></div>
-            <div class="service-content">
-                <h3>Плотницкие работы</h3>
-                <p>Изготовление и ремонт мебели, установка дверей, монтаж деревянных конструкций.</p>
-                <button class="btn btn-secondary">Подробнее</button>
-            </div>
-        </div>
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/painting.jpg');"></div>
-            <div class="service-content">
-                <h3>Малярные работы</h3>
-                <p>Профессиональная покраска стен, потолков, фасадов с гарантией качества.</p>
-                <button class="btn btn-secondary">Подробнее</button>
-            </div>
-        </div>
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/cleaning.jpg');"></div>
-            <div class="service-content">
-                <h3>Уборка</h3>
-                <p>Генеральная и поддерживающая уборка помещений любой площади.</p>
-                <button class="btn btn-secondary">Подробнее</button>
-            </div>
-        </div>
-        <div class="service-card">
-            <div class="service-img" style="background-image: url('https://example.com/assembly.jpg');"></div>
-            <div class="service-content">
-                <h3>Сборка мебели</h3>
-                <p>Качественная сборка мебели от IKEA и других производителей.</p>
-                <button class="btn btn-secondary">Подробнее</button>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+
 </div>
 </section>
 
 <!-- О нас -->
-<section class="about">
+<section class="about" id="about">
 <div class="container">
     <div class="about-content">
         <div class="about-text">
@@ -85,13 +56,13 @@
             <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
             <button class="btn btn-outline">Узнать больше</button>
         </div>
-        <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div>
+        <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div> <!-- TODO сделать картинку -->
     </div>
 </div>
 </section>
 
 <!-- Отзывы -->
-<section class="testimonials">
+<section class="testimonials" id="reviews">
 <div class="container">
     <div class="section-title">
         <h2>Отзывы наших клиентов</h2>
@@ -164,4 +135,3 @@
 
 {% endblock content %}
 
-TODO перебрать базовые стили по шлаблонам. 

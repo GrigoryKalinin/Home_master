@@ -5,9 +5,10 @@ from django.utils.text import slugify
 
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Категория') # название категории
-    slug = models.SlugField(max_length=100, unique=True, verbose_name='url') # человекочитаемый URL 
-    image = models.ImageField(upload_to='images/category/', blank=True)
-    available = models.BooleanField(default=True, verbose_name='Доступность') 
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='url') # человекочитаемый URL
+    image = models.ImageField(upload_to='images/category/', verbose_name='Изображение')
+    available = models.BooleanField(default=True, verbose_name='Доступность')
+    description = models.TextField(max_length=100, blank=True, verbose_name='Описание')
 
     class Meta:
         ordering = ('name',)
@@ -29,9 +30,10 @@ class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Категория') # связь с категорией
     name = models.CharField(max_length=100, db_index=True, verbose_name='Продукт') # название товара
     slug = models.SlugField(max_length=100, unique=True, verbose_name='url') # человекочитаемый URL
-    image = models.ImageField(upload_to='images/products/', blank=True) # изображение товара
+    image = models.ImageField(upload_to='images/products/', blank=True, verbose_name='Изображение') # изображение товара
     description = models.TextField(blank=True, verbose_name='Описание') # описание товара
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена') # цена товара
+    popularity = models.PositiveIntegerField(default=0, verbose_name='Популярность') # популярность товара
     available = models.BooleanField(default=True, verbose_name='Доступность') # доступность товара
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания') # дата создания товара
     date_update = models.DateTimeField(auto_now=True, verbose_name='Дата обновления') # дата обновления товара
