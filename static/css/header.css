@@ -12,7 +12,7 @@ header {
 .header-top {
   background-color: var(--primary-blue);
   color: var(--text-light);
-  padding: 10px 0;
+  padding: 8px 0;
   font-size: 14px;
 }
 
@@ -31,14 +31,45 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--text-light);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.header-contact a:hover {
+  color: var(--primary-yellow);
 }
 
 .header-contact i {
   color: var(--primary-yellow);
 }
 
+.header-social {
+  display: flex;
+  gap: 10px;
+}
+
+.header-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--text-light);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.header-social a:hover {
+  border-color: var(--primary-yellow);
+  color: var(--primary-yellow);
+  transform: scale(1.1);
+}
+
 .header-main {
-  padding: 0px 0;
+  padding: 8px 0; /* Уменьшили отступы для меньшей высоты */
 }
 
 .header-main .container {
@@ -57,16 +88,24 @@ header {
   color: var(--primary-yellow);
 }
 
+.logo img {
+  height: 60px; /* Уменьшили высоту логотипа */
+  width: auto;
+}
+
 nav ul {
   display: flex;
   list-style: none;
   gap: 25px;
+  margin: 0;
+  padding: 0;
 }
 
 nav a {
   font-weight: 600;
   color: var(--primary-blue);
   transition: color 0.3s;
+  text-decoration: none;
 }
 
 nav a:hover {
@@ -80,29 +119,95 @@ nav a:hover {
   font-size: 24px;
   color: var(--primary-blue);
   cursor: pointer;
+  padding: 8px;
 }
 
 /* Адаптивность */
 @media (max-width: 992px) {
   /* Средние устройства (планшеты) */
   .header-main .container {
-    flex-wrap: wrap; /* Разрешаем перенос элементов */
+      flex-wrap: wrap;
   }
   
   nav ul {
-    gap: 15px; /* Уменьшаем расстояние между пунктами меню */
+      gap: 15px;
+  }
+  
+  .logo img {
+      height: 50px;
   }
 }
 
 @media (max-width: 768px) {
-  /* Маленькие устройства (горизонтальные телефоны) */
+  /* Маленькие устройства */
   .header-top {
-    padding: 8px 0; /* Уменьшаем отступы */
-    font-size: 12px; /* Уменьшаем размер текста */
+      padding: 6px 0;
+      font-size: 12px;
   }
   
   .header-contact {
-    display: none; /* Скрываем контакты в верхней панели */
+      gap: 15px;
+  }
+  
+  /* Скрываем email, оставляем только телефон */
+  .header-contact a:last-child {
+      display: none;
+  }
+  
+  .header-social {
+      gap: 8px;
+  }
+  
+  .header-social a {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+  }
+  
+  .header-main {
+      padding: 10px 0; /* Увеличили отступы для лучшего центрирования */
+  }
+  
+  .header-main .container {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "logo button burger";
+      align-items: center;
+      gap: 10px;
+      min-height: 50px; /* Добавили минимальную высоту для центрирования */
+  }
+  
+  .logo {
+      grid-area: logo;
+      display: flex;
+      align-items: center;
+  }
+  
+  .logo img {
+      height: 40px;
+  }
+  
+  .btn.btn-primary {
+      grid-area: button;
+      justify-self: center;
+      align-self: center; /* Добавили для вертикального центрирования */
+      padding: 8px 16px;
+      font-size: 12px;
+      white-space: nowrap;
+  }
+  
+  .mobile-menu-btn {
+      grid-area: burger;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      justify-self: end;
+      align-self: center; /* Добавили для вертикального центрирования */
+  }
+  
+  nav {
+      grid-column: 1 / -1;
+      order: 1;
   }
   
   nav ul {
@@ -115,46 +220,73 @@ nav a:hover {
       flex-direction: column;
       padding: 20px;
       box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-      z-index: 1000
+      z-index: 1000;
+      margin: 0;
   }
   
-  /* Активное состояние мобильного меню */
   nav ul.mobile-menu-open {
       display: flex !important;
   }
   
-  .mobile-menu-btn {
-    display: block; /* Показываем кнопку меню */
+  nav ul li {
+      margin: 0;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
   }
   
-  .logo {
-      font-size: 20px; /* Уменьшаем размер логотипа */
+  nav ul li:last-child {
+      border-bottom: none;
   }
 }
 
 @media (min-width: 769px) {
-  /* Десктопная версия - принудительно показываем меню */
+  /* Десктопная версия */
   nav ul {
       display: flex !important;
   }
 }
 
 @media (max-width: 576px) {
-  /* Очень маленькие устройства (вертикальные телефоны) */
-  .header-main {
-    padding: 10px 0; /* Уменьшаем отступы */
+  /* Очень маленькие устройства */
+  .header-top {
+      padding: 5px 0;
+      font-size: 11px;
   }
   
-  .logo {
-    font-size: 18px; /* Ещё меньше логотип */
+  .header-contact {
+      gap: 10px;
+  }
+  
+  .header-social {
+      gap: 6px;
+  }
+  
+  .header-social a {
+      width: 26px;
+      height: 26px;
+      font-size: 11px;
+  }
+  
+  .header-main {
+      padding: 8px 0;
+  }
+  
+  .header-main .container {
+      gap: 8px;
+      min-height: 45px; /* Уменьшили для очень маленьких экранов */
+  }
+  
+  .logo img {
+      height: 35px;
+  }
+  
+  .btn.btn-primary {
+      padding: 6px 12px;
+      font-size: 11px;
   }
   
   .mobile-menu-btn {
-    font-size: 20px; /* Уменьшаем иконку меню */
-  }
-  
-  .btn {
-    padding: 8px 15px; /* Уменьшаем кнопки */
-    font-size: 12px;
+      font-size: 20px;
+      padding: 6px;
   }
 }
