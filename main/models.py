@@ -36,7 +36,7 @@ class Product(models.Model):
     popularity = models.PositiveIntegerField(default=0, verbose_name='Популярность', blank=True) # популярность товара
     available = models.BooleanField(default=True, verbose_name='Доступность') # доступность товара
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания') # дата создания товара
-    date_update = models.DateTimeField(auto_now=True, verbose_name='Дата обновления') # дата обновления товара
+    date_updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления') # дата обновления товара
 
     class Meta:
         ordering = ('name',)
@@ -73,8 +73,8 @@ class Order(models.Model):
     phone = models.CharField(max_length=50, verbose_name='Телефон', db_index=True)
     city = models.CharField(max_length=50, blank=True, verbose_name='Адрес')
     comment = models.TextField(max_length=100, blank=True, verbose_name='Комментарий')
-    created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
-    updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
+    date_updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name='Статус')
 
     def __str__(self):
@@ -85,5 +85,5 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
 
         indexes = [
-            models.Index(fields=['status', 'phone', 'created']),
+            models.Index(fields=['status', 'phone', 'date_created']),
         ]
