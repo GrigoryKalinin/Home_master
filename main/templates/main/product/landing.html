@@ -28,18 +28,18 @@
     <div class='services-grid'>
         {% for category in categories %}
             <div class='service-card'>
-                <!-- TODO решить проблему с размером фотографии
                 <div class="service-img">
                     <img src="{{category.image.url}}" alt="{{category.name}}"> 
                 </div>
-                -->
-                <!-- TODO поработать с визуализацией (всё должно быть на одном уровне) -->
                 <div class="service-content">
                     <h3>{{category.name}}</h3>
-                    {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
-                        <p>{{product.name}}</p>
-                    {% endfor %}
-                    <button class='btn btn-secondary'>Подробнее</button>
+                    <div class='service-products'>
+                        <div class="service-products-title">Популярные услуги:</div>
+                        {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
+                            <p>{{product.name}}</p>
+                        {% endfor %}
+                    </div>
+                    <button class='btn btn-secondary'>Посмотреть все</button>
                 </div>
             </div>
         {% endfor %}
