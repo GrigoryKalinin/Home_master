@@ -3,6 +3,7 @@
 
 {% block style %} 
 <link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+<link rel="stylesheet" href="{% static 'css/modal.css' %}" />
 {% endblock style %} 
 
 {% block content %}
@@ -13,7 +14,7 @@
     <!-- TODO информация и ссылка на заявку -->
     <h1>Профессиональный ремонт и обслуживание</h1>
     <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
-    <button class="btn btn-primary">Заказать услугу</button>
+    <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</button>
 </div>
 </section>
 
@@ -139,5 +140,86 @@
 </div>
 </section>
 
+<!-- Модальное окно -->
+{% include "main/order/modal.html" with form=order_form %}
+
 {% endblock content %}
 
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderForm = document.getElementById('orderForm');
+    const submitBtn = document.getElementById('submitOrderBtn');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    const messagesDiv = document.getElementById('form-messages');
+    const modal = new bootstrap.Modal(document.getElementById('orderModal'));
+
+    orderForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Показываем спиннер
+        spinner.classList.remove('d-none');
+        submitBtn.disabled = true;
+        messagesDiv.innerHTML = '';
+
+        const formData = new FormData(orderForm);
+
+        fetch(orderForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Успешная отправка
+                messagesDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        ${data.message}
+                    </div>
+                `;
+                orderForm.reset();
+                setTimeout(() => {
+                    modal.hide();
+                    messagesDiv.innerHTML = '';
+                }, 2000);
+            } else {
+                // Ошибки валидации
+                let errorHtml = '<div class="alert alert-danger"><ul class="mb-0">';
+                for (const [field, errors] of Object.entries(data.errors)) {
+                    errors.forEach(error => {
+                        errorHtml += `<li>${error}</li>`;
+                    });
+                }
+                errorHtml += '</ul></div>';
+                messagesDiv.innerHTML = errorHtml;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            messagesDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    Произошла ошибка при отправке заявки. Попробуйте еще раз.
+                </div>
+            `;
+        })
+        .finally(() => {
+            // Скрываем спиннер
+            spinner.classList.add('d-none');
+            submitBtn.disabled = false;
+        });
+    });
+
+    // Очистка формы при закрытии модального окна
+    document.getElementById('orderModal').addEventListener('hidden.bs.modal', function() {
+        orderForm.reset();
+        messagesDiv.innerHTML = '';
+        spinner.classList.add('d-none');
+        submitBtn.disabled = false;
+    });
+});
+</script>
+{% endblock script %}
