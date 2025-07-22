@@ -37,7 +37,7 @@ class ProductListByCategory(ListView):
 class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
-    template_name = 'main/order/order_from.html'
+    template_name = 'main/order/modal.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,7 +63,7 @@ class OrderCreateView(CreateView):
             return JsonResponse({
                 'success': False,
                 'errors': form.errors,
-                'form_html': render_to_string('main/order/order_form_modal.html', {
+                'form_html': render_to_string('main/order/modal.html', {
                     'form': form
                 }, request=self.request)
             })
