@@ -1,7 +1,9 @@
+from typing import Any
 from django.db.models.base import Model as Model
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.shortcuts import get_object_or_404
-from .models import Category, Product
+from .models import Category, Product, Order
+from .forms import OrderForm
 
 
 
@@ -28,5 +30,15 @@ class ProductListByCategory(ListView):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
         return context
+    
 
+class OrderCreateView(CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'main/order/order_from.html'
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Оформление заказа'
+        context['button_text'] = 'Оформить заказ'
+        return context

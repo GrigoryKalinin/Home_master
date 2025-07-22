@@ -78,6 +78,25 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-phonenumber-field"
+version = "8.1.0"
+description = "An international phone number field for django models."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "django_phonenumber_field-8.1.0-py3-none-any.whl", hash = "sha256:9ba66873bf47401b13fc57797fbf85e785864a6bfdc8b9daa3a9012886567045"},
+    {file = "django_phonenumber_field-8.1.0.tar.gz", hash = "sha256:f19450625574ad3a2de047c409527d0e57699496849e71e53b53e8679ff67b27"},
+]
+
+[package.dependencies]
+Django = ">=4.2"
+
+[package.extras]
+phonenumbers = ["phonenumbers (>=7.0.2)"]
+phonenumberslite = ["phonenumberslite (>=7.0.2)"]
+
+[[package]]
 name = "isort"
 version = "6.0.1"
 description = "A Python utility / library to sort Python imports."
@@ -103,6 +122,18 @@ groups = ["main"]
 files = [
     {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
     {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
+]
+
+[[package]]
+name = "phonenumbers"
+version = "9.0.10"
+description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "phonenumbers-9.0.10-py2.py3-none-any.whl", hash = "sha256:13b12d269be1f2b363c9bc2868656a7e2e8b50f1a1cef629c75005da6c374c6b"},
+    {file = "phonenumbers-9.0.10.tar.gz", hash = "sha256:c2d15a6a9d0534b14a7764f51246ada99563e263f65b80b0251d1a760ac4a1ba"},
 ]
 
 [[package]]
@@ -365,4 +396,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "65458c9a37a59d64ac6f1d23f4bb53b184a617eb8015911af0cd85ac6b0487bb"
+content-hash = "3efd4eac41bcdab30b61aa25e09ba768281a28a9417fd24e4503b2c05934fe5f"
