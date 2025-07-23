@@ -21,7 +21,7 @@ class LandingView(TemplateView):
 
 class ProductListByCategory(ListView):
     model = Product
-    template_name = 'main/product/product.html'
+    template_name = 'main/product/product_list.html'
     context_object_name = 'products'
 
     def get_queryset(self):

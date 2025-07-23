@@ -1,7 +1,17 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from transliterate import translit
 
+def create_slug(text):
+    """Создает slug с поддержкой кириллицы"""
+    try:
+        # Транслитерация кириллицы в латиницу
+        transliterated = translit(text, 'ru', reversed=True)
+        return slugify(transliterated)
+    except:
+        # Если транслитерация не удалась, используем стандартный slugify
+        return slugify(text, allow_unicode=True)
 
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='Категория') # название категории
@@ -16,15 +26,35 @@ class Category(models.Model):
         verbose_name_plural = 'Категории'
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        # Генерируем slug если он пустой или имя изменилось
+        if not self.slug or self._name_changed():
+            self.slug = create_slug(self.name)
+            
+            # Проверяем уникальность slug
+            original_slug = self.slug
+            counter = 1
+            while self.__class__.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+                self.slug = f"{original_slug}-{counter}"
+                counter += 1
+                
         super().save(*args, **kwargs)
+
+    def _name_changed(self):
+        """Проверяет, изменилось ли имя категории"""
+        if not self.pk:  # Новый объект - считаем что имя "изменилось"
+            return True
+            
+        try:
+            old_obj = self.__class__.objects.get(pk=self.pk)
+            return old_obj.name != self.name
+        except self.__class__.DoesNotExist:
+            return True
 
     def __str__(self):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_by_category", args=[self.slug])
+        return reverse("main:product_list", args=[self.slug])
     
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Категория') # связь с категорией
@@ -48,9 +78,29 @@ class Product(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        # Если slug пустой или имя изменилось
+        if not self.slug or self._name_changed():
             self.slug = slugify(self.name)
+            
+            # Проверяем уникальность slug
+            original_slug = self.slug
+            counter = 1
+            while self.__class__.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+                self.slug = f"{original_slug}-{counter}"
+                counter += 1
+                
         super().save(*args, **kwargs)
+
+    def _name_changed(self):
+        """Проверяет, изменилось ли имя категории"""
+        if not self.pk:  # Новый объект, не сохранён в БД
+            return False
+            
+        try:
+            old_obj = self.__class__.objects.get(pk=self.pk)
+            return old_obj.name != self.name
+        except self.__class__.DoesNotExist:
+            return False
 
     def __str__(self):
         return str(self.name)
