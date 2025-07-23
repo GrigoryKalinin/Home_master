@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from phonenumber_field.modelfields import PhoneNumberField
 from transliterate import translit
 
 def create_slug(text):
@@ -54,7 +55,7 @@ class Category(models.Model):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_list", args=[self.slug])
+        return reverse("main:category_list", args=[self.slug])
     
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name='Категория') # связь с категорией
@@ -78,9 +79,9 @@ class Product(models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        # Если slug пустой или имя изменилось
+        # Генерируем slug если он пустой или имя изменилось
         if not self.slug or self._name_changed():
-            self.slug = slugify(self.name)
+            self.slug = create_slug(self.name)
             
             # Проверяем уникальность slug
             original_slug = self.slug
@@ -93,20 +94,20 @@ class Product(models.Model):
 
     def _name_changed(self):
         """Проверяет, изменилось ли имя категории"""
-        if not self.pk:  # Новый объект, не сохранён в БД
-            return False
+        if not self.pk:  # Новый объект - считаем что имя "изменилось"
+            return True
             
         try:
             old_obj = self.__class__.objects.get(pk=self.pk)
             return old_obj.name != self.name
         except self.__class__.DoesNotExist:
-            return False
+            return True
 
     def __str__(self):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_detail", args=[self.slug])
+        return reverse("main:product_list", args=[self.slug])
     
 
 class Order(models.Model):
@@ -120,7 +121,7 @@ class Order(models.Model):
     ]
 
     name = models.CharField(max_length=50, blank=True, verbose_name='Имя')
-    phone = models.CharField(max_length=50, verbose_name='Телефон', db_index=True)
+    phone = PhoneNumberField(verbose_name='Телефон', db_index=True, region='RU')
     city = models.CharField(max_length=50, blank=True, verbose_name='Адрес')
     comment = models.TextField(max_length=100, blank=True, verbose_name='Комментарий')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)

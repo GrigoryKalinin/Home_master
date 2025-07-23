@@ -45,9 +45,3 @@ class OrderForm(forms.ModelForm):
         # Устанавливаем стандартный российский регион для всех номеров
         self.fields['phone'].initial = '+7'
 
-    def clean_phone(self):
-        """Дополнительная обработка номера"""
-        phone = self.cleaned_data.get('phone')
-        if phone:
-            return phone.as_e164  # Сохраняем в международном формате (+79161234567)
-        return phone
