@@ -107,8 +107,8 @@ class Product(models.Model):
         return str(self.name)
     
     def get_absolute_url(self):
-        return reverse("main:product_list", args=[self.slug])
-    
+        return reverse("main:product_detail", args=[self.category.slug, self.slug])
+
 
 class Order(models.Model):
     STATUS_CHOICES = [

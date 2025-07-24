@@ -9,19 +9,17 @@
 <div class='container'>
   <div class="products-container">
     <h1 class="page-title">{{ category.name }}</h1>
-    
-    <p class="page-description">
-        
-    </p>
-
+    <p class="page-description">Пока ничего не написано</p>
     <div class="products">
       {% for product in products %}
       <div class="product">
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-        {% endif %}
-        <h3>{{ product.name }}</h3>
+        <a href={{ product.get_absolute_url }}>
+          {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}">
+          {% endif %}
+          <h3>{{ product.name }}</h3>
           <p>от {{ product.price }} руб.</p>
+        </a>
         <button class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</button>
       </div>
       {% empty %}
