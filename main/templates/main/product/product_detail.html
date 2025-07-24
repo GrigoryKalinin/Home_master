@@ -9,48 +9,48 @@
 {% block content %}
 <div class="container">
   <div class="product-detail">
-    <div class="breadcrumb">
-      <a href="/">Главная</a> / 
-      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a> / 
-      <span>{{ product.name }}</span>
+  <div class="breadcrumb">
+    <a href="/">Главная</a> /
+    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a> /
+    <span>{{ product.name }}</span>
+  </div>
+
+  <div class="product-content">
+    <div class="product-image">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+        <div class="no-image">
+          <i class="fas fa-image"></i>
+          <p>Изображение отсутствует</p>
+        </div>
+      {% endif %}
     </div>
 
-    <div class="product-content">
-      <div class="product-image">
-          {% if product.image %}
-              <img src="{{ product.image.url }}" alt="{{ product.name }}">
-          {% else %}
-              <div class="no-image">
-                  <i class="fas fa-image"></i>
-                  <p>Изображение отсутствует</p>
-              </div>
-          {% endif %}
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+
+      <div class="product-price">
+        от {{ product.price }} руб.
       </div>
 
-      <div class="product-info">
-          <h1>{{ product.name }}</h1>
-          
-          <div class="product-price">
-              от {{ product.price }} руб.
-          </div>
+      <div class="product-description">
+        <h3>Описание услуги</h3>
+        <p>{{ product.description|linebreaks }}</p>
+      </div>
 
-          <div class="product-description">
-              <h3>Описание услуги</h3>
-              <p>{{ product.description|linebreaks }}</p>
-          </div>
-
-          <div class="product-actions">
-              <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
-                  <i class="fas fa-phone"></i>
-                  Заказать услугу
-              </button>
-              <a href="{{ category.get_absolute_url }}" class="btn btn-secondary">
-                  <i class="fas fa-arrow-left"></i>
-                  Назад к услугам
-              </a>
-          </div>
+      <div class="product-actions">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
+          <i class="fas fa-phone"></i>
+          Заказать услугу
+        </button>
+        <a href="{{ category.get_absolute_url }}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i>
+          Назад к услугам
+        </a>
       </div>
     </div>
+  </div>
   </div>
 </div>
 
@@ -62,3 +62,5 @@
 <script src="{% static 'js/modal.js' %}"></script>
 <script src="{% static 'js/phone_mask.js' %}"></script>
 {% endblock script %}
+
+<!--TODO облагородить-->

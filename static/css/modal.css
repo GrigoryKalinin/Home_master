@@ -2,188 +2,188 @@
 /* TODO перебрать стили */
 /* Переопределяем Bootstrap стили для соответствия дизайну */
 .modal-content {
-    border-radius: 8px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    font-family: "Arial", sans-serif;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  font-family: "Arial", sans-serif;
 }
 
 .modal-header {
-    background-color: var(--primary-blue);
-    color: var(--text-light);
-    border-bottom: none;
-    padding: 1.5rem;
-    border-radius: 8px 8px 0 0;
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+  border-bottom: none;
+  padding: 1.5rem;
+  border-radius: 8px 8px 0 0;
 }
 
 .modal-header .modal-title {
-    font-size: 24px;
-    font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .modal-header .btn-close {
-    filter: invert(1);
-    opacity: 0.8;
+  filter: invert(1);
+  opacity: 0.8;
 }
 
 .modal-header .btn-close:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 .modal-body {
-    padding: 2rem 1.5rem;
-    background-color: white;
+  padding: 2rem 1.5rem;
+  background-color: white;
 }
 
 .modal-footer {
-    border-top: 1px solid #dee2e6;
-    padding: 1.5rem;
-    background-color: var(--light-gray);
-    border-radius: 0 0 8px 8px;
+  border-top: 1px solid #dee2e6;
+  padding: 1.5rem;
+  background-color: var(--light-gray);
+  border-radius: 0 0 8px 8px;
 }
 
 /* Стили формы */
 .modal-body .mb-3 label {
-    font-weight: bold;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-    display: block;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  display: block;
 }
 
 .modal-body .form-control {
-    border-radius: 4px;
-    border: 2px solid #e0e0e0;
-    padding: 12px 15px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-    font-family: "Arial", sans-serif;
+  border-radius: 4px;
+  border: 2px solid #e0e0e0;
+  padding: 12px 15px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  font-family: "Arial", sans-serif;
 }
 
 .modal-body .form-control:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 0.2rem rgba(0, 91, 170, 0.25);
-    outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 0.2rem rgba(0, 91, 170, 0.25);
+  outline: none;
 }
 
 .modal-body textarea.form-control {
-    resize: vertical;
-    min-height: 80px;
+  resize: vertical;
+  min-height: 80px;
 }
 
 /* Кнопки в модальном окне используют существующие стили */
 .modal-footer .btn {
-    display: inline-block;
-    padding: 12px 25px;
-    border-radius: 4px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    text-align: center;
-    font-family: "Arial", sans-serif;
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  font-family: "Arial", sans-serif;
 }
 
 .modal-footer .btn-primary {
-    background-color: var(--primary-yellow);
-    color: var(--text-dark);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-yellow);
+  color: var(--text-dark);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .modal-footer .btn-primary:hover:not(:disabled) {
-    background-color: #ffc600;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #ffc600;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .modal-footer .btn-primary:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .modal-footer .btn-secondary {
-    background-color: #6c757d;
-    color: var(--text-light);
+  background-color: #6c757d;
+  color: var(--text-light);
 }
 
 .modal-footer .btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
+  background-color: #5a6268;
+  transform: translateY(-2px);
 }
 
 /* Сообщения об ошибках и успехе */
 .alert {
-    border-radius: 4px;
-    margin-bottom: 0;
-    font-size: 14px;
+  border-radius: 4px;
+  margin-bottom: 0;
+  font-size: 14px;
 }
 
 .alert-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-    color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
 }
 
 .alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
 }
 
 .alert ul {
-    margin-bottom: 0;
-    padding-left: 20px;
+  margin-bottom: 0;
+  padding-left: 20px;
 }
 
 /* Ошибки полей */
 .text-danger {
-    color: #dc3545 !important;
-    font-size: 12px;
-    margin-top: 4px;
+  color: #dc3545 !important;
+  font-size: 12px;
+  margin-top: 4px;
 }
 
 /* Спиннер загрузки */
 .spinner-border-sm {
-    width: 1rem;
-    height: 1rem;
-    margin-right: 8px;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 8px;
 }
 
 /* Адаптивность модального окна */
 @media (max-width: 576px) {
-    .modal-dialog {
-        margin: 10px;
-    }
-    
-    .modal-header,
-    .modal-body,
-    .modal-footer {
-        padding: 1rem;
-    }
-    
-    .modal-header .modal-title {
-        font-size: 20px;
-    }
-    
-    .modal-footer .btn {
-        padding: 10px 20px;
-        font-size: 13px;
-    }
+  .modal-dialog {
+    margin: 10px;
+  }
+  
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 1rem;
+  }
+  
+  .modal-header .modal-title {
+    font-size: 20px;
+  }
+  
+  .modal-footer .btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
 }
 
 /* Анимация появления модального окна */
 .modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out;
-    transform: translate(0, -50px);
+  transition: transform 0.3s ease-out;
+  transform: translate(0, -50px);
 }
 
 .modal.show .modal-dialog {
-    transform: none;
+  transform: none;
 }
 
 /* Затемнение фона */
 .modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }

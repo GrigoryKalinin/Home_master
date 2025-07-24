@@ -2,36 +2,37 @@
 <link rel="stylesheet" href="{% static 'css/header.css' %}" />
 
 <div class="header-top">
-    <div class="container">
-        <div class="header-contact">
-            <!-- TODO сделать контакты-->
-            <a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
-            <a href="mailto:info@repairservice.com"><i class="fas fa-envelope"></i> info@repairservice.com</a>
-        </div>
-        <div class="header-social">
-            <!-- TODO сделать соц.сети-->
-            <a href="#"><i class="fab fa-vk"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-        </div>
+  <div class="container">
+    <div class="header-contact">
+      <!-- TODO сделать контакты-->
+      <a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
+      <a href="mailto:info@repairservice.com"><i class="fas fa-envelope"></i> info@repairservice.com</a>
     </div>
+    <div class="header-social">
+      <!-- TODO сделать соц.сети-->
+      <a href="#"><i class="fab fa-vk"></i></a>
+      <a href="#"><i class="fab fa-telegram"></i></a>
+      <a href="#"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </div>
 </div>
 <div class="header-main">
-    <div class="container">
-        <a href="{% url 'main:landing' %}" class="logo"> 
-            <img src="{% static "images/logo_2.png" %}" alt="МастерГранд" height="100">
-        </a>
-        <nav>
-            <ul>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#reviews">Отзывы</a></li>
-                <li><a href="#contact">Контакты</a></li>
-            </ul>
-        </nav>
-        <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать звонок</button>
-        <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
-    </div>
+  <div class="container">
+    <a href="{% url 'main:landing' %}" class="logo"> 
+      <img src="{% static "images/logo_2.png" %}" alt="МастерГранд" height="100">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#services">Услуги</a></li>
+        <li><a href="#about">О нас</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#contact">Контакты</a></li>
+      </ul>
+    </nav>
+    <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать звонок</button>
+    <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+  </div>
 </div>
 <script src="{% static "js/header.js" %}"></script>
 <!-- TODO добавить поиск по услугам-->
+<!--TODO добавить при переходе с главной странице при нажатии на ссылки, чтобы открывалась страница с этой информацией. А на главной странице был переход имено по айди-->  

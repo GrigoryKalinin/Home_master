@@ -1,58 +1,58 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
 
-{% block style %} 
+{% block style %}
 <link rel="stylesheet" href="{% static 'main/css/product/landing.css' %}" />
 <link rel="stylesheet" href="{% static 'css/modal.css' %}" />
-{% endblock style %} 
+{% endblock style %}
 
 {% block content %}
 
 <!-- Герой-секция -->
 <section class="hero">
 <div class="container">
-    <h1>Профессиональный ремонт и обслуживание</h1>
-    <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
-    <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</button>
+  <h1>Профессиональный ремонт и обслуживание</h1>
+  <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
+  <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</button>
 </div>
 </section>
 
 <!-- Услуги -->
 <section class="services" id="services">
 <div class="container">
-    <div class="section-title">
-        <h2>Наши услуги</h2>
-        <p>Мы предлагаем широкий спектр услуг по ремонту и обслуживанию для вашего удобства</p>
-    </div>
+  <div class="section-title">
+    <h2>Наши услуги</h2>
+    <p>Мы предлагаем широкий спектр услуг по ремонту и обслуживанию для вашего удобства</p>
+  </div>
 <!--TODO стили карточек-->
-    <div class='services-grid'>
-        {% for category in categories %}
-            <div class='service-card'>
-                <a href="{{category.get_absolute_url}}">
-                    <div class="service-img">
-                        <img src="{{category.image.url}}" alt="{{category.name}}"> 
-                    </div>
-                </a>
-                <div class="service-content">
-                    <a href="{{category.get_absolute_url}}">
-                        <h3>{{category.name}}</h3>
-                    </a>
-                    <div class='service-products'>
-                        <a href="{{category.get_absolute_url}}">
-                            <div class="service-products-title">Популярные услуги:</div>
-                        </a>
-                        {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
-                            <a href="{{category.get_absolute_url}}">
-                                <p>{{product.name}}</p>
-                            </a>
-                        {% endfor %}
-                    </div>
-                    <a href="{{category.get_absolute_url}}" class='btn btn-secondary'>Посмотреть все
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+  <div class='services-grid'>
+    {% for category in categories %}
+      <div class='service-card'>
+        <a href="{{category.get_absolute_url}}">
+          <div class="service-img">
+            <img src="{{category.image.url}}" alt="{{category.name}}">
+          </div>
+        </a>
+        <div class="service-content">
+          <a href="{{category.get_absolute_url}}">
+            <h3>{{category.name}}</h3>
+          </a>
+          <div class='service-products'>
+            <a href="{{category.get_absolute_url}}">
+              <div class="service-products-title">Популярные услуги:</div>
+            </a>
+            {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
+              <a href="{{category.get_absolute_url}}">
+                <p>{{product.name}}</p>
+              </a>
+            {% endfor %}
+          </div>
+          <a href="{{category.get_absolute_url}}" class='btn btn-secondary'>Посмотреть все
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 
 </div>
 </section>
@@ -61,16 +61,16 @@
 <!-- TODO информация о компании добавить ссылку на кнопку "узнать больше"-->
 <section class="about" id="about">
 <div class="container">
-    <div class="about-content">
-        <div class="about-text">
-            <h2>О нашей компании</h2>
-            <p>Мы - команда профессиональных мастеров с многолетним опытом работы в сфере ремонта и обслуживания. Наша компания была основана в 2010 году и с тех пор мы помогли тысячам клиентов решить их бытовые проблемы.</p>
-            <p>Наши мастера проходят строгий отбор и регулярное обучение, чтобы предоставлять вам услуги высочайшего качества. Мы используем только проверенные материалы и инструменты от ведущих производителей.</p>
-            <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
-            <button class="btn btn-outline">Узнать больше</button>
-        </div>
-        <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div> <!-- TODO сделать картинку -->
+  <div class="about-content">
+    <div class="about-text">
+      <h2>О нашей компании</h2>
+      <p>Мы - команда профессиональных мастеров с многолетним опытом работы в сфере ремонта и обслуживания. Наша компания была основана в 2010 году и с тех пор мы помогли тысячам клиентов решить их бытовые проблемы.</p>
+      <p>Наши мастера проходят строгий отбор и регулярное обучение, чтобы предоставлять вам услуги высочайшего качества. Мы используем только проверенные материалы и инструменты от ведущих производителей.</p>
+      <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
+      <button class="btn btn-outline">Узнать больше</button>
     </div>
+    <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div> <!-- TODO сделать картинку -->
+  </div>
 </div>
 </section>
 
@@ -78,72 +78,72 @@
 <!-- TODO сделать редерин отзывов с бд -->
 <section class="testimonials" id="reviews">
 <div class="container">
-    <div class="section-title">
-        <h2>Отзывы наших клиентов</h2>
-        <p>Что говорят о нас люди, которые уже воспользовались нашими услугами</p>
+  <div class="section-title">
+    <h2>Отзывы наших клиентов</h2>
+    <p>Что говорят о нас люди, которые уже воспользовались нашими услугами</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <p>"Очень доволен работой мастера по сантехнике. Приехал вовремя, быстро нашел проблему и устранил ее. Цена соответствовала озвученной заранее. Рекомендую!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background-image: url('https://example.com/avatar1.jpg');"></div>
+        <div class="author-info">
+          <h4>Александр Петров</h4>
+          <p>Москва</p>
+        </div>
+      </div>
     </div>
-    <div class="testimonials-grid">
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <p>"Очень доволен работой мастера по сантехнике. Приехал вовремя, быстро нашел проблему и устранил ее. Цена соответствовала озвученной заранее. Рекомендую!"</p>
-            <div class="testimonial-author">
-                <div class="author-avatar" style="background-image: url('https://example.com/avatar1.jpg');"></div>
-                <div class="author-info">
-                    <h4>Александр Петров</h4>
-                    <p>Москва</p>
-                </div>
-            </div>
+    <div class="testimonial-card">
+      <div class="stars">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+      </div>
+      <p>"Заказывала сборку кухни из IKEA. Мастер приехал точно в назначенное время, работал аккуратно и профессионально. Кухня собрана идеально, все работает. Спасибо!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background-image: url('https://example.com/avatar2.jpg');"></div>
+        <div class="author-info">
+          <h4>Елена Смирнова</h4>
+          <p>Санкт-Петербург</p>
         </div>
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-            <p>"Заказывала сборку кухни из IKEA. Мастер приехал точно в назначенное время, работал аккуратно и профессионально. Кухня собрана идеально, все работает. Спасибо!"</p>
-            <div class="testimonial-author">
-                <div class="author-avatar" style="background-image: url('https://example.com/avatar2.jpg');"></div>
-                <div class="author-info">
-                    <h4>Елена Смирнова</h4>
-                    <p>Санкт-Петербург</p>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial-card">
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-            </div>
-            <p>"Вызвал электрика для замены проводки в квартире. Работа выполнена качественно, все аккуратно, мусор убрали после себя. Цена немного выше средней, но качество того стоит."</p>
-            <div class="testimonial-author">
-                <div class="author-avatar" style="background-image: url('https://example.com/avatar3.jpg');"></div>
-                <div class="author-info">
-                    <h4>Дмитрий Иванов</h4>
-                    <p>Казань</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="testimonial-card">
+      <div class="stars">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </div>
+      <p>"Вызвал электрика для замены проводки в квартире. Работа выполнена качественно, все аккуратно, мусор убрали после себя. Цена немного выше средней, но качество того стоит."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background-image: url('https://example.com/avatar3.jpg');"></div>
+        <div class="author-info">
+          <h4>Дмитрий Иванов</h4>
+          <p>Казань</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </section>
 
 <!-- CTA -->
 <section class="cta">
 <div class="container">
-    <h2>Готовы помочь вам прямо сейчас!</h2>
-    <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
-    <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Оставить заявку</button>
+  <h2>Готовы помочь вам прямо сейчас!</h2>
+  <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
+  <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Оставить заявку</button>
 </div>
 </section>
 

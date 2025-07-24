@@ -1,46 +1,46 @@
 <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">Заказать услугу</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
-            </div>
-            <form id="orderForm" method="post" action="{% url 'main:order_create' %}">
-                <div class="modal-body">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        {{ order_from.name.label_tag }}
-                        {{ order_from.name }}
-                        {% if order_from.name.errors %}
-                            <div class="text-danger small">{{ order_from.name.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-3">
-                        {{ order_from.phone.label_tag }}
-                        {{ order_from.phone }}
-                        {% if order_from.phone.errors %}
-                            <div class="text-danger small">{{ order_from.phone.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-3">
-                        {{ order_from.comment.label_tag }}
-                        {{ order_from.comment }}
-                        {% if order_from.comment.errors %}
-                            <div class="text-danger small">{{ order_from.comment.errors.0 }}</div>
-                        {% endif %}
-                    </div>
-                    <div id="form-messages"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary" id="submitOrderBtn">
-                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        Отправить заявку
-                    </button>
-                </div>
-            </form>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModalLabel">Заказать услугу</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <form id="orderForm" method="post" action="{% url 'main:order_create' %}">
+        <div class="modal-body">
+          {% csrf_token %}
+          <div class="mb-3">
+            {{ order_from.name.label_tag }}
+            {{ order_from.name }}
+            {% if order_from.name.errors %}
+              <div class="text-danger small">{{ order_from.name.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="mb-3">
+            {{ order_from.phone.label_tag }}
+            {{ order_from.phone }}
+            {% if order_from.phone.errors %}
+              <div class="text-danger small">{{ order_from.phone.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="mb-3">
+            {{ order_from.comment.label_tag }}
+            {{ order_from.comment }}
+            {% if order_from.comment.errors %}
+              <div class="text-danger small">{{ order_from.comment.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div id="form-messages"></div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-primary" id="submitOrderBtn">
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            Отправить заявку
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 <!-- TODO облагородить шаблон-->
