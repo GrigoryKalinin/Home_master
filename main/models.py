@@ -67,10 +67,10 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/products/', blank=True, verbose_name='Изображение') # изображение товара
     description = models.TextField(blank=True, verbose_name='Описание') # описание товара
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена') # цена товара
-    popularity = models.PositiveIntegerField(default=0, verbose_name='Популярность', blank=True) # популярность товара
     available = models.BooleanField(default=True, verbose_name='Доступность') # доступность товара
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания') # дата создания товара
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления') # дата обновления товара
+    popularity = models.PositiveIntegerField(default=0, verbose_name='Популярность', blank=True) # популярность товара
 
     class Meta:
         ordering = ('name',)

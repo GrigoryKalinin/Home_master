@@ -98,6 +98,46 @@
   margin-bottom: 15px;
 }
 
+.product-services {
+  margin-bottom: 40px;
+}
+
+.product-services h3 {
+  font-size: 20px;
+  color: var(--primary-blue);
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary-yellow);
+}
+
+.services-list {
+  display: grid;
+  gap: 15px;
+}
+
+.service-item {
+  padding: 15px;
+  background-color: var(--light-gray);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-blue);
+}
+
+.service-item h4 {
+  color: var(--primary-blue);
+  margin-bottom: 8px;
+}
+
+.service-price {
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.service-description {
+  color: #666;
+  font-size: 14px;
+}
+
 .product-actions {
   display: flex;
   gap: 15px;

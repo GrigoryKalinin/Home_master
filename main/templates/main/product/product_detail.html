@@ -39,6 +39,23 @@
         <p>{{ product.description|linebreaks }}</p>
       </div>
 
+      {% if product.services.all %}
+      <div class="product-services">
+          <h3>Услуги</h3>
+          <div class="services-list">
+              {% for service in product.services.all %}
+              <div class="service-item">
+                  <h4>{{ service.name }}</h4>
+                  <p class="service-price">от {{ service.price }} руб.</p>
+                  {% if service.description %}
+                  <p class="service-description">{{ service.description }}</p>
+                  {% endif %}
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+      {% endif %}
+
       <div class="product-actions">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
           <i class="fas fa-phone"></i>
