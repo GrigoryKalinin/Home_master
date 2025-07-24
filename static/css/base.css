@@ -26,5 +26,61 @@ a {
   color: inherit;
 }
 
+/* Основной контейнер для центрирования контента */
+.container {
+  max-width: 1200px; /* Максимальная ширина контейнера */
+  margin: 0 auto; /* Центрирование по горизонтали */
+  padding: 0 15px; /* Внутренние отступы по бокам */
+}
+
+/* Базовая система кнопок - общие стили для всех кнопок */
+.btn {
+  display: inline-block; /* Строчно-блочный элемент */
+  padding: 12px 25px; /* Внутренние отступы */
+  border-radius: 4px; /* Скругление углов */
+  font-weight: bold; /* Жирный шрифт */
+  text-transform: uppercase; /* Заглавные буквы */
+  transition: all 0.3s; /* Плавная анимация всех изменений */
+  border: none; /* Убираем границу */
+  cursor: pointer; /* Курсор-указатель */
+  font-size: 14px; /* Размер шрифта */
+  text-align: center; /* Центрирование текста */
+}
+
+/* Основные желтые кнопки (Call-to-Action) */
+.btn-primary {
+  background-color: var(--primary-yellow); /* Желтый фон */
+  color: var(--text-dark); /* Темный текст */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+.btn-primary:hover {
+  background-color: #ffc600; /* Более яркий желтый при наведении */
+  transform: translateY(-2px); /* Поднятие кнопки */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень */
+}
+
+/* Второстепенные синие кнопки */
+.btn-secondary {
+  background-color: var(--primary-blue); /* Синий фон */
+  color: var(--text-light); /* Светлый текст */
+}
+
+.btn-secondary:hover {
+  background-color: var(--dark-blue); /* Темно-синий при наведении */
+  transform: translateY(-2px); /* Поднятие кнопки */
+}
+
+/* Кнопки с прозрачным фоном и рамкой */
+.btn-outline {
+  background-color: transparent; /* Прозрачный фон */
+  color: var(--primary-blue); /* Синий текст */
+  border: 2px solid var(--primary-blue); /* Синяя рамка */
+  padding: 10px 23px; /* Уменьшенные отступы из-за рамки */
+}
+
+.btn-outline:hover {
+  background-color: rgba(0, 91, 170, 0.1); /* Полупрозрачный синий фон */
+}
 
 

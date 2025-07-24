@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block style %} 
-<link rel="stylesheet" href="{% static 'css/landing.css' %}" />
+<link rel="stylesheet" href="{% static 'main/css/product/landing.css' %}" />
 <link rel="stylesheet" href="{% static 'css/modal.css' %}" />
 {% endblock style %} 
 
@@ -24,22 +24,31 @@
         <h2>Наши услуги</h2>
         <p>Мы предлагаем широкий спектр услуг по ремонту и обслуживанию для вашего удобства</p>
     </div>
-
+<!--TODO стили карточек-->
     <div class='services-grid'>
         {% for category in categories %}
             <div class='service-card'>
-                <div class="service-img">
-                    <img src="{{category.image.url}}" alt="{{category.name}}"> 
-                </div>
+                <a href="{{category.get_absolute_url}}">
+                    <div class="service-img">
+                        <img src="{{category.image.url}}" alt="{{category.name}}"> 
+                    </div>
+                </a>
                 <div class="service-content">
-                    <h3>{{category.name}}</h3>
+                    <a href="{{category.get_absolute_url}}">
+                        <h3>{{category.name}}</h3>
+                    </a>
                     <div class='service-products'>
-                        <div class="service-products-title">Популярные услуги:</div>
+                        <a href="{{category.get_absolute_url}}">
+                            <div class="service-products-title">Популярные услуги:</div>
+                        </a>
                         {% for product in category.products.all|dictsortreversed:'popularity'|slice:":2" %}
-                            <p>{{product.name}}</p>
+                            <a href="{{category.get_absolute_url}}">
+                                <p>{{product.name}}</p>
+                            </a>
                         {% endfor %}
                     </div>
-                    <button class='btn btn-secondary'>Посмотреть все</button>
+                    <a href="{{category.get_absolute_url}}" class='btn btn-secondary'>Посмотреть все
+                    </a>
                 </div>
             </div>
         {% endfor %}
