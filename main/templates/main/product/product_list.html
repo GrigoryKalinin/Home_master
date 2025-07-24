@@ -7,28 +7,28 @@
 
 {% block content %}
 <div class='container'>
-    <div class="products-container">
-        <h1 class="page-title">{{ category.name }}</h1>
+  <div class="products-container">
+    <h1 class="page-title">{{ category.name }}</h1>
+    
+    <p class="page-description">
         
-        <p class="page-description">
-            
-        </p>
+    </p>
 
-        <div class="products">
-            {% for product in products %}
-            <div class="product">
-                {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                {% endif %}
-                <h3>{{ product.name }}</h3>
-                <p>от {{ product.price }} руб.</p>
-                <button class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</button>
-            </div>
-            {% empty %}
-            <p>В этой категории пока нет товаров.</p>
-            {% endfor %}
-        </div>
+    <div class="products">
+      {% for product in products %}
+      <div class="product">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+          <p>от {{ product.price }} руб.</p>
+        <button class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</button>
+      </div>
+      {% empty %}
+      <p>В этой категории пока нет товаров.</p>
+      {% endfor %}
     </div>
+  </div>
 </div>
 <!-- Модальное окно для заказа -->
 {% include "main/order/modal.html" %}

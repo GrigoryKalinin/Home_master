@@ -7,64 +7,98 @@ from .models import Category, Product, Order
 from .forms import OrderForm
 
 
-
 class LandingView(TemplateView):
-    template_name = 'main/product/landing.html'
+    template_name = "main/product/landing.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'МастерГранд'
-        context['categories'] = Category.objects.filter(available=True)
-        context['order_from'] = OrderForm()
+        context["title"] = "МастерГранд"
+        context["categories"] = Category.objects.filter(available=True)
+        context["order_from"] = OrderForm()
         return context
 
 
 class ProductListByCategory(ListView):
     model = Product
-    template_name = 'main/product/product_list.html'
-    context_object_name = 'products'
+    template_name = "main/product/product_list.html"
+    context_object_name = "products"
 
     def get_queryset(self):
-        self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        self.category = get_object_or_404(Category, slug=self.kwargs["category_slug"])
         return Product.objects.filter(category=self.category, available=True)
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = self.category
+        context["category"] = self.category
         return context
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "main/product/product_detail.html"
+    context_object_name = "product"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
     
+        category_slug = self.kwargs["category_slug"]
+        product_slug = self.kwargs["product_slug"]
+
+        queryset = queryset.select_related("category")
+
+        product = get_object_or_404(
+            queryset,
+            category__slug=category_slug,
+            slug=product_slug,
+            available=True,
+        )
+        return product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.object
+
+        context["title"] = product.name
+        context["description"] = product.description 
+        context["category"] = product.category
+
+        return context
 
 class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
-    template_name = 'main/order/modal.html'
+    template_name = "main/order/modal.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Оформление заказа'
-        context['button_text'] = 'Оформить заказ'
+        context["title"] = "Оформление заказа"
+        context["button_text"] = "Оформить заказ"
         return context
-    
 
     def form_valid(self, form):
         """Обработка успешной отправки формы через AJAX"""
-        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
             order = form.save()
-            return JsonResponse({
-                'success': True,
-                'message': 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.',
-                'order_id': order.id
-            })
+            return JsonResponse(
+                {
+                    "success": True,
+                    "message": "Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.",
+                    "order_id": order.id,
+                }
+            )
         return super().form_valid(form)
 
     def form_invalid(self, form):
         """Обработка ошибок формы через AJAX"""
-        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'success': False,
-                'errors': form.errors,
-                'form_html': render_to_string('main/order/modal.html', {
-                    'form': form
-                }, request=self.request)
-            })
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "success": False,
+                    "errors": form.errors,
+                    "form_html": render_to_string(
+                        "main/order/modal.html", {"form": form}, request=self.request
+                    ),
+                }
+            )
         return super().form_invalid(form)
