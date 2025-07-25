@@ -2,6 +2,7 @@ from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from .models import Order
 
+
 class OrderForm(forms.ModelForm):
 
     phone = PhoneNumberField(
@@ -45,3 +46,16 @@ class OrderForm(forms.ModelForm):
         # Устанавливаем стандартный российский регион для всех номеров
         self.fields['phone'].initial = '+7'
 
+
+# class ReviewForm(forms.ModelForm):
+#     RATING_CHOICES = [
+#         (1, '1 - Ужасно'),
+#         (2, '2 - Плохо'), 
+#         (3, '3 - Нормально'),
+#         (4, '4 - Хорошо'),
+#         (5, '5 - Отлично'),
+#     ]
+
+#     class Meta:
+#         model = Review
+#         fields = ['text', 'image', 'rating']

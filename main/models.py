@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
+# from django.contrib.auth.models import User
+
 from phonenumber_field.modelfields import PhoneNumberField
 from transliterate import translit
 
@@ -171,8 +174,9 @@ class Order(models.Model):
         ('spam', 'Спам'),
     ]
 
-    name = models.CharField(max_length=50, blank=True, verbose_name='Имя')
+    name = models.CharField(max_length=50, verbose_name='Имя')
     phone = PhoneNumberField(verbose_name='Телефон', db_index=True, region='RU')
+    image = models.ImageField(upload_to='images/orders/', blank=True, verbose_name='Фото')
     city = models.CharField(max_length=50, blank=True, verbose_name='Адрес')
     comment = models.TextField(max_length=100, blank=True, verbose_name='Комментарий')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания', db_index=True)
@@ -182,10 +186,28 @@ class Order(models.Model):
     def __str__(self):
         return f'{self.name} ({self.phone})'
 
-    class Meta: 
+    class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
 
         indexes = [
             models.Index(fields=['status', 'phone', 'date_created']),
         ]
+
+# class Review(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', null=True, blank=True)
+#     name = models.CharField(max_length=100, verbose_name='Имя', blank=True)  # оставляем для совместимости
+#     text = models.TextField(max_length=1000, verbose_name='Текст')
+#     image = models.ImageField(upload_to='images/reviews/', blank=True, verbose_name='Фото')
+#     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+#     rating = models.PositiveIntegerField(default=5, verbose_name='Оценка', validators=[MinValueValidator(1), MaxValueValidator(5)], db_index=True)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
+
+#     def get_name(self):
+#         return self.user.get_full_name() or self.user.username if self.user else self.name
+
+#     def save(self, *args, **kwargs):
+#         if self.user and not self.name:
+#             self.name = self.user.get_full_name() or self.user.username
+#         super().save(*args, **kwargs)
+
