@@ -8,7 +8,7 @@ from .forms import OrderForm
 
 
 class LandingView(TemplateView):
-    template_name = "main/product/landing.html"
+    template_name = "main/landing.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -16,6 +16,9 @@ class LandingView(TemplateView):
         context["categories"] = Category.objects.filter(available=True)
         context["order_from"] = OrderForm()
         return context
+    
+class AboutView(TemplateView):
+    template_name = "main/about_us.html"
 
 
 class ProductListByCategory(ListView):

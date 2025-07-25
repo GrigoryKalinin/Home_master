@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main/css/about_us.css' %}">
+<link rel="stylesheet" href="{% static 'css/modal.css' %}">
+{% endblock style %}
+
+{% block content %}
+<!-- Герой-секция -->
+<section class="about-hero">
+  <div class="container">
+    <h1>О компании МастерГранд</h1>
+    <p>Надежный партнер в решении бытовых проблем с 2010 года</p>
+  </div>
+</section>
+
+<!-- Миссия и ценности -->
+<section class="mission">
+  <div class="container">
+    <div class="mission-content">
+      <div class="mission-text">
+        <h2>Наша миссия</h2>
+        <p>Делать жизнь людей комфортнее, решая их бытовые проблемы быстро, качественно и по честной цене. Мы верим, что каждый дом заслуживает профессионального ухода.</p>
+        <div class="values">
+          <div class="value-item">
+            <i class="fas fa-handshake"></i>
+            <span>Честность</span>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-award"></i>
+            <span>Качество</span>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-clock"></i>
+            <span>Пунктуальность</span>
+          </div>
+        </div>
+      </div>
+      <div class="mission-image">
+        <img src="{% static 'images/mission.jpg' %}" alt="Наша миссия">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Статистика -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">5000+</div>
+        <div class="stat-label">Довольных клиентов</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">14</div>
+        <div class="stat-label">Лет опыта</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Видов услуг</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Положительных отзывов</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Почему выбирают нас -->
+<section class="why-choose">
+  <div class="container">
+    <h2>Почему выбирают МастерГранд</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-user-check"></i>
+        </div>
+        <h3>Проверенные мастера</h3>
+        <p>Все специалисты проходят тщательный отбор и имеют опыт работы от 5 лет</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-tools"></i>
+        </div>
+        <h3>Профессиональные инструменты</h3>
+        <p>Используем только качественное оборудование и материалы</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Гарантия до 12 месяцев</h3>
+        <p>Предоставляем официальную гарантию на все выполненные работы</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>Поддержка 24/7</h3>
+        <p>Круглосуточная служба поддержки для экстренных случаев</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Как мы работаем -->
+<section class="how-we-work">
+  <div class="container">
+    <h2>Как мы работаем</h2>
+    <div class="work-process">
+      <div class="process-step">
+        <div class="step-number">01</div>
+        <div class="step-content">
+          <h3>Заявка</h3>
+          <p>Оставляете заявку удобным способом - по телефону, через сайт или мессенджеры</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-number">02</div>
+        <div class="step-content">
+          <h3>Выезд мастера</h3>
+          <p>Мастер приезжает в удобное время и проводит бесплатную диагностику</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-number">03</div>
+        <div class="step-content">
+          <h3>Выполнение работ</h3>
+          <p>Согласовываем стоимость и выполняем работы качественно и в срок</p>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-number">04</div>
+        <div class="step-content">
+          <h3>Гарантия</h3>
+          <p>Предоставляем гарантию и остаемся на связи для поддержки</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Команда -->
+<section class="team">
+  <div class="container">
+    <div class="team-header">
+      <h2>Познакомьтесь с нашей командой</h2>
+      <p>Профессионалы, которые заботятся о вашем комфорте</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-member">
+        <div class="member-photo">
+          <img src="{% static 'images/team-1.jpg' %}" alt="Алексей Иванов">
+        </div>
+        <div class="member-info">
+          <h3>Алексей Иванов</h3>
+          <p class="position">Главный мастер</p>
+          <p class="experience">15 лет опыта</p>
+          <div class="specialization">
+            <span>Электрика</span>
+            <span>Сантехника</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="member-photo">
+          <img src="{% static 'images/team-2.jpg' %}" alt="Михаил Петров">
+        </div>
+        <div class="member-info">
+          <h3>Михаил Петров</h3>
+          <p class="position">Мастер-универсал</p>
+          <p class="experience">10 лет опыта</p>
+          <div class="specialization">
+            <span>Мебель</span>
+            <span>Техника</span>
+          </div>
+        </div>
+      </div>
+      <div class="team-member">
+        <div class="member-photo">
+          <img src="{% static 'images/team-3.jpg' %}" alt="Дмитрий Сидоров">
+        </div>
+        <div class="member-info">
+          <h3>Дмитрий Сидоров</h3>
+          <p class="position">Мастер по ремонту</p>
+          <p class="experience">8 лет опыта</p>
+          <div class="specialization">
+            <span>Отделка</span>
+            <span>Ремонт</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Присоединиться к команде -->
+<section class="join-team">
+  <div class="container">
+    <div class="join-content">
+      <div class="join-text">
+        <h2>Присоединяйтесь к нашей команде</h2>
+        <p>Ищем опытных мастеров для расширения команды. Предлагаем стабильный доход, гибкий график и дружный коллектив.</p>
+        <ul>
+          <li>Высокая оплата труда</li>
+          <li>Гибкий график работы</li>
+          <li>Обеспечение инструментами</li>
+          <li>Постоянный поток заказов</li>
+        </ul>
+      </div>
+      <div class="join-actions">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#joinModal">
+          <i class="fas fa-user-plus"></i>
+          Присоединиться к команде
+        </button>
+        <a href="tel:+74951234567" class="btn btn-outline">
+          <i class="fas fa-phone"></i>
+          Позвонить HR
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Нужна помощь мастера?</h2>
+    <p>Оставьте заявку и получите бесплатную консультацию в течение 15 минут</p>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
+      Получить консультацию
+    </button>
+  </div>
+</section>
+
+<!-- Модальные окна -->
+{% include "main/order/modal.html" %}
+{% endblock content %}
+
+{% block script %}
+<script src="{% static 'js/modal.js' %}"></script>
+<script src="{% static 'js/phone_mask.js' %}"></script>
+{% endblock script %}

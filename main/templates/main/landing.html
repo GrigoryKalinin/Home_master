@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'main/css/product/landing.css' %}" />
+<link rel="stylesheet" href="{% static 'main/css/landing.css' %}" />
 <link rel="stylesheet" href="{% static 'css/modal.css' %}" />
 {% endblock style %}
 
@@ -67,7 +67,9 @@
       <p>Мы - команда профессиональных мастеров с многолетним опытом работы в сфере ремонта и обслуживания. Наша компания была основана в 2010 году и с тех пор мы помогли тысячам клиентов решить их бытовые проблемы.</p>
       <p>Наши мастера проходят строгий отбор и регулярное обучение, чтобы предоставлять вам услуги высочайшего качества. Мы используем только проверенные материалы и инструменты от ведущих производителей.</p>
       <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
-      <button class="btn btn-outline">Узнать больше</button>
+      <a href="{% url 'main:about_us' %}">
+        <button class="btn btn-outline">Узнать больше</button>
+      </a>
     </div>
     <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div> <!-- TODO сделать картинку -->
   </div>
