@@ -1,6 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from .models import Category, Product, Service, Order
+from .models import Category, Product, Service, Order, JobApplication
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
@@ -28,8 +28,14 @@ class ServiceAdmin(ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
-    list_display = ['name', 'phone', 'comment', 'date_created', 'status', 'date_updated']
+    list_display = ['name', 'status', 'phone', 'comment', 'date_created']
     list_filter = ['status', 'date_created']
     list_editable = ['status']
     search_fields = ['name', 'phone']
 
+@admin.register(JobApplication)
+class JobApplicationAdmin(ModelAdmin):
+    list_display = ['first_name', 'last_name', 'status', 'age', 'phone', 'city', 'specialization', 'date_created',]
+    list_filter = ['status', 'date_created', 'city', 'specialization']
+    list_editable = ['status']
+    search_fields = ['first_name', 'last_name', 'phone', 'city', 'specialization',]

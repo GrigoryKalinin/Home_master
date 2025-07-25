@@ -1,0 +1,188 @@
+{% extends "base.html" %} {% load static %} {% block style %}
+<link rel="stylesheet" href="{% static 'css/modal.css' %}" />
+<link
+  rel="stylesheet"
+  href="{% static 'main/css/job_application/job_application_create.css' %}"
+/>
+{% endblock style %} {% block content %}
+<div class="job-application-page">
+  <!-- Hero секция -->
+  <section class="job-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Присоединяйтесь к команде МастерГранд</h1>
+        <p class="hero-subtitle">
+          Станьте частью профессиональной команды мастеров и развивайте свой
+          бизнес вместе с нами
+        </p>
+        <div class="hero-benefits">
+          <div class="benefit-item">
+            <i class="fas fa-handshake"></i>
+            <span>Стабильные заказы</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Достойная оплата</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-users"></i>
+            <span>Поддержка команды</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Основная форма -->
+  <section class="application-form-section">
+    <div class="container">
+      <div class="form-wrapper">
+        <div class="form-header">
+          <h2>Подать заявку</h2>
+          <p>Заполните форму ниже, и мы свяжемся с вами в ближайшее время</p>
+        </div>
+
+        <form method="post" class="job-application-form" novalidate>
+          {% csrf_token %}
+
+          <div class="form-grid">
+            <!-- Личная информация -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-user"></i>
+                Личная информация
+              </h3>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="{{ form.first_name.id_for_label }}"
+                    >{{ form.first_name.label }}</label
+                  >
+                  {{ form.first_name }} {% if form.first_name.errors %}
+                  <div class="error-message">
+                    {{ form.first_name.errors.0 }}
+                  </div>
+                  {% endif %}
+                </div>
+
+                <div class="form-group">
+                  <label for="{{ form.last_name.id_for_label }}"
+                    >{{ form.last_name.label }}</label
+                  >
+                  {{ form.last_name }} {% if form.last_name.errors %}
+                  <div class="error-message">{{ form.last_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="{{ form.age.id_for_label }}"
+                    >{{ form.age.label }}</label
+                  >
+                  {{ form.age }} {% if form.age.errors %}
+                  <div class="error-message">{{ form.age.errors.0 }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="form-group">
+                  <label for="{{ form.phone.id_for_label }}"
+                    >{{ form.phone.label }}</label
+                  >
+                  {{ form.phone }} {% if form.phone.errors %}
+                  <div class="error-message">{{ form.phone.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Профессиональная информация -->
+            <div class="form-section">
+              <h3 class="section-title">
+                <i class="fas fa-tools"></i>
+                Профессиональная информация
+              </h3>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="{{ form.city.id_for_label }}"
+                    >{{ form.city.label }}</label
+                  >
+                  {{ form.city }} {% if form.city.errors %}
+                  <div class="error-message">{{ form.city.errors.0 }}</div>
+                  {% endif %}
+                </div>
+
+                <div class="form-group">
+                  <label for="{{ form.specialization.id_for_label }}"
+                    >{{ form.specialization.label }}</label
+                  >
+                  {{ form.specialization }} {% if form.specialization.errors %}
+                  <div class="error-message">
+                    {{ form.specialization.errors.0 }}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="{{ form.comment.id_for_label }}"
+                  >{{ form.comment.label }}</label
+                >
+                {{ form.comment }}
+                <small class="form-help"
+                  >Расскажите о своем опыте, навыках и почему хотите работать с
+                  нами</small
+                >
+                {% if form.comment.errors %}
+                <div class="error-message">{{ form.comment.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">
+              <i class="fas fa-paper-plane"></i>
+              Отправить заявку
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Дополнительная информация -->
+      <div class="additional-info">
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h4>Быстрый отклик</h4>
+            <p>Мы рассматриваем анкеты в течение 24 часов</p>
+          </div>
+
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Надежность</h4>
+            <p>Работаем только с проверенными мастерами</p>
+          </div>
+
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h4>Развитие</h4>
+            <p>Помогаем развивать ваш профессиональный уровень</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %} {% block script %}
+<script src="{% static 'js/phone_mask.js' %}"></script>
+{% endblock script %}
+
+<!--TODO настроить-->

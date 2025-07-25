@@ -5,8 +5,8 @@ from django.template.loader import render_to_string
 # from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.urls import reverse_lazy
 
-from .models import Category, Product, Order
-from .forms import OrderForm
+from .models import Category, Product, Order, JobApplication
+from .forms import OrderForm, JobApplicationForm
 
 
 class LandingView(TemplateView):
@@ -110,6 +110,40 @@ class OrderCreateView(CreateView):
                     ),
                 }
             )
+        return super().form_invalid(form)
+
+class JobApplicationCreateView(CreateView):
+    model = JobApplication
+    form_class = JobApplicationForm
+    template_name = "main/job_application/job_application_create.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Анкета мастера"
+        context["button_text"] = "Отправить анкету"
+        return context
+
+    def form_valid(self, form):
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            application = form.save()
+            return JsonResponse({
+                "success": True,
+                "message": "Анкета успешно отправлена! Мы рассмотрим вашу заявку и свяжемся с вами.",
+                "application_id": application.id,
+            })
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse({
+                "success": False,
+                "errors": form.errors,
+                "form_html": render_to_string(
+                    "main/job_application/job_application_create.html",
+                    {"form": form},
+                    request=self.request,
+                ),
+            })
         return super().form_invalid(form)
 
 
