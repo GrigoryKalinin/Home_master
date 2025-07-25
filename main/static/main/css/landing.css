@@ -1,17 +1,10 @@
 /* Главная секция (герой) с большим заголовком и призывом к действию */
 .hero {
-  background-image: linear-gradient( /* Градиентный оверлей */
-      rgba(0, 91, 170, 0.7), /* Полупрозрачный синий сверху */
-      rgba(0, 91, 170, 0.7) /* Полупрозрачный синий снизу */
-    )
-    /*,
-        url("/static/images/logo_1.png")*/; /* Фоновое изображение (закомментировано) */
-  background-size: cover; /* Покрытие всей области */
-  background-position: center; /* Центрирование фона */
-  color: var(--text-light); /* Светлый текст */
-  text-align: center; /* Центрирование текста */
-  padding: 180px 0 100px; /* Большие вертикальные отступы */
-  margin-top: 80px; /* Отступ сверху от хедера */
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+  color: var(--text-light);
+  text-align: center;
+  padding: 180px 0 100px;
+  margin-top: 80px;
 }
 
 .hero h1 {
@@ -277,10 +270,10 @@
 
 /* Секция призыва к действию (Call-to-Action) */
 .cta {
-  padding: 80px 0; /* Вертикальные отступы */
-  background-color: var(--primary-blue); /* Синий фон */
-  color: var(--text-light); /* Светлый текст */
-  text-align: center; /* Центрирование текста */
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+  color: var(--text-light);
+  text-align: center;
 }
 
 /* Заголовок CTA секции */

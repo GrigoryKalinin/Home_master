@@ -156,6 +156,22 @@
   font-size: 16px;
 }
 
+.product-actions .btn-primary {
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffc600 100%);
+  border: none;
+}
+
+.product-actions .btn-primary:hover {
+  background: linear-gradient(135deg, #ffc600 0%, #e6b800 100%);
+}
+
+.product-actions .btn-secondary {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+}
+
+.product-actions .btn-secondary:hover {
+  background: linear-gradient(135deg, var(--dark-blue) 0%, #002952 100%);
+}
 
 /* Адаптивность */
 @media (max-width: 992px) {

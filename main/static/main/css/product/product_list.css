@@ -74,7 +74,7 @@
 }
 
 .btn-order {
-  background-color: var(--primary-yellow);
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffc600 100%);
   color: var(--text-dark);
   padding: 8px 16px;
   border-radius: 4px;
@@ -89,7 +89,7 @@
 }
 
 .btn-order:hover {
-  background-color: #ffc600;
+  background: linear-gradient(135deg, #ffc600 0%, #e6b800 100%);
   transform: translateY(-2px);
 }
 

@@ -49,26 +49,27 @@ a {
 
 /* Основные желтые кнопки (Call-to-Action) */
 .btn-primary {
-  background-color: var(--primary-yellow); /* Желтый фон */
-  color: var(--text-dark); /* Темный текст */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffc600 100%);
+  color: var(--text-dark);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: #ffc600; /* Более яркий желтый при наведении */
-  transform: translateY(-2px); /* Поднятие кнопки */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень */
+  background: linear-gradient(135deg, #ffc600 0%, #e6b800 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Второстепенные синие кнопки */
 .btn-secondary {
-  background-color: var(--primary-blue); /* Синий фон */
-  color: var(--text-light); /* Светлый текст */
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+  color: var(--text-light);
 }
 
 .btn-secondary:hover {
-  background-color: var(--dark-blue); /* Темно-синий при наведении */
-  transform: translateY(-2px); /* Поднятие кнопки */
+  background: linear-gradient(135deg, var(--dark-blue) 0%, #002952 100%);
+  transform: translateY(-2px);
 }
 
 /* Кнопки с прозрачным фоном и рамкой */
