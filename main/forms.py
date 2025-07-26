@@ -100,6 +100,14 @@ class EmployeeForm(forms.ModelForm):
         validators=[MinValueValidator(0), MaxValueValidator(50)]
     )
 
+    date_hired = forms.DateField(
+        label='Дата приема на работу',
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control'
+        })
+    )
+
     status = forms.ChoiceField(
         label="Статус",
         choices=[
@@ -116,7 +124,7 @@ class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ['first_name', 'last_name', 'midle_name', 'birth_date', 'phone', 'email', 'city', 'specialization', 'experience', 'status']
+        fields = ['first_name', 'last_name', 'midle_name', 'birth_date', 'phone', 'email', 'city', 'specialization', 'experience', 'date_hired', 'status']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

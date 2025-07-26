@@ -28,8 +28,8 @@ class ServiceAdmin(ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(ModelAdmin):
-    list_display = ['first_name', 'last_name', 'phone', 'city','specialization', 'status', 'experience','date_created']
-    list_filter = ['status', 'date_created', 'city', 'specialization']
+    list_display = ['first_name', 'last_name', 'phone', 'city','specialization', 'status', 'experience','date_hired']
+    list_filter = ['status', 'date_hired', 'city', 'specialization']
     list_editable = ['status', 'experience']
     search_fields = ['first_name', 'last_name', 'phone', 'specialization', 'status']
 

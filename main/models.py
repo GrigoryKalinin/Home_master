@@ -204,8 +204,9 @@ class Employee(models.Model):
     specialization = models.CharField(max_length=100, verbose_name="Специализация", db_index=True)
     experience = models.PositiveIntegerField(verbose_name="Опыт работы", help_text="В годах")
     image = models.ImageField(upload_to="images/employees/", blank=True, verbose_name="Фото")
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", db_index=True)
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    date_hired = models.DateField(verbose_name="Дата приема на работу", null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active', verbose_name="Статус")
     slug = models.SlugField(max_length=100, unique=True, verbose_name="url", blank=True)
     

@@ -1,11 +1,12 @@
-from typing import Any
-from django.db.models.query import QuerySet
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
+# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.urls import reverse_lazy
+from django.db.models import Q
+from django.urls import reverse_lazy
+
+from datetime import date
 
 from .models import Category, Product, Order, JobApplication, Employee
 from .forms import OrderForm, JobApplicationForm, EmployeeForm
@@ -78,6 +79,7 @@ class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
     template_name = "main/employee/employee_create.html"
+    success_url = reverse_lazy("main:employee_list")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,12 +93,47 @@ class EmployeeListView(ListView):
     context_object_name = "employees"
     
     def get_queryset(self):
-        return Employee.objects.all().order_by('last_name')
+        queryset = Employee.objects.all().order_by('last_name')
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search) |
+                Q(phone__icontains=search) |
+                Q(city__icontains=search) |
+                Q(specialization__icontains=search)
+            )
+        
+        status = self.request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Employee.STATUS_CHOICES
+        return context
 
 class EmployeeDetailView(DetailView):
     model = Employee
     template_name = "main/employee/employee_detail.html"
     context_object_name = "employee"
+    slug_url_kwarg = 'employee_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        employee = self.object
+        
+        # Стаж в компании
+        if employee.date_hired:
+            today = date.today()
+            years = today.year - employee.date_hired.year
+            if today.month < employee.date_hired.month or (today.month == employee.date_hired.month and today.day < employee.date_hired.day):
+                years -= 1
+            context['company_experience'] = years
+        
+        return context
 
 class OrderCreateView(CreateView):
     model = Order
