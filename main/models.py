@@ -215,14 +215,32 @@ class Employee(models.Model):
         verbose_name_plural = "Сотрудники"
         
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug or self._name_changed():
             self.slug = create_slug(f"{self.first_name}-{self.last_name}")
+
             original_slug = self.slug
             counter = 1
-            while self.__class__.objects.filter(slug=self.slug).exclude(pk=self.pk).exists():
+            while (
+                self.__class__.objects.filter(slug=self.slug)
+                .exclude(pk=self.pk)
+                .exists()
+            ):
                 self.slug = f"{original_slug}-{counter}"
                 counter += 1
+
         super().save(*args, **kwargs)
+
+    def _name_changed(self):
+        """Проверяет, изменилось ли имя категории"""
+        if not self.pk:  # Новый объект - считаем что имя "изменилось"
+            return True
+
+        try:
+            old_obj = self.__class__.objects.get(pk=self.pk)
+            return (old_obj.first_name != self.first_name or 
+                    old_obj.last_name != self.last_name)
+        except self.__class__.DoesNotExist:
+            return True
 
     def get_absolute_url(self):
         return reverse("main:employee_detail", args=[self.slug])
