@@ -28,9 +28,9 @@ class ServiceAdmin(ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(ModelAdmin):
-    list_display = ['first_name', 'last_name', 'phone', 'city','specialization', 'status', 'experience','date_hired']
+    list_display = ['first_name', 'last_name', 'phone', 'city', 'specialization', 'status', 'available', 'experience','date_hired']
     list_filter = ['status', 'date_hired', 'city', 'specialization']
-    list_editable = ['status', 'experience']
+    list_editable = ['status', 'experience', 'available']
     search_fields = ['first_name', 'last_name', 'phone', 'specialization', 'status']
 
 @admin.register(Order)

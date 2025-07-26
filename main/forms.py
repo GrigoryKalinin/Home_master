@@ -27,11 +27,10 @@ class EmployeeForm(forms.ModelForm):
 
     midle_name = forms.CharField(
         label='Ваше отчество',
-        required=False,
         widget=forms.TextInput(attrs={
             'placeholder': 'Введите ваше отчество',
             'class': 'form-control',
-            'autocomplete': 'middle-name'  # Для автозаполнения
+            'autocomplete': 'additional-name'  # Для автозаполнения
         })
     )
 
@@ -63,6 +62,7 @@ class EmployeeForm(forms.ModelForm):
 
     email = forms.EmailField(
         label='Ваш email',
+        required=False,
         widget=forms.EmailInput(attrs={
             'placeholder': 'Введите ваш email',
             'class': 'form-control',
@@ -122,9 +122,18 @@ class EmployeeForm(forms.ModelForm):
         })
     )
 
+    image = forms.ImageField(
+        label='Фотография',
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control-file',
+            'accept': 'image/*'
+        })
+    )
+
     class Meta:
         model = Employee
-        fields = ['first_name', 'last_name', 'midle_name', 'birth_date', 'phone', 'email', 'city', 'specialization', 'experience', 'date_hired', 'status']
+        fields = ['first_name', 'last_name', 'midle_name', 'birth_date', 'phone', 'email', 'city', 'specialization', 'experience', 'date_hired', 'status', 'image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

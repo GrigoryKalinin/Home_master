@@ -78,7 +78,7 @@ class ProductDetailView(DetailView):
 class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
-    template_name = "main/employee/employee_create.html"
+    template_name = "main/private/employee_create.html"
     success_url = reverse_lazy("main:employee_list")
 
     def get_context_data(self, **kwargs):
@@ -89,7 +89,7 @@ class EmployeeCreateView(CreateView):
 
 class EmployeeListView(ListView):
     model = Employee
-    template_name = "main/employee/employee_list.html"
+    template_name = "main/private/employee_list.html"
     context_object_name = "employees"
     
     def get_queryset(self):
@@ -117,7 +117,7 @@ class EmployeeListView(ListView):
 
 class EmployeeDetailView(DetailView):
     model = Employee
-    template_name = "main/employee/employee_detail.html"
+    template_name = "main/private/employee_detail.html"
     context_object_name = "employee"
     slug_url_kwarg = 'employee_slug'
 

@@ -209,6 +209,7 @@ class Employee(models.Model):
     date_hired = models.DateField(verbose_name="Дата приема на работу", null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active', verbose_name="Статус")
     slug = models.SlugField(max_length=100, unique=True, verbose_name="url", blank=True)
+    available = models.BooleanField(default=True, verbose_name="Доступность")
     
     class Meta:
         verbose_name = "Сотрудник"
