@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -113,6 +113,18 @@ class EmployeeListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = Employee.STATUS_CHOICES
+        return context
+
+class EmployeeUpdateView(UpdateView):
+    model = Employee
+    form_class = EmployeeForm
+    template_name = "main/private/employee_create.html"
+    slug_url_kwarg = 'employee_slug'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Редактирование сотрудника"
+        context["button_text"] = "Сохранить изменения"
         return context
 
 class EmployeeDetailView(DetailView):

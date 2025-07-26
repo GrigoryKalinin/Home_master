@@ -9,7 +9,13 @@
 		<div class="col-md-8">
 			<div class="card">
 				<div class="card-header">
-					<h4 class="mb-0">Добавление нового сотрудника</h4>
+					<h4 class="mb-0">
+						{% if form.instance.pk %}
+							Редактирование {{ form.instance.first_name }} {{ form.instance.last_name }}
+						{% else %}
+							Добавление нового сотрудника
+						{% endif %}
+					</h4>
 				</div>
 				<div class="card-body">
 					<form method="post" enctype="multipart/form-data">
@@ -80,9 +86,14 @@
               {{ form.image }}
             </div>
 
-						<div class="d-flex gap-2">
+						<div class="d-flex justify-content-between">
 							<button type="submit" class="btn btn-success">
-								<i class="bi bi-check-lg"></i> Добавить
+								<i class="bi bi-check-lg"></i> 
+								{% if form.instance.pk %}
+									Сохранить
+								{% else %}
+									Добавить
+								{% endif %}
 							</button>
 							<a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
 								<i class="bi bi-arrow-left"></i> Назад

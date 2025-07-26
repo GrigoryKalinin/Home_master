@@ -48,9 +48,12 @@
             </div>
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer d-flex justify-content-between">
           <a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Назад к списку
+          </a>
+          <a href="{% url 'main:employee_edit' employee.slug %}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> Редактировать
           </a>
         </div>
       </div>
