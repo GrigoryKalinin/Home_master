@@ -1,0 +1,58 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}
+  {{ employee.first_name }} {{ employee.last_name }}
+{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="mb-1">{{ employee.first_name }} {{ employee.last_name }}</h4>
+            <span class="badge bg-primary">{{ employee.get_status_display }}</span>
+          </div>
+          <div>
+            {% if employee.image %}
+              <img src="{{ employee.image.url }}" alt="{{ employee.first_name }} {{ employee.last_name }}" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+            {% else %}
+              <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+                <i class="bi bi-person-fill text-white fs-3"></i>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Личная информация</h6>
+              <p><strong>ФИО:</strong> {{ employee.first_name }} {{ employee.midle_name }} {{ employee.last_name }}</p>
+              <p><strong>Дата рождения:</strong> {{ employee.birth_date }}</p>
+              <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+              <p><strong>Email:</strong> {{ employee.email|default:"Не указан" }}</p>
+              <p><strong>Город:</strong> {{ employee.city }}</p>
+            </div>
+            <div class="col-md-6">
+              <h6>Рабочая информация</h6>
+              <p><strong>Специализация:</strong> {{ employee.specialization }}</p>
+              <p><strong>Опыт работы:</strong> {{ employee.experience }} лет</p>
+              <p><strong>Дата приема:</strong> {{ employee.date_hired|default:"Не указана" }}</p>
+              {% if company_experience %}
+                <p><strong>Стаж в компании:</strong> {{ company_experience }} лет</p>
+              {% endif %}
+              <p><strong>Статус:</strong> {{ employee.get_status_display }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}
