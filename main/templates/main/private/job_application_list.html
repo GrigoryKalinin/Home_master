@@ -1,0 +1,64 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Заявки на работу{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Заявки на работу</h2>
+
+  <!-- Фильтры -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-4">
+          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по имени, телефону, городу...">
+        </div>
+        <div class="col-md-3">
+          <select name="status" class="form-select">
+            <option value="">Все статусы</option>
+            {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Фильтр</button>
+          <a href="{% url 'main:job_application_list' %}" class="btn btn-outline-secondary">Сброс</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if applications %}
+    <div class="row">
+      {% for application in applications %}
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ application.first_name }} {{ application.last_name }}</h5>
+            <p class="card-text">
+              <small class="text-muted">{{ application.specialization }}</small><br>
+              <i class="bi bi-telephone"></i> {{ application.phone }}<br>
+              <i class="bi bi-geo-alt"></i> {{ application.city }}<br>
+              <i class="bi bi-person"></i> {{ application.age }} лет
+            </p>
+            <span class="badge bg-primary">{{ application.get_status_display }}</span>
+            <div class="mt-2">
+              <a href="{% url 'main:job_application_detail' application.pk %}" class="btn btn-sm btn-outline-primary">
+                Подробнее
+              </a>
+            </div>
+            <small class="text-muted d-block mt-2">{{ application.date_created|date:"d.m.Y H:i" }}</small>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-file-earmark-text display-1 text-muted"></i>
+      <h4 class="mt-3">Заявки не найдены</h4>
+    </div>
+  {% endif %}
+</div>
+{% endblock content%}

@@ -221,6 +221,57 @@ class JobApplicationCreateView(CreateView):
             })
         return super().form_invalid(form)
 
+class JobApplicationListView(ListView):
+    model = JobApplication
+    template_name = "main/private/job_application_list.html"
+    context_object_name = "applications"
+    
+    def get_queryset(self):
+        queryset = JobApplication.objects.all().order_by('-date_created')
+        
+        status = self.request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+            
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search) |
+                Q(phone__icontains=search) |
+                Q(city__icontains=search) |
+                Q(specialization__icontains=search)
+            )
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = JobApplication.STATUS_CHOICES
+        return context
+
+class JobApplicationDetailView(DetailView):
+    model = JobApplication
+    template_name = "main/private/job_application_detail.html"
+    context_object_name = "application"
+    
+    def post(self, request, *args, **kwargs):
+        application = self.get_object()
+        new_status = request.POST.get('status')
+        
+        if new_status in dict(JobApplication.STATUS_CHOICES):
+            application.status = new_status
+            application.save()
+            
+        return JsonResponse({
+            'success': True,
+            'new_status': application.get_status_display()
+        })
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = JobApplication.STATUS_CHOICES
+        return context
 
 # class ReviewCreateView(LoginRequiredMixin, CreateView):
 #     model = Review
