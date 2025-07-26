@@ -1,0 +1,100 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Заказы{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Заказы</h2>
+
+  <!-- Фильтры -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-4">
+          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по имени, телефону, адресу...">
+        </div>
+        <div class="col-md-3">
+          <select name="status" class="form-select">
+            <option value="">Все статусы</option>
+            {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Фильтр</button>
+          <a href="{% url 'main:order_list' %}" class="btn btn-outline-secondary">Сброс</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if orders %}
+    <div class="row">
+      {% for order in orders %}
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ order.name }}</h5>
+            <p class="card-text">
+              <i class="bi bi-telephone"></i> {{ order.phone }}<br>
+              {% if order.city %}
+                <i class="bi bi-geo-alt"></i> {{ order.city }}<br>
+              {% endif %}
+              {% if order.comment %}
+                <small class="text-muted">{{ order.comment|truncatechars:50 }}</small>
+              {% endif %}
+            </p>
+            {% if order.image %}
+              <img src="{{ order.image.url }}" alt="Фото заказа" class="img-fluid rounded mb-2" style="max-height: 100px;">
+            {% endif %}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <select class="form-select form-select-sm status-select" data-id="{{ order.pk }}" style="width: auto;">
+                {% for value, label in status_choices %}
+                  <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <small class="text-muted">{{ order.date_created|date:"d.m.Y H:i" }}</small>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-clipboard-x display-1 text-muted"></i>
+      <h4 class="mt-3">Заказы не найдены</h4>
+    </div>
+  {% endif %}
+</div>
+
+{% csrf_token %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            const orderId = this.dataset.id;
+            const newStatus = this.value;
+            
+            fetch(`/order/${orderId}/status/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: `status=${newStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Ошибка при изменении статуса');
+                    location.reload();
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock content%}
+<!--TODO Вынести скрипт-->

@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, View
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -186,6 +186,48 @@ class OrderCreateView(CreateView):
                 }
             )
         return super().form_invalid(form)
+    
+class OrderListView(ListView):
+    model = Order
+    template_name = "main/private/order_list.html"
+    context_object_name = "orders"
+    
+    def get_queryset(self):
+        queryset = Order.objects.all().order_by('-date_created')
+        
+        status = self.request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+            
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) |
+                Q(phone__icontains=search) |
+                Q(city__icontains=search)
+            )
+            
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Order.STATUS_CHOICES
+        return context
+
+class OrderStatusUpdateView(View):
+    def post(self, request, pk):
+        order = get_object_or_404(Order, pk=pk)
+        new_status = request.POST.get('status')
+        
+        if new_status in dict(Order.STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+            return JsonResponse({
+                'success': True,
+                'new_status': order.get_status_display()
+            })
+        
+        return JsonResponse({'success': False})
 
 class JobApplicationCreateView(CreateView):
     model = JobApplication
