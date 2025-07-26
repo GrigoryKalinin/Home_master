@@ -1,6 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
-from .models import Category, Product, Service, Order, JobApplication
+from .models import Category, Product, Service, Order, JobApplication, Employee
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
@@ -25,6 +25,13 @@ class ServiceAdmin(ModelAdmin):
     list_editable = ['price', 'available', 'popularity'] # поля, которые можно редактировать
     prepopulated_fields = {'slug': ('name',)} # автоматическое заполнение поля slug по полю name
     search_fields = ['product__name', 'name'] # поля, по которым будет поиск 
+
+@admin.register(Employee)
+class EmployeeAdmin(ModelAdmin):
+    list_display = ['first_name', 'last_name', 'phone', 'city','specialization', 'status', 'experience','date_created']
+    list_filter = ['status', 'date_created', 'city', 'specialization']
+    list_editable = ['status', 'experience']
+    search_fields = ['first_name', 'last_name', 'phone', 'specialization', 'status']
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
