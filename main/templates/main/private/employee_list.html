@@ -4,42 +4,49 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Список сотрудников</h2>
-        <a href="{% url 'main:employee_create' %}" class="btn btn-success">
-            <i class="bi bi-person-plus"></i> Добавить сотрудника
-        </a>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Список сотрудников</h2>
+    <a href="{% url 'main:employee_create' %}" class="btn btn-success">
+      <i class="bi bi-person-plus"></i> Добавить сотрудника
+    </a>
+  </div>
 
-    {% if employees %}
-        <div class="row">
-            {% for employee in employees %}
-            <div class="col-md-6 col-lg-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ employee.first_name }} {{ employee.last_name }}</h5>
-                        <p class="card-text">
-                            <small class="text-muted">{{ employee.specialization }}</small><br>
-                            <i class="bi bi-telephone"></i> {{ employee.phone }}<br>
-                            <i class="bi bi-geo-alt"></i> {{ employee.city }}
-                        </p>
-                        <span class="badge bg-primary">{{ employee.get_status_display }}</span>
-                        <div class="mt-2">
-                            <a href="{% url 'main:employee_detail' employee.slug %}" class="btn btn-sm btn-outline-primary">
-                                Подробнее
-                            </a>
-                        </div>
-                    </div>
-                </div>
+  {% if employees %}
+    <div class="row">
+      {% for employee in employees %}
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body d-flex p-0">
+            <div class="w-50 p-3">
+              <h5 class="card-title">{{ employee.first_name }} {{ employee.last_name }}</h5>
+              <p class="card-text">
+                <small class="text-muted">{{ employee.specialization }}</small><br>
+                <i class="bi bi-telephone"></i> {{ employee.phone }}<br>
+                <i class="bi bi-geo-alt"></i> {{ employee.city }}
+              </p>
+              <span class="badge bg-primary">{{ employee.get_status_display }}</span>
+              <div class="mt-2">
+                <a href="{% url 'main:employee_detail' employee.slug %}" class="btn btn-sm btn-outline-primary">
+                  Подробнее
+                </a>
+              </div>
             </div>
-            {% endfor %}
+            {% if employee.image %}
+              <div class="w-50">
+                <img src="{{ employee.image.url }}" alt="{{ employee.first_name }} {{ employee.last_name }}" class="w-100 h-100" style="object-fit: cover;">
+              </div>
+            {% endif %}
+          </div>
         </div>
-    {% else %}
-        <div class="text-center py-5">
-            <i class="bi bi-people display-1 text-muted"></i>
-            <h4 class="mt-3">Сотрудники не найдены</h4>
-            <p class="text-muted">Добавьте первого сотрудника</p>
-        </div>
-    {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-people display-1 text-muted"></i>
+      <h4 class="mt-3">Сотрудники не найдены</h4>
+      <p class="text-muted">Добавьте первого сотрудника</p>
+    </div>
+  {% endif %}
 </div>
 {% endblock content%}
