@@ -122,6 +122,65 @@ nav a:hover {
   padding: 8px;
 }
 
+.user-menu-item {
+  position: relative;
+}
+
+.user-login-link {
+  color: #6c757d !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.user-login-link:hover {
+  color: #495057 !important;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.user-profile:hover {
+  color: #495057;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  min-width: 120px;
+  z-index: 1000;
+  display: none;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.user-dropdown a:hover {
+  background: #f8f9fa;
+}
+
 /* Адаптивность */
 @media (max-width: 992px) {
   /* Средние устройства (планшеты) */

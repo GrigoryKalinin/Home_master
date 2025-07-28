@@ -4,12 +4,10 @@
 <div class="header-top">
   <div class="container">
     <div class="header-contact">
-      <!-- TODO сделать контакты-->
       <a href="tel:+1234567890"><i class="fas fa-phone"></i> +1 (234) 567-890</a>
       <a href="mailto:info@repairservice.com"><i class="fas fa-envelope"></i> info@repairservice.com</a>
     </div>
     <div class="header-social">
-      <!-- TODO сделать соц.сети-->
       <a href="#"><i class="fab fa-vk"></i></a>
       <a href="#"><i class="fab fa-telegram"></i></a>
       <a href="#"><i class="fab fa-whatsapp"></i></a>
@@ -28,12 +26,111 @@
         <li><a href="#reviews">Отзывы</a></li>
         <li><a href="#contact">Контакты</a></li>
         <li><a href="{% url 'main:job_application_create' %}">Карьера</a></li>
+        <li class="user-menu-item">
+          {% if user.is_authenticated %}
+            <div class="user-profile" onclick="toggleUserDropdown()">
+              <i class="fas fa-user-circle"></i>
+              <span>{{ user.first_name|default:user.username }}</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+              <a href="{% url 'users:logout' %}">Выйти</a>
+            </div>
+          {% else %}
+            <a href="#" class="user-login-link" data-bs-toggle="modal" data-bs-target="#authModal">
+              <i class="fas fa-user-circle"></i>
+              <span>Войти</span>
+            </a>
+          {% endif %}
+        </li>
       </ul>
     </nav>
     <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать звонок</button>
     <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
   </div>
 </div>
+
+<!-- Модальное окно авторизации -->
+<div class="modal fade" id="authModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="authModalTitle">Вход в аккаунт</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Форма входа -->
+        <form id="loginForm" method="post" action="{% url 'users:login' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" name="password" placeholder="Пароль" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Войти</button>
+        </form>
+        
+        <!-- Форма регистрации -->
+        <form id="registerForm" method="post" action="{% url 'users:register' %}" style="display: none;">
+          {% csrf_token %}
+          <div class="mb-3">
+            <input type="text" class="form-control" name="first_name" placeholder="Имя" required>
+          </div>
+          <div class="mb-3">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" name="password1" placeholder="Пароль" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" name="password2" placeholder="Подтвердите пароль" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <p id="authToggleText">Нет аккаунта? <a href="#" onclick="toggleAuthForm()">Зарегистрироваться</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="{% static "js/header.js" %}"></script>
+<script>
+function toggleAuthForm() {
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const modalTitle = document.getElementById('authModalTitle');
+  const toggleText = document.getElementById('authToggleText');
+  
+  if (loginForm.style.display === 'none') {
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+    modalTitle.textContent = 'Вход в аккаунт';
+    toggleText.innerHTML = 'Нет аккаунта? <a href="#" onclick="toggleAuthForm()">Зарегистрироваться</a>';
+  } else {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    modalTitle.textContent = 'Регистрация';
+    toggleText.innerHTML = 'Уже есть аккаунт? <a href="#" onclick="toggleAuthForm()">Войти</a>';
+  }
+}
+
+function toggleUserDropdown() {
+  document.getElementById('userDropdown').classList.toggle('show');
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.user-profile, .user-profile *')) {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown && dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+    }
+  }
+}
+</script>
+
+
 <!-- TODO добавить поиск по услугам-->
 <!--TODO добавить при переходе с главной странице при нажатии на ссылки, чтобы открывалась страница с этой информацией. А на главной странице был переход имено по айди-->  
