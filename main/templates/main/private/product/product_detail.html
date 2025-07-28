@@ -1,0 +1,81 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}{{ product.name }} - Услуги{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2>{{ product.name }}</h2>
+      <p class="text-muted">{{ product.description }}</p>
+      <p><strong>Цена: {{ product.price }} ₽</strong></p>
+      <span class="badge {% if product.available %}bg-success{% else %}bg-secondary{% endif %}">
+        {% if product.available %}Доступен{% else %}Недоступен{% endif %}
+      </span>
+    </div>
+    <a href="{% url 'main:service_create' %}?product={{ product.slug }}" class="btn btn-success">
+      <i class="bi bi-plus"></i> Добавить услугу
+    </a>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-4">
+          <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Поиск услуг...">
+        </div>
+        <div class="col-md-3">
+          <select name="available" class="form-select">
+            <option value="">Все услуги</option>
+            <option value="true" {% if current_available == 'true' %}selected{% endif %}>Доступные</option>
+            <option value="false" {% if current_available == 'false' %}selected{% endif %}>Недоступные</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Фильтр</button>
+          <a href="{% url 'main:product_detail_admin' product.slug %}" class="btn btn-outline-secondary">Сброс</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if services %}
+    <div class="row">
+      {% for service in services %}
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ service.name }}</h5>
+            <p class="card-text">{{ service.description|truncatechars:100 }}</p>
+            <p class="card-text"><strong>Цена: {{ service.price }} ₽</strong></p>
+            <span class="badge {% if service.available %}bg-success{% else %}bg-secondary{% endif %}">
+              {% if service.available %}Доступна{% else %}Недоступна{% endif %}
+            </span>
+            <div class="mt-2">
+              <a href="{% url 'main:service_detail' service.slug %}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-eye"></i> Подробнее
+              </a>
+              <a href="{% url 'main:service_edit' service.slug %}" class="btn btn-sm btn-outline-warning">
+                <i class="bi bi-pencil"></i> Изменить
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-tools display-1 text-muted"></i>
+      <h4 class="mt-3">Услуги не найдены</h4>
+    </div>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="{% url 'main:category_detail' product.category.slug %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Назад к товарам
+    </a>
+  </div>
+</div>
+{% endblock content%}

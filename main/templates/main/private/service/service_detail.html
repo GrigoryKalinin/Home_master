@@ -1,0 +1,40 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}{{ service.name }}{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-1">{{ service.name }}</h4>
+          <span class="badge {% if service.available %}bg-success{% else %}bg-secondary{% endif %}">
+            {% if service.available %}Доступна{% else %}Недоступна{% endif %}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <h6>Информация об услуге</h6>
+              <p><strong>Товар:</strong> {{ service.product.name }}</p>
+              <p><strong>Категория:</strong> {{ service.product.category.name }}</p>
+              <p><strong>Описание:</strong> {{ service.description }}</p>
+              <p><strong>Цена:</strong> {{ service.price }} ₽</p>
+              <p><strong>Статус:</strong> {% if service.available %}Доступна{% else %}Недоступна{% endif %}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'main:product_detail_admin' service.product.slug %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к услугам
+          </a>
+          <a href="{% url 'main:service_edit' service.slug %}" class="btn btn-primary">
+            <i class="bi bi-pencil"></i> Редактировать
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}

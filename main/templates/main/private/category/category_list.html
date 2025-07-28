@@ -1,0 +1,70 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Категории{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Категории</h2>
+    <a href="{% url 'main:category_create' %}" class="btn btn-success">
+      <i class="bi bi-plus"></i> Добавить категорию
+    </a>
+  </div>
+
+  <!-- Фильтры -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-4">
+          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по названию...">
+        </div>
+        <div class="col-md-3">
+          <select name="available" class="form-select">
+            <option value="">Все категории</option>
+            <option value="true" {% if request.GET.available == 'true' %}selected{% endif %}>Доступные</option>
+            <option value="false" {% if request.GET.available == 'false' %}selected{% endif %}>Недоступные</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Фильтр</button>
+          <a href="{% url 'main:category_list' %}" class="btn btn-outline-secondary">Сброс</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if categories %}
+    <div class="row">
+      {% for category in categories %}
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card">
+          {% if category.image %}
+            <img src="{{ category.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+            <p class="card-text">{{ category.description|truncatechars:100 }}</p>
+            <span class="badge {% if category.available %}bg-success{% else %}bg-secondary{% endif %}">
+              {% if category.available %}Доступна{% else %}Недоступна{% endif %}
+            </span>
+            <div class="mt-2">
+              <a href="{% url 'main:category_detail' category.slug %}" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-eye"></i> Подробнее
+              </a>
+              <a href="{% url 'main:category_edit' category.slug %}" class="btn btn-sm btn-outline-warning">
+                <i class="bi bi-pencil"></i> Изменить
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-grid display-1 text-muted"></i>
+      <h4 class="mt-3">Категории не найдены</h4>
+    </div>
+  {% endif %}
+</div>
+{% endblock content%}

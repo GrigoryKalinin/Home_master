@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, View
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView, View
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -8,8 +8,8 @@ from django.urls import reverse_lazy
 
 from datetime import date
 
-from .models import Category, Product, Order, JobApplication, Employee
-from .forms import OrderForm, JobApplicationForm, EmployeeForm
+from .models import Category, Product, Service, Order, JobApplication, Employee
+from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm
 
 
 class LandingView(TemplateView):
@@ -26,7 +26,70 @@ class LandingView(TemplateView):
 class AboutView(TemplateView):
     template_name = "main/about_us.html"
 
+# Категории (для сотрудников)
+# TODO доработать
 
+class CategoryListView(ListView):
+    model = Category
+    template_name = "main/private/category/category_list.html"
+    context_object_name = "categories"
+    
+    def get_queryset(self):
+        queryset = Category.objects.all().order_by('name')
+        
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+            
+        available = self.request.GET.get('available')
+        if available == 'true':
+            queryset = queryset.filter(available=True)
+        elif available == 'false':
+            queryset = queryset.filter(available=False)
+            
+        return queryset
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "main/private/category/category_detail.html"
+    context_object_name = "category"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = self.object
+        
+        # Получаем товары категории с фильтрацией
+        products = Product.objects.filter(category=category).order_by('name')
+        
+        search = self.request.GET.get('search')
+        if search:
+            products = products.filter(name__icontains=search)
+            
+        available = self.request.GET.get('available')
+        if available == 'true':
+            products = products.filter(available=True)
+        elif available == 'false':
+            products = products.filter(available=False)
+            
+        context['products'] = products
+        context['search_query'] = search or ''
+        context['current_available'] = available or ''
+        return context
+
+class CategoryCreateView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "main/private/category/category_form.html"
+    success_url = reverse_lazy("main:category_list")
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = "main/private/category/category_form.html"
+    success_url = reverse_lazy("main:category_list")
+
+
+# Продукты (для пользователей)
 class ProductListByCategory(ListView):
     model = Product
     template_name = "main/product/product_list.html"
@@ -74,7 +137,95 @@ class ProductDetailView(DetailView):
 
         return context
 
+# Продукты (для сотрудников)
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "main/private/product/product_form.html"
+    
+    def get_success_url(self):
+        return reverse_lazy("main:category_detail", kwargs={'slug': self.object.category.slug})
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        category_slug = self.request.GET.get('category')
+        if category_slug:
+            try:
+                category = Category.objects.get(slug=category_slug)
+                initial['category'] = category
+            except Category.DoesNotExist:
+                pass
+        return initial
 
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "main/private/product/product_detail.html"
+    context_object_name = "product"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product = self.object
+        
+        # Получаем услуги товара с фильтрацией
+        services = Service.objects.filter(product=product).order_by('name')
+        
+        search = self.request.GET.get('search')
+        if search:
+            services = services.filter(name__icontains=search)
+            
+        available = self.request.GET.get('available')
+        if available == 'true':
+            services = services.filter(available=True)
+        elif available == 'false':
+            services = services.filter(available=False)
+            
+        context['services'] = services
+        context['search_query'] = search or ''
+        context['current_available'] = available or ''
+        return context
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "main/private/product/product_form.html"
+    
+    def get_success_url(self):
+        return reverse_lazy("main:category_detail", kwargs={'slug': self.object.category.slug})
+
+# Услуги (для сотрудников)
+class ServiceCreateView(CreateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = "main/private/service/service_form.html"
+    
+    def get_success_url(self):
+        return reverse_lazy("main:product_detail_admin", kwargs={'slug': self.object.product.slug})
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        product_slug = self.request.GET.get('product')
+        if product_slug:
+            try:
+                product = Product.objects.get(slug=product_slug)
+                initial['product'] = product
+            except Product.DoesNotExist:
+                pass
+        return initial
+
+class ServiceDetailView(DetailView):
+    model = Service
+    template_name = "main/private/service/service_detail.html"
+    context_object_name = "service"
+
+class ServiceUpdateView(UpdateView):
+    model = Service
+    form_class = ServiceForm
+    template_name = "main/private/service/service_form.html"
+    
+    def get_success_url(self):
+        return reverse_lazy("main:product_detail_admin", kwargs={'slug': self.object.product.slug})
+
+# Сотрудники (для сотрудников)
 class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
@@ -147,6 +298,7 @@ class EmployeeDetailView(DetailView):
         
         return context
 
+# Заявки для пользователей
 class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
@@ -186,7 +338,8 @@ class OrderCreateView(CreateView):
                 }
             )
         return super().form_invalid(form)
-    
+
+# Заявки для сотрудников
 class OrderListView(ListView):
     model = Order
     template_name = "main/private/order_list.html"
@@ -229,6 +382,7 @@ class OrderStatusUpdateView(View):
         
         return JsonResponse({'success': False})
 
+# Резюме для пользователей
 class JobApplicationCreateView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm
@@ -263,6 +417,7 @@ class JobApplicationCreateView(CreateView):
             })
         return super().form_invalid(form)
 
+# Резюме (для сотрудников)
 class JobApplicationListView(ListView):
     model = JobApplication
     template_name = "main/private/job_application_list.html"
