@@ -1,10 +1,11 @@
-{% extends "base.html" %} {% load static %} {% block style %}
-<link rel="stylesheet" href="{% static 'css/modal.css' %}" />
-<link
-  rel="stylesheet"
-  href="{% static 'main/css/job_application/job_application_create.css' %}"
-/>
-{% endblock style %} {% block content %}
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'main/css/job_application/job_application_create.css' %}" />
+{% endblock style %} 
+
+{% block content %}
 <div class="job-application-page">
   <!-- Hero секция -->
   <section class="job-hero">
@@ -182,7 +183,8 @@
   </section>
 </div>
 {% endblock content %} {% block script %}
-<script src="{% static 'js/phone_mask.js' %}"></script>
+  <script src="{% static 'js/phone_mask.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
 {% endblock script %}
 
-<!--TODO настроить-->
+<!--TODO настроить модальное окно для заказа звонка, подумать над видом подачи заявки на работу-->

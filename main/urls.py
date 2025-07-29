@@ -28,7 +28,7 @@ urlpatterns = [
     path('category/<slug:slug>/edit/', views.CategoryUpdateView.as_view(), name='category_edit'),
         # Продукты
     path('product/create/', views.ProductCreateView.as_view(), name='product_create'),
-    path('product/<slug:slug>/', views.ProductDetailView.as_view(), name='product_detail_admin'),
+    path('product/<slug:slug>/', views.ProductDetailAdminView.as_view(), name='product_detail_admin'),
     path('product/<slug:slug>/edit/', views.ProductUpdateView.as_view(), name='product_edit'),
         # Услуги
     path('service/create/', views.ServiceCreateView.as_view(), name='service_create'),

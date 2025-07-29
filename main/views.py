@@ -26,6 +26,11 @@ class LandingView(TemplateView):
 class AboutView(TemplateView):
     template_name = "main/about_us.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()  
+        return context
+
 # Категории (для сотрудников)
 # TODO доработать
 
@@ -102,6 +107,7 @@ class ProductListByCategory(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["category"] = self.category
+        context["order_from"] = OrderForm()
         return context
 
 
@@ -134,6 +140,7 @@ class ProductDetailView(DetailView):
         context["title"] = product.name
         context["description"] = product.description
         context["category"] = product.category
+        context["order_from"] = OrderForm()
 
         return context
 
@@ -157,7 +164,7 @@ class ProductCreateView(CreateView):
                 pass
         return initial
 
-class ProductDetailView(DetailView):
+class ProductDetailAdminView(DetailView):
     model = Product
     template_name = "main/private/product/product_detail.html"
     context_object_name = "product"
@@ -392,6 +399,7 @@ class JobApplicationCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context["title"] = "Анкета мастера"
         context["button_text"] = "Отправить анкету"
+        context["order_from"] = OrderForm()
         return context
 
     def form_valid(self, form):
