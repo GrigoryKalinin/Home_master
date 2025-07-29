@@ -27,3 +27,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pylint]
 load-plugins = "pylint_django"
+
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "missing-module-docstring",  # Игнорировать отсутствие docstring в модулях
+    "missing-class-docstring",   # Игнорировать отсутствие docstring в классах
+    "missing-function-docstring", # Игнорировать отсутствие docstring в функциях
+]
