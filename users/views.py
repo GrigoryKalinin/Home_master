@@ -16,18 +16,18 @@ class UserRegisterView(CreateView):
     template_name = 'users/register.html'
 
     def get_success_url(self):
-        return reverse_lazy('users:profile', kwargs={"pk": self.object.pk})
+        return reverse_lazy('users:profile')
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('users:profile', pk=request.user.pk)
+            return redirect('users:profile')
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         response = super().form_valid(form)
         user = form.save()
         login(self.request, user)
-        messages.success(self.request, f'Добро пожаловать, {user.username}! Регистрация прошла успешно.')
+        messages.success(self.request, f'Добро пожаловать, {user.get_full_name()}! Регистрация прошла успешно.')
         return response
     
     def form_invalid(self, form):
@@ -50,7 +50,7 @@ class UserLoginView(LoginView):
         next_url = self.request.GET.get('next')
         if next_url and next_url != reverse_lazy('users:login'):
             return next_url
-        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
+        return reverse_lazy('users:profile')
     
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -81,15 +81,9 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         # Игнорируем переданный pk/slug и возвращаем текущего пользователя
         return self.request.user
 
-    def get(self, request, *args, **kwargs):
-        # Если в URL есть pk/slug (попытка доступа к чужому профилю) — редирект на свой
-        if 'pk' in self.kwargs or 'slug' in self.kwargs:
-            return redirect('users:profile', pk=self.request.user.pk)
-        return super().get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = f"Профиль: {self.object.username}"
+        context['title'] = f"Профиль: {self.object.get_full_name()}"
         return context
 
 
@@ -104,7 +98,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         messages.success(self.request, 'Профиль успешно обновлен.')
-        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
+        return reverse_lazy('users:profile')
     
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -123,7 +117,7 @@ class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
     def get_success_url(self):
         messages.success(self.request, 'Пароль успешно изменен.')
-        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
+        return reverse_lazy('users:profile')
     
     def form_invalid(self, form):
         response = super().form_invalid(form)
