@@ -7,18 +7,20 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-from .forms import CustomUserCreationForm, CustomUserLoginForm, CustomUserChangeForm
 from .models import User
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileUpdateForm, CustomPasswordChangeForm
 
 
 class UserRegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('users:profile')
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', kwargs={"pk": self.object.pk})
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('users:profile')
+            return redirect('users:profile', pk=request.user.pk)
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
@@ -40,28 +42,95 @@ class UserRegisterView(CreateView):
 
 
 class UserLoginView(LoginView):
-    form_class = CustomUserLoginForm
+    form_class = CustomAuthenticationForm
     template_name = 'users/login.html'
     redirect_authenticated_user = True
 
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url and next_url != reverse_lazy('users:login'):
+            return next_url
+        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
     
-    
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        messages.error(self.request, 'Неверное имя пользователя или пароль. Попробуйте снова.')
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Авторизация"
+        return context
 
 
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('users:login')
 
-class ProfileView(LoginRequiredMixin, DetailView):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:  # Проверяем, был ли пользователь авторизован
+            messages.info(request, "Вы успешно вышли из системы.")
+        return super().dispatch(request, *args, **kwargs)  # Затем выполняем выход
+
+
+class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'users/profile.html'
     context_object_name = 'user'
     
-    def get_object(self):
+    def get_object(self, queryset=None):
+        # Игнорируем переданный pk/slug и возвращаем текущего пользователя
         return self.request.user
+
+    def get(self, request, *args, **kwargs):
+        # Если в URL есть pk/slug (попытка доступа к чужому профилю) — редирект на свой
+        if 'pk' in self.kwargs or 'slug' in self.kwargs:
+            return redirect('users:profile', pk=self.request.user.pk)
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f"Профиль: {self.object.username}"
+        return context
+
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = CustomUserChangeForm
+    form_class = UserProfileUpdateForm
     template_name = 'users/profile_update.html'
     success_url = reverse_lazy('users:profile')
     
     def get_object(self):
         return self.request.user
+    
+    def get_success_url(self):
+        messages.success(self.request, 'Профиль успешно обновлен.')
+        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
+    
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
+        return response
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Редактирование профиля"
+        return context
+    
+
+class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'users/password_change.html'
+    form_class = CustomPasswordChangeForm
+
+    def get_success_url(self):
+        messages.success(self.request, 'Пароль успешно изменен.')
+        return reverse_lazy('users:profile', kwargs={"pk": self.request.user.pk})
+    
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
+        return response
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Смена пароля"
+        return context
