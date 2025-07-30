@@ -63,14 +63,11 @@ class UserLoginView(LoginView):
         return context
 
 
-class UserLogoutView(LogoutView):
-    next_page = reverse_lazy('users:login')
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:  # Проверяем, был ли пользователь авторизован
-            messages.info(request, "Вы успешно вышли из системы.")
-        return super().dispatch(request, *args, **kwargs)  # Затем выполняем выход
-
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.info(request, "Вы успешно вышли из системы.")
+    return redirect('main:landing')
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
