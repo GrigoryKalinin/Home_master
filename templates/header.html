@@ -24,6 +24,29 @@
         <li><a href="#reviews">Отзывы</a></li>
         <li><a href="#contact">Контакты</a></li>
         <li><a href="{% url 'main:job_application_create' %}">Карьера</a></li>
+        <li class="user-menu-item">
+          {% if user.is_authenticated %}
+            <div class="user-profile" onclick="toggleUserDropdown()">
+              <i class="fas fa-user-circle"></i>
+              <span>{{ user.get_short_name|default:user.email }}</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+              <a href="{% url 'users:profile' %}">Профиль</a>
+              <a href="{% url 'users:logout' %}">Выйти</a>
+            </div>
+          {% else %}
+            <div class="user-profile" onclick="toggleUserDropdown()">
+              <i class="fas fa-user-circle"></i>
+              <span>Аккаунт</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+              <a href="{% url 'users:login' %}">Войти</a>
+              <a href="{% url 'users:register' %}">Регистрация</a>
+            </div>
+          {% endif %}
+        </li>      
       </ul>
     </nav>
     <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать звонок</button>

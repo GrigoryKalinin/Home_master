@@ -58,3 +58,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+function toggleUserDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.classList.toggle('show');
+}
+
+// Закрытие при клике вне меню
+document.addEventListener('click', function(event) {
+  const userMenu = document.querySelector('.user-menu-item');
+  if (!userMenu.contains(event.target)) {
+    document.getElementById('userDropdown').classList.remove('show');
+  }
+});
