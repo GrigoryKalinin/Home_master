@@ -179,6 +179,42 @@ nav a:hover {
   background: #f8f9fa;
 }
 
+/* Выпадающий список услуг */
+.services-dropdown {
+  position: relative;
+}
+
+.services-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+}
+
+.services-dropdown-menu.show {
+  display: block;
+}
+
+.services-dropdown-menu a {
+  display: block;
+  padding: 10px 15px;
+  color: #333 !important;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.services-dropdown-menu a:hover {
+  background: #f8f9fa;
+  color: var(--primary-blue) !important;
+}
+
+
 /* Адаптивность */
 @media (max-width: 1200px) {
   /* Большие планшеты */
