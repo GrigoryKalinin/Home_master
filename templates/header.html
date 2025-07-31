@@ -20,11 +20,11 @@
     <nav>
       <ul>
         {% if request.resolver_match.url_name == 'landing' %}
-        <li><a href="#services">Услуги</a></li>
+        <li><a href="#services"><i class="fas fa-tools"></i> Услуги</a></li>
         {% else %}
         <li class="services-dropdown">
           <a href="javascript:void(0)" onclick="toggleServicesDropdown(event)">
-            Услуги <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-tools"></i> Услуги <i class="fas fa-chevron-down"></i>
           </a>
           <div class="services-dropdown-menu">
             {% for category in categories %}
@@ -35,10 +35,10 @@
           </div>
         </li>
         {% endif %}
-        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#about{% else %}{% url 'main:about_us' %}#about{% endif %}">О нас</a></li>
-        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#reviews{% else %}{% url 'main:landing' %}#reviews{% endif %}">Отзывы</a></li>
-        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#contact{% else %}{% url 'main:landing' %}#contact{% endif %}">Контакты</a></li>        
-        <li><a href="{% url 'main:job_application_create' %}">Карьера</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#about{% else %}{% url 'main:about_us' %}#about{% endif %}"><i class="fas fa-info-circle"></i> О нас</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#reviews{% else %}{% url 'main:landing' %}#reviews{% endif %}"><i class="fas fa-star"></i> Отзывы</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#contact{% else %}{% url 'main:landing' %}#contact{% endif %}"><i class="fas fa-phone-alt"></i> Контакты</a></li>        
+        <li><a href="{% url 'main:job_application_create' %}"><i class="fas fa-briefcase"></i> Карьера</a></li>
         <li class="user-menu-item">
           {% if user.is_authenticated %}
             <div class="user-profile" onclick="toggleUserDropdown()">
@@ -47,8 +47,8 @@
               <i class="fas fa-chevron-down"></i>
             </div>
             <div class="user-dropdown" id="userDropdown">
-              <a href="{% url 'users:profile' %}">Профиль</a>
-              <a href="{% url 'users:logout' %}">Выйти</a>
+              <a href="{% url 'users:profile' %}"><i class="fas fa-user-cog"></i> Профиль</a>
+              <a href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt"></i> Выйти</a>
             </div>
           {% else %}
             <div class="user-profile" onclick="toggleUserDropdown()">
@@ -57,13 +57,13 @@
               <i class="fas fa-chevron-down"></i>
             </div>
             <div class="user-dropdown" id="userDropdown">
-              <a href="{% url 'users:login' %}">Войти</a>
-              <a href="{% url 'users:register' %}">Регистрация</a>
+              <a href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt"></i> Войти</a>
+              <a href="{% url 'users:register' %}"><i class="fas fa-user-plus"></i> Регистрация</a>
             </div>
           {% endif %}
         </li>      
       </ul>
-    </nav>
+    </nav>    
     <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать звонок</button>
     <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
   </div>
