@@ -318,6 +318,7 @@ class OrderCreateView(CreateView):
         return context
 
     def form_valid(self, form):
+        form.instance.created_by_client = True
         """Обработка успешной отправки формы через AJAX"""
         if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
             order = form.save()
