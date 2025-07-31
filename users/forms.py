@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.html import strip_tags
 
@@ -62,7 +62,7 @@ class CustomUserCreationForm(UserCreationForm):
         return user
     
 
-class CustomUserLoginForm(AuthenticationForm):
+class CustomAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(
         label='Email',
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ваш Email', 'autocomplete': 'email', 'autofocus': True})
@@ -86,7 +86,8 @@ class CustomUserLoginForm(AuthenticationForm):
                 raise
         return self.cleaned_data
     
-class CustomUserChangeForm(forms.ModelForm):
+
+class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone', 'city', 'address', 'avatar')
@@ -123,3 +124,17 @@ class CustomUserChangeForm(forms.ModelForm):
 
         return cleaned_data
 
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label='Старый пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Старый пароль'})
+    )
+    new_password1 = forms.CharField(
+        label='Новый пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Новый пароль'})
+    )
+    new_password2 = forms.CharField(
+        label='Подтверждение нового пароля',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Подтверждение нового пароля'})
+    )

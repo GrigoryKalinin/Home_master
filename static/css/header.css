@@ -84,9 +84,6 @@ header {
   color: var(--primary-blue);
 }
 
-.logo span {
-  color: var(--primary-yellow);
-}
 
 .logo img {
   height: 60px; /* Уменьшили высоту логотипа */
@@ -122,171 +119,309 @@ nav a:hover {
   padding: 8px;
 }
 
+
+.user-menu-item {
+  position: relative;
+}
+
+.user-login-link {
+  color: #6c757d !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.user-login-link:hover {
+  color: #495057 !important;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.user-profile:hover {
+  color: #495057;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  min-width: 120px;
+  z-index: 1000;
+  display: none;
+}
+
+.user-dropdown.show {
+  display: block;
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.user-dropdown a:hover {
+  background: #f8f9fa;
+}
+
+/* Выпадающий список услуг */
+.services-dropdown {
+  position: relative;
+}
+
+.services-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+}
+
+.services-dropdown-menu.show {
+  display: block;
+}
+
+.services-dropdown-menu a {
+  display: block;
+  padding: 10px 15px;
+  color: #333 !important;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.services-dropdown-menu a:hover {
+  background: #f8f9fa;
+  color: var(--primary-blue) !important;
+}
+
+
 /* Адаптивность */
-@media (max-width: 992px) {
-  /* Средние устройства (планшеты) */
-  .header-main .container {
-      flex-wrap: wrap;
+@media (max-width: 1200px) {
+  /* Большие планшеты */
+  nav ul {
+    gap: 20px;
   }
   
-  nav ul {
-      gap: 15px;
+  .btn.btn-primary {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 992px) {
+  /* Планшеты */
+  .header-top {
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  
+  .header-contact {
+    gap: 15px;
+  }
+  
+  .header-social {
+    gap: 8px;
+  }
+  
+  .header-main {
+    padding: 8px 0;
+  }
+  
+  .header-main .container {
+    flex-wrap: wrap;
+    gap: 15px;
   }
   
   .logo img {
-      height: 50px;
+    height: 50px;
+  }
+  
+  nav ul {
+    gap: 15px;
+    font-size: 14px;
+  }
+  
+  .btn.btn-primary {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .user-dropdown {
+    min-width: 100px;
   }
 }
 
 @media (max-width: 768px) {
-  /* Маленькие устройства */
+  /* Мобильные устройства */
   .header-top {
-      padding: 6px 0;
-      font-size: 12px;
+    padding: 5px 0;
+    font-size: 12px;
   }
   
-  .header-contact {
-      gap: 15px;
-  }
-  
-  /* Скрываем email, оставляем только телефон */
-  .header-contact a:last-child {
-      display: none;
-  }
-  
-  .header-social {
-      gap: 8px;
+  .header-contact a:nth-child(2) {
+    display: none; /* Скрываем email */
   }
   
   .header-social a {
-      width: 28px;
-      height: 28px;
-      font-size: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
   }
   
   .header-main {
-      padding: 10px 0; /* Увеличили отступы для лучшего центрирования */
+    padding: 8px 0;
   }
   
   .header-main .container {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      grid-template-areas: "logo button burger";
-      align-items: center;
-      gap: 10px;
-      min-height: 50px; /* Добавили минимальную высоту для центрирования */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "logo button burger";
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
   }
   
   .logo {
-      grid-area: logo;
-      display: flex;
-      align-items: center;
+    grid-area: logo;
   }
   
   .logo img {
-      height: 40px;
+    height: 40px;
   }
   
   .btn.btn-primary {
-      grid-area: button;
-      justify-self: center;
-      align-self: center; /* Добавили для вертикального центрирования */
-      padding: 8px 16px;
-      font-size: 12px;
-      white-space: nowrap;
+    grid-area: button;
+    justify-self: center;
+    padding: 6px 12px;
+    font-size: 11px;
+    white-space: nowrap;
   }
   
   .mobile-menu-btn {
-      grid-area: burger;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      justify-self: end;
-      align-self: center; /* Добавили для вертикального центрирования */
+    grid-area: burger;
+    display: flex;
+    justify-self: end;
   }
   
   nav {
-      grid-column: 1 / -1;
-      order: 1;
+    grid-column: 1 / -1;
+    order: 1;
   }
   
   nav ul {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: white;
-      flex-direction: column;
-      padding: 20px;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-      z-index: 1000;
-      margin: 0;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 1000;
+    margin: 0;
+    border-top: 1px solid #eee;
   }
   
   nav ul.mobile-menu-open {
-      display: flex !important;
+    display: flex !important;
   }
   
   nav ul li {
-      margin: 0;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
   }
   
   nav ul li:last-child {
-      border-bottom: none;
+    border-bottom: none;
+  }
+  
+  .user-dropdown {
+    position: static;
+    box-shadow: none;
+    border: none;
+    background: #f8f9fa;
+    margin-top: 10px;
   }
 }
 
 @media (min-width: 769px) {
-  /* Десктопная версия */
+  /* Десктоп */
   nav ul {
-      display: flex !important;
+    display: flex !important;
+  }
+  
+  .mobile-menu-btn {
+    display: none !important;
   }
 }
 
 @media (max-width: 576px) {
-  /* Очень маленькие устройства */
+  /* Маленькие мобильные */
   .header-top {
-      padding: 5px 0;
-      font-size: 11px;
+    padding: 4px 0;
+    font-size: 11px;
   }
   
   .header-contact {
-      gap: 10px;
+    gap: 8px;
   }
   
   .header-social {
-      gap: 6px;
+    gap: 5px;
   }
   
   .header-social a {
-      width: 26px;
-      height: 26px;
-      font-size: 11px;
-  }
-  
-  .header-main {
-      padding: 8px 0;
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
   }
   
   .header-main .container {
-      gap: 8px;
-      min-height: 45px; /* Уменьшили для очень маленьких экранов */
+    gap: 8px;
+    min-height: 45px;
   }
   
   .logo img {
-      height: 35px;
+    height: 35px;
   }
   
   .btn.btn-primary {
-      padding: 6px 12px;
-      font-size: 11px;
+    padding: 5px 10px;
+    font-size: 10px;
   }
   
   .mobile-menu-btn {
-      font-size: 20px;
-      padding: 6px;
+    font-size: 18px;
+    padding: 5px;
+  }
+  
+  nav ul {
+    padding: 10px;
+  }
+  
+  nav ul li {
+    padding: 10px 0;
   }
 }
+
