@@ -28,14 +28,14 @@
           </a>
           <div class="services-dropdown-menu">
             {% for category in categories %}
-              <a href="{% url 'main:landing' %}#services">{{ category.name }}</a>
+              <a href="{{category.get_absolute_url}}">{{ category.name }}</a>
             {% empty %}
               <a href="{% url 'main:landing' %}#services">Нет категорий</a>
             {% endfor %}
           </div>
         </li>
         {% endif %}
-        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#about{% else %}{% url 'main:landing' %}#about{% endif %}">О нас</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#about{% else %}{% url 'main:about_us' %}#about{% endif %}">О нас</a></li>
         <li><a href="{% if request.resolver_match.url_name == 'landing' %}#reviews{% else %}{% url 'main:landing' %}#reviews{% endif %}">Отзывы</a></li>
         <li><a href="{% if request.resolver_match.url_name == 'landing' %}#contact{% else %}{% url 'main:landing' %}#contact{% endif %}">Контакты</a></li>        
         <li><a href="{% url 'main:job_application_create' %}">Карьера</a></li>
