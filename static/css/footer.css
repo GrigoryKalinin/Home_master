@@ -66,3 +66,7 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 14px;
 }
+
+#contact {
+  scroll-margin-top: 120px;
+}
