@@ -40,9 +40,6 @@ class JobApplicationView(TemplateView):
         context["order_from"] = OrderForm()
         return context
 
-# Категории (для сотрудников)
-# TODO доработать
-
 class CategoryListView(ListView):
     model = Category
     template_name = "main/private/category/category_list.html"

@@ -5,7 +5,6 @@ from phonenumber_field.formfields import PhoneNumberField
 from .models import Order, JobApplication, Employee, Category, Product, Service
 
 
-# TODO доработать
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
