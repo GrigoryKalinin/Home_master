@@ -1,7 +1,7 @@
 .product-detail {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 40px 15px;
+  padding: 30px 15px;
   margin-top: 100px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .breadcrumb span {
-  color: var(--text-dark);
+  color: #666;
   font-weight: bold;
 }
 
@@ -63,25 +63,25 @@
 }
 
 .product-info h1 {
-  font-size: 32px;
+  font-size: 30px;
   color: var(--primary-blue);
-  margin-bottom: 20px;
+  margin-bottom: 8px;
   line-height: 1.3;
 }
 
 .product-price {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   color: var(--text-dark);
-  margin-bottom: 30px;
-  padding: 15px;
+  margin-bottom: 20px;
+  padding: 12px;
   background-color: var(--light-gray);
   border-radius: 8px;
   border-left: 4px solid var(--primary-yellow);
 }
 
 .product-description {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .product-description h3 {
@@ -99,7 +99,7 @@
 }
 
 .product-services {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .product-services h3 {
@@ -112,30 +112,31 @@
 
 .services-list {
   display: grid;
-  gap: 15px;
+  gap: 12px;
 }
 
 .service-item {
-  padding: 15px;
+  padding: 10px;
   background-color: var(--light-gray);
   border-radius: 8px;
   border-left: 4px solid var(--primary-blue);
 }
 
 .service-item h4 {
+  font-size: 21px;
   color: var(--primary-blue);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .service-price {
   font-weight: bold;
   color: var(--text-dark);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .service-description {
   color: #666;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .product-actions {
