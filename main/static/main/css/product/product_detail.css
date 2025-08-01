@@ -8,7 +8,7 @@
 .breadcrumb {
   margin-bottom: 30px;
   font-size: 14px;
-  color: #666;
+  color: #444;
 }
 
 .breadcrumb a {
@@ -93,7 +93,7 @@
 }
 
 .product-description p {
-  color: #666;
+  color: #444;
   line-height: 1.6;
   margin-bottom: 15px;
 }
@@ -135,7 +135,7 @@
 }
 
 .service-description {
-  color: #666;
+  color: #444;
   font-size: 12px;
 }
 

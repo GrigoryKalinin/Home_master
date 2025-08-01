@@ -88,7 +88,7 @@
 }
 
 .form-header p {
-  color: #666;
+  color: #444;
   font-size: 16px;
   margin: 0;
 }
@@ -173,7 +173,7 @@
 }
 
 .form-help {
-  color: #666;
+  color: #444;
   font-size: 13px;
   margin-top: 5px;
   font-style: italic;
@@ -248,7 +248,7 @@
 }
 
 .info-card p {
-  color: #666;
+  color: #444;
   font-size: 14px;
   line-height: 1.5;
   margin: 0;
@@ -272,7 +272,7 @@
 }
 
 .cta-section p {
-  color: #666;
+  color: #444;
   font-size: 16px;
   margin-bottom: 30px;
   max-width: 500px;

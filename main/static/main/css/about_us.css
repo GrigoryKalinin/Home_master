@@ -36,7 +36,7 @@
 }
 
 .mission-text p {
-  color: #666;
+  color: #444;
   line-height: 1.7;
   margin-bottom: 30px;
   font-size: 18px;
@@ -146,7 +146,7 @@
 }
 
 .feature-card p {
-  color: #666;
+  color: #444;
   line-height: 1.6;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .step-content p {
-  color: #666;
+  color: #444;
   line-height: 1.6;
 }
 
@@ -214,7 +214,7 @@
 }
 
 .team-header p {
-  color: #666;
+  color: #444;
   font-size: 18px;
 }
 
@@ -265,7 +265,7 @@
 }
 
 .experience {
-  color: #666;
+  color: #444;
   margin-bottom: 15px;
   font-size: 14px;
 }
@@ -304,7 +304,7 @@
 }
 
 .join-text p {
-  color: #666;
+  color: #444;
   line-height: 1.7;
   margin-bottom: 25px;
   font-size: 18px;
@@ -317,7 +317,7 @@
 
 .join-text li {
   padding: 8px 0;
-  color: #666;
+  color: #444;
   position: relative;
   padding-left: 25px;
 }
