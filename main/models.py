@@ -300,6 +300,7 @@ class JobApplication(models.Model):
     comment = models.TextField(max_length=1000, verbose_name="Комментарий", blank=True)
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", db_index=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new", verbose_name="Статус")
+    created_by_client = models.BooleanField(default=False, verbose_name="Создано клиентом")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.phone}, возвраст: {self.age}, город: {self.city}, специализация: {self.specialization}"

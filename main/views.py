@@ -395,6 +395,7 @@ class JobApplicationCreateView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm
     template_name = "main/job_application/job_application_create.html"
+    success_url = reverse_lazy("main:landing")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -404,6 +405,7 @@ class JobApplicationCreateView(CreateView):
         return context
 
     def form_valid(self, form):
+        form.instance.created_by_client = True
         if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
             application = form.save()
             return JsonResponse({
