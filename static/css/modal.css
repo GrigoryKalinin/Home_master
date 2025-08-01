@@ -85,24 +85,6 @@
   font-family: "Arial", sans-serif;
 }
 
-.modal-footer .btn-primary {
-  background-color: var(--primary-yellow);
-  color: var(--text-dark);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.modal-footer .btn-primary:hover:not(:disabled) {
-  background-color: #ffc600;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.modal-footer .btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
 .modal-footer .btn-secondary {
   background-color: #6c757d;
   color: var(--text-light);

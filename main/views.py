@@ -31,6 +31,14 @@ class AboutView(TemplateView):
         context["order_from"] = OrderForm()  
         return context
 
+class JobApplicationView(TemplateView):
+    template_name = "main/job_application/job_application.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Работа в МастерГранд"
+        return context
+
 # Категории (для сотрудников)
 # TODO доработать
 
@@ -391,10 +399,10 @@ class OrderStatusUpdateView(View):
         return JsonResponse({'success': False})
 
 # Резюме для пользователей
-class JobApplicationCreateView(CreateView):
+class JobApplicationCreateFormView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm
-    template_name = "main/job_application/job_application_create.html"
+    template_name = "main/job_application/job_application_form.html"
     success_url = reverse_lazy("main:landing")
 
     def get_context_data(self, **kwargs):
@@ -421,7 +429,7 @@ class JobApplicationCreateView(CreateView):
                 "success": False,
                 "errors": form.errors,
                 "form_html": render_to_string(
-                    "main/job_application/job_application_create.html",
+                    "main/job_application/job_application_form.html",
                     {"form": form},
                     request=self.request,
                 ),

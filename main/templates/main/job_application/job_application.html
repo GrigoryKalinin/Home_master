@@ -1,0 +1,87 @@
+{% extends "base.html" %} 
+{% load static %} 
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'main/css/job_application/job_application.css' %}" />
+{% endblock style %} 
+
+{% block content %}
+<div class="job-application-page">
+  <!-- Hero секция -->
+  <section class="job-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Присоединяйтесь к команде МастерГранд</h1>
+        <p class="hero-subtitle">
+          Станьте частью профессиональной команды мастеров и развивайте свой
+          бизнес вместе с нами
+        </p>
+        <div class="hero-benefits">
+          <div class="benefit-item">
+            <i class="fas fa-handshake"></i>
+            <span>Стабильные заказы</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Достойная оплата</span>
+          </div>
+          <div class="benefit-item">
+            <i class="fas fa-users"></i>
+            <span>Поддержка команды</span>
+          </div>
+        </div>
+        <div class="hero-cta">
+          <a href="{% url 'main:job_application_form' %}" class="btn btn-primary btn-large">
+            <i class="fas fa-paper-plane"></i>
+            Откликнуться
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="application-form-section">
+    <div class="container">
+      <!-- Дополнительная информация -->
+      <div class="additional-info">
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h4>Быстрый отклик</h4>
+            <p>Мы рассматриваем анкеты в течение 24 часов</p>
+          </div>
+
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4>Надежность</h4>
+            <p>Работаем только с проверенными мастерами</p>
+          </div>
+
+          <div class="info-card">
+            <div class="card-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h4>Развитие</h4>
+            <p>Помогаем развивать ваш профессиональный уровень</p>
+          </div>
+        </div>
+        
+        <!-- Призыв к действию -->
+        <div class="cta-section">
+          <h3>Готовы начать работать с нами?</h3>
+          <p>Заполните анкету и станьте частью нашей команды профессионалов</p>
+          <a href="{% url 'main:job_application_form' %}" class="btn btn-secondary btn-large">
+            <i class="fas fa-edit"></i>
+            Заполнить анкету
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock content %} 
+

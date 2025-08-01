@@ -7,13 +7,14 @@ urlpatterns = [
     path('', views.LandingView.as_view(), name='landing'),
     path('about/', views.AboutView.as_view(), name='about_us'),
     path('order/create/', views.OrderCreateView.as_view(), name='order_create'),
+    path('job/', views.JobApplicationView.as_view(), name='job_application'),
+    path('job/form', views.JobApplicationCreateFormView.as_view(), name='job_application_form'),
 
     # Управление
         # Заказы
     path('orders/', views.OrderListView.as_view(), name='order_list'),
     path('order/<int:pk>/status/', views.OrderStatusUpdateView.as_view(), name='order_status_update'),
         # Резюме
-    path('job_application/create/', views.JobApplicationCreateView.as_view(), name='job_application_create'),
     path('job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),
     path('job_application/<int:pk>/', views.JobApplicationDetailView.as_view(), name='job_application_detail'),
         # Сотрудники
