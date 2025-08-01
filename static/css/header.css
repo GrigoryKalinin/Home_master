@@ -119,13 +119,12 @@ nav a:hover {
   padding: 8px;
 }
 
-
 .user-menu-item {
   position: relative;
 }
 
 .user-login-link {
-  color: #6c757d !important;
+  color: var(--primary-blue) !important;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -134,20 +133,20 @@ nav a:hover {
 }
 
 .user-login-link:hover {
-  color: #495057 !important;
+  color: var(--dark-blue) !important;
 }
 
 .user-profile {
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #6c757d;
+  color: var(--primary-blue);
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .user-profile:hover {
-  color: #495057;
+  color: var(--primary-yellow);
 }
 
 .user-dropdown {
@@ -155,9 +154,9 @@ nav a:hover {
   top: 100%;
   right: 0;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--primary-blue);
   border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 91, 170, 0.15);
   min-width: 120px;
   z-index: 1000;
   display: none;
@@ -170,13 +169,14 @@ nav a:hover {
 .user-dropdown a {
   display: block;
   padding: 10px 15px;
-  color: #333;
+  color: var(--primary-blue);
   text-decoration: none;
+  font-weight: 600;
   transition: background 0.3s ease;
 }
 
 .user-dropdown a:hover {
-  background: #f8f9fa;
+  color: var(--primary-yellow);
 }
 
 /* Выпадающий список услуг */
@@ -189,9 +189,9 @@ nav a:hover {
   top: 100%;
   left: 0;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--primary-blue);
   border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 91, 170, 0.15);
   min-width: 200px;
   z-index: 1000;
   display: none;
@@ -204,14 +204,13 @@ nav a:hover {
 .services-dropdown-menu a {
   display: block;
   padding: 10px 15px;
-  color: #333 !important;
+  color: var(--primary-blue) !important;
   text-decoration: none;
   transition: background 0.3s ease;
 }
 
 .services-dropdown-menu a:hover {
-  background: #f8f9fa;
-  color: var(--primary-blue) !important;
+  color: var(--primary-yellow) !important;
 }
 
 
@@ -271,7 +270,7 @@ nav a:hover {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 862px) {
   /* Мобильные устройства */
   .header-top {
     padding: 5px 0;
@@ -365,7 +364,7 @@ nav a:hover {
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 863px) {
   /* Десктоп */
   nav ul {
     display: flex !important;
@@ -424,4 +423,3 @@ nav a:hover {
     padding: 10px 0;
   }
 }
-
