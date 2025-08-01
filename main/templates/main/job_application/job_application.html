@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="hero-cta">
-          <a href="{% url 'main:job_application_form' %}" class="btn btn-primary btn-large">
+          <a href="{% url 'main:job_application_form' %}" class="btn btn-primary">
             <i class="fas fa-paper-plane"></i>
             Откликнуться
           </a>
@@ -74,7 +74,7 @@
         <div class="cta-section">
           <h3>Готовы начать работать с нами?</h3>
           <p>Заполните анкету и станьте частью нашей команды профессионалов</p>
-          <a href="{% url 'main:job_application_form' %}" class="btn btn-secondary btn-large">
+          <a href="{% url 'main:job_application_form' %}" class="btn btn-primary">
             <i class="fas fa-edit"></i>
             Заполнить анкету
           </a>
@@ -83,5 +83,12 @@
     </div>
   </section>
 </div>
+
+{% include "main/order/modal.html" %}
 {% endblock content %} 
+
+{% block script %}
+  <script src="{% static 'js/phone_mask.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+{% endblock script %}
 
