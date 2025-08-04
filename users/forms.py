@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.html import strip_tags
 
@@ -138,3 +138,19 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         label='Подтверждение нового пароля',
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Подтверждение нового пароля'})
     )
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
+
+
+class CustomSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Новый пароль'})
+        self.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Подтверждение нового пароля'})
+
+        for field_name in ('new_password1', 'new_password2'):
+            if self.fields.get(field_name):
+                self.fields[field_name].help_text = ''

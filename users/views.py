@@ -1,14 +1,13 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DetailView, UpdateView
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
 from .models import User
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileUpdateForm, CustomPasswordChangeForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileUpdateForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
 
 
 class UserRegisterView(CreateView):
@@ -125,3 +124,21 @@ class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Смена пароля"
         return context
+    
+
+class UserPasswordResetView(PasswordResetView):
+    template_name = 'users/password_reset.html'
+    email_template_name = 'users/password_reset_email.html'
+    form_class = CustomPasswordResetForm
+    success_url = reverse_lazy('users:password_reset_done')
+
+class UserPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+class UserPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+    form_class = CustomSetPasswordForm
+    success_url = reverse_lazy('users:password_reset_complete')
+
+class UserPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
