@@ -255,7 +255,7 @@ class ServiceUpdateView(StaffRequiredMixin, UpdateView):
 class EmployeeCreateView(StaffRequiredMixin, CreateView):
     model = Employee
     form_class = EmployeeForm
-    template_name = "main/private/employee_create.html"
+    template_name = "main/private/employee/employee_create.html"
     success_url = reverse_lazy("main:employee_list")
 
     def get_context_data(self, **kwargs):
@@ -266,7 +266,7 @@ class EmployeeCreateView(StaffRequiredMixin, CreateView):
 
 class EmployeeListView(StaffRequiredMixin, ListView):
     model = Employee
-    template_name = "main/private/employee_list.html"
+    template_name = "main/private/employee/employee_list.html"
     context_object_name = "employees"
     
     def get_queryset(self):
@@ -295,7 +295,7 @@ class EmployeeListView(StaffRequiredMixin, ListView):
 class EmployeeUpdateView(StaffRequiredMixin, UpdateView):
     model = Employee
     form_class = EmployeeForm
-    template_name = "main/private/employee_create.html"
+    template_name = "main/private/employee/employee_create.html"
     slug_url_kwarg = 'employee_slug'
     
     def get_context_data(self, **kwargs):
@@ -306,7 +306,7 @@ class EmployeeUpdateView(StaffRequiredMixin, UpdateView):
 
 class EmployeeDetailView(StaffRequiredMixin, DetailView):
     model = Employee
-    template_name = "main/private/employee_detail.html"
+    template_name = "main/private/employee/employee_detail.html"
     context_object_name = "employee"
     slug_url_kwarg = 'employee_slug'
 
@@ -364,7 +364,7 @@ class OrderCreateView(CreateView):
 
 class OrderListView(StaffRequiredMixin, ListView):
     model = Order
-    template_name = "main/private/order_list.html"
+    template_name = "main/private/order/order_list.html"
     context_object_name = "orders"
     
     def get_queryset(self):
@@ -443,7 +443,7 @@ class JobApplicationCreateFormView(CreateView):
 
 class JobApplicationListView(StaffRequiredMixin, ListView):
     model = JobApplication
-    template_name = "main/private/job_application_list.html"
+    template_name = "main/private/job_application/job_application_list.html"
     context_object_name = "applications"
     
     def get_queryset(self):
@@ -472,7 +472,7 @@ class JobApplicationListView(StaffRequiredMixin, ListView):
 
 class JobApplicationDetailView(StaffRequiredMixin, DetailView):
     model = JobApplication
-    template_name = "main/private/job_application_detail.html"
+    template_name = "main/private/job_application/job_application_detail.html"
     context_object_name = "application"
     
     def post(self, request, *args, **kwargs):
