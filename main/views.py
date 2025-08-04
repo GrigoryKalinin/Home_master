@@ -17,7 +17,7 @@ class LandingView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "МастерГранд"
+        context["title"] = "МастерГранд - ПОМОЩЬ РЯДОМ"
         context["categories"] = Category.objects.filter(available=True)
         context["order_from"] = OrderForm()
         return context
@@ -28,7 +28,8 @@ class AboutView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["order_from"] = OrderForm()  
+        context["order_from"] = OrderForm()
+        context["title"] = "О компании МастерГранд"
         return context
 
 class JobApplicationView(TemplateView):
@@ -114,6 +115,7 @@ class ProductListByCategory(ListView):
         context = super().get_context_data(**kwargs)
         context["category"] = self.category
         context["order_from"] = OrderForm()
+        context["title"] = f"{self.category.name} — МастерГранд"
         return context
 
 
@@ -143,7 +145,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         product = self.object
 
-        context["title"] = product.name
+        context["title"] = f'{product.name} — МастерГранд'
         context["description"] = product.description
         context["category"] = product.category
         context["order_from"] = OrderForm()

@@ -1,5 +1,7 @@
 {% extends "base.html" %} 
-{% load static %} 
+{% load static %}
+
+{% block title %}{{ title }}{% endblock title %} 
 
 {% block style %}
   <link rel="stylesheet" href="{% static 'main/css/job_application/job_application.css' %}" />
