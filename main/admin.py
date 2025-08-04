@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import RangeDateFilter
-from .models import Category, Product, Service, Order, JobApplication, Employee
+from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
@@ -92,6 +92,11 @@ class ServiceAdmin(ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+@admin.register(Specialization)
+class SpecializationAdmin(ModelAdmin):
+    list_display = ['name']
+    search_fields = ['name']
 
 @admin.register(Employee)
 class EmployeeAdmin(ModelAdmin):

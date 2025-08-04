@@ -181,6 +181,18 @@ class Service(models.Model):
         return str(self.name)
 
 
+class Specialization(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name="Специализация")
+    
+    class Meta:
+        verbose_name = "Специализация"
+        verbose_name_plural = "Специализации"
+        ordering = ['name']
+    
+    def __str__(self):
+        return str(self.name)
+
+
 class Employee(models.Model):
     STATUS_CHOICES = [
         ('trainee', 'Стажировка'),
@@ -201,7 +213,7 @@ class Employee(models.Model):
     phone = PhoneNumberField(verbose_name="Телефон", db_index=True, region="RU")
     email = models.EmailField(verbose_name="Email", blank=True)
     city = models.CharField(max_length=100, verbose_name="Город", db_index=True)
-    specialization = models.CharField(max_length=100, verbose_name="Специализация", db_index=True)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="Специализация")
     experience = models.PositiveIntegerField(verbose_name="Опыт работы", help_text="В годах")
     image = models.ImageField(upload_to="images/employees/", blank=True, verbose_name="Фото")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")

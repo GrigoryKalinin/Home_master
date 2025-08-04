@@ -49,6 +49,8 @@ class UserLoginView(LoginView):
         next_url = self.request.GET.get('next')
         if next_url and next_url != reverse_lazy('users:login'):
             return next_url
+        if self.request.user.is_staff:
+            return reverse_lazy('main:employee_dashboard')
         return reverse_lazy('users:profile')
     
     def form_invalid(self, form):

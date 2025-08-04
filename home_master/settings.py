@@ -227,6 +227,11 @@ UNFOLD = {
                         "icon": "build",
                         "link": "/admin/main/service/",
                     },
+                    {
+                        "title": "Специальности",
+                        "icon": "work_outline",
+                        "link": "/admin/main/specialization/",
+                    },
                 ],
             },
             {
@@ -254,6 +259,12 @@ UNFOLD = {
                         "icon": "people",
                         "link": "/admin/main/employee/",
                     },
+                ],
+            },
+            {
+                "title": "Пользователи",
+                "separator": True,
+                "items": [
                     {
                         "title": "Пользователи",
                         "icon": "person",

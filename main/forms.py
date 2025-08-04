@@ -2,8 +2,7 @@ from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 from phonenumber_field.formfields import PhoneNumberField
-from .models import Order, JobApplication, Employee, Category, Product, Service
-
+from .models import Order, JobApplication, Employee, Category, Product, Service, Specialization
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -131,14 +130,10 @@ class EmployeeForm(forms.ModelForm):
         ),
     )
 
-    specialization = forms.CharField(
-        label="Ваша специализация",
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Введите вашу специализацию",
-                "class": "form-control",
-            }
-        ),
+    specialization = forms.ModelChoiceField(
+        queryset=Specialization.objects.all(),
+        label="Специализация",
+        widget=forms.Select(attrs={"class": "form-control"})
     )
 
     experience = forms.IntegerField(
