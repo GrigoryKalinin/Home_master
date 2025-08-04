@@ -50,6 +50,15 @@ class JobApplicationView(TemplateView):
         context["title"] = "Работа в МастерГранд"
         context["order_from"] = OrderForm()
         return context
+    
+
+class DashboardView(StaffRequiredMixin, TemplateView):
+    template_name = "main/private/dashboard.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Панель сотрудника"
+        return context
 
 class CategoryListView(StaffRequiredMixin, ListView):
     model = Category

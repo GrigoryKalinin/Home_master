@@ -1,0 +1,33 @@
+{% extends "private/employee_base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="bi bi-person-workspace"></i> Информация о сотруднике</h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Имя:</strong> {{ user.get_full_name }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <p><strong>Телефон:</strong> {{ user.phone|default:"Не указан" }}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Город:</strong> {{ user.city|default:"Не указан" }}</p>
+              <p><strong>Статус:</strong> Сотрудник</p>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a href="{% url 'users:logout' %}" class="btn btn-danger">
+              <i class="bi bi-box-arrow-right"></i> Выход
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
