@@ -84,9 +84,11 @@ class EmployeeForm(forms.ModelForm):
                 "placeholder": "Введите дату рождения",
                 "type": "date",
                 "class": "form-control",
-                "autocomplete": "off",  # Для автозаполнения
-            }
+                "autocomplete": "off",
+            },
+            format='%Y-%m-%d'  # Добавляем формат
         ),
+        input_formats=['%Y-%m-%d']  # Добавляем входной формат
     )
 
     phone = PhoneNumberField(
@@ -153,7 +155,14 @@ class EmployeeForm(forms.ModelForm):
 
     date_hired = forms.DateField(
         label="Дата приема на работу",
-        widget=forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+        widget=forms.DateInput(
+            attrs={
+                "type": "date", 
+                "class": "form-control"
+            },
+            format='%Y-%m-%d'  # Добавляем формат
+        ),
+        input_formats=['%Y-%m-%d']  # Добавляем входной формат
     )
 
     status = forms.ChoiceField(

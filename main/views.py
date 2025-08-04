@@ -278,7 +278,7 @@ class EmployeeListView(StaffRequiredMixin, ListView):
                 Q(last_name__icontains=search) |
                 Q(phone__icontains=search) |
                 Q(city__icontains=search) |
-                Q(specialization__icontains=search)
+                Q(specialization__name__icontains=search)
             )
         
         status = self.request.GET.get('status')
