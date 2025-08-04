@@ -5,6 +5,27 @@
   margin-top: 120px;
 }
 
+.breadcrumb {
+  margin-bottom: 30px;
+  font-size: 14px;
+  color: #444;
+}
+
+.breadcrumb a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+  color: var(--dark-blue);
+}
+
+.breadcrumb span {
+  color: #666;
+  font-weight: bold;
+}
+
 .page-title {
   color: var(--primary-blue);
   text-align: center;
