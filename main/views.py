@@ -1,15 +1,25 @@
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView, View
-# from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django.urls import reverse_lazy
+from django.contrib import messages
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 from datetime import date
 
 from .models import Category, Product, Service, Order, JobApplication, Employee
 from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm
+
+# Миксин для проверки принадлежности к сотрудникам
+class StaffRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_staff
+
+    def handle_no_permission(self):
+        messages.error(self.request, "У вас нет доступа к этому разделу.")
+        return redirect("main:landing")
 
 
 class LandingView(TemplateView):
@@ -41,7 +51,7 @@ class JobApplicationView(TemplateView):
         context["order_from"] = OrderForm()
         return context
 
-class CategoryListView(ListView):
+class CategoryListView(StaffRequiredMixin, ListView):
     model = Category
     template_name = "main/private/category/category_list.html"
     context_object_name = "categories"
@@ -61,7 +71,7 @@ class CategoryListView(ListView):
             
         return queryset
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(StaffRequiredMixin, DetailView):
     model = Category
     template_name = "main/private/category/category_detail.html"
     context_object_name = "category"
@@ -70,7 +80,6 @@ class CategoryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         category = self.object
         
-        # Получаем товары категории с фильтрацией
         products = Product.objects.filter(category=category).order_by('name')
         
         search = self.request.GET.get('search')
@@ -88,20 +97,18 @@ class CategoryDetailView(DetailView):
         context['current_available'] = available or ''
         return context
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(StaffRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
     template_name = "main/private/category/category_form.html"
     success_url = reverse_lazy("main:category_list")
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(StaffRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = "main/private/category/category_form.html"
     success_url = reverse_lazy("main:category_list")
 
-
-# Продукты (для пользователей)
 class ProductListByCategory(ListView):
     model = Product
     template_name = "main/product/product_list.html"
@@ -117,7 +124,6 @@ class ProductListByCategory(ListView):
         context["order_from"] = OrderForm()
         context["title"] = f"{self.category.name} — МастерГранд"
         return context
-
 
 class ProductDetailView(DetailView):
     model = Product
@@ -152,8 +158,7 @@ class ProductDetailView(DetailView):
 
         return context
 
-# Продукты (для сотрудников)
-class ProductCreateView(CreateView):
+class ProductCreateView(StaffRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = "main/private/product/product_form.html"
@@ -172,7 +177,7 @@ class ProductCreateView(CreateView):
                 pass
         return initial
 
-class ProductDetailAdminView(DetailView):
+class ProductDetailAdminView(StaffRequiredMixin, DetailView):
     model = Product
     template_name = "main/private/product/product_detail.html"
     context_object_name = "product"
@@ -181,7 +186,6 @@ class ProductDetailAdminView(DetailView):
         context = super().get_context_data(**kwargs)
         product = self.object
         
-        # Получаем услуги товара с фильтрацией
         services = Service.objects.filter(product=product).order_by('name')
         
         search = self.request.GET.get('search')
@@ -199,7 +203,7 @@ class ProductDetailAdminView(DetailView):
         context['current_available'] = available or ''
         return context
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(StaffRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "main/private/product/product_form.html"
@@ -207,8 +211,7 @@ class ProductUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy("main:category_detail", kwargs={'slug': self.object.category.slug})
 
-# Услуги (для сотрудников)
-class ServiceCreateView(CreateView):
+class ServiceCreateView(StaffRequiredMixin, CreateView):
     model = Service
     form_class = ServiceForm
     template_name = "main/private/service/service_form.html"
@@ -227,12 +230,12 @@ class ServiceCreateView(CreateView):
                 pass
         return initial
 
-class ServiceDetailView(DetailView):
+class ServiceDetailView(StaffRequiredMixin, DetailView):
     model = Service
     template_name = "main/private/service/service_detail.html"
     context_object_name = "service"
 
-class ServiceUpdateView(UpdateView):
+class ServiceUpdateView(StaffRequiredMixin, UpdateView):
     model = Service
     form_class = ServiceForm
     template_name = "main/private/service/service_form.html"
@@ -240,8 +243,7 @@ class ServiceUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy("main:product_detail_admin", kwargs={'slug': self.object.product.slug})
 
-# Сотрудники (для сотрудников)
-class EmployeeCreateView(CreateView):
+class EmployeeCreateView(StaffRequiredMixin, CreateView):
     model = Employee
     form_class = EmployeeForm
     template_name = "main/private/employee_create.html"
@@ -253,7 +255,7 @@ class EmployeeCreateView(CreateView):
         context["button_text"] = "Добавить сотрудника"
         return context
 
-class EmployeeListView(ListView):
+class EmployeeListView(StaffRequiredMixin, ListView):
     model = Employee
     template_name = "main/private/employee_list.html"
     context_object_name = "employees"
@@ -281,7 +283,7 @@ class EmployeeListView(ListView):
         context['status_choices'] = Employee.STATUS_CHOICES
         return context
 
-class EmployeeUpdateView(UpdateView):
+class EmployeeUpdateView(StaffRequiredMixin, UpdateView):
     model = Employee
     form_class = EmployeeForm
     template_name = "main/private/employee_create.html"
@@ -293,7 +295,7 @@ class EmployeeUpdateView(UpdateView):
         context["button_text"] = "Сохранить изменения"
         return context
 
-class EmployeeDetailView(DetailView):
+class EmployeeDetailView(StaffRequiredMixin, DetailView):
     model = Employee
     template_name = "main/private/employee_detail.html"
     context_object_name = "employee"
@@ -303,7 +305,6 @@ class EmployeeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         employee = self.object
         
-        # Стаж в компании
         if employee.date_hired:
             today = date.today()
             years = today.year - employee.date_hired.year
@@ -313,7 +314,6 @@ class EmployeeDetailView(DetailView):
         
         return context
 
-# Заявки для пользователей
 class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
@@ -327,7 +327,6 @@ class OrderCreateView(CreateView):
 
     def form_valid(self, form):
         form.instance.created_by_client = True
-        """Обработка успешной отправки формы через AJAX"""
         if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
             order = form.save()
             return JsonResponse(
@@ -340,7 +339,6 @@ class OrderCreateView(CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        """Обработка ошибок формы через AJAX"""
         if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
             return JsonResponse(
                 {
@@ -355,8 +353,7 @@ class OrderCreateView(CreateView):
             )
         return super().form_invalid(form)
 
-# Заявки для сотрудников
-class OrderListView(ListView):
+class OrderListView(StaffRequiredMixin, ListView):
     model = Order
     template_name = "main/private/order_list.html"
     context_object_name = "orders"
@@ -383,7 +380,7 @@ class OrderListView(ListView):
         context['status_choices'] = Order.STATUS_CHOICES
         return context
 
-class OrderStatusUpdateView(View):
+class OrderStatusUpdateView(StaffRequiredMixin, View):
     def post(self, request, pk):
         order = get_object_or_404(Order, pk=pk)
         new_status = request.POST.get('status')
@@ -398,7 +395,6 @@ class OrderStatusUpdateView(View):
         
         return JsonResponse({'success': False})
 
-# Резюме для пользователей
 class JobApplicationCreateFormView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm
@@ -436,8 +432,7 @@ class JobApplicationCreateFormView(CreateView):
             })
         return super().form_invalid(form)
 
-# Резюме (для сотрудников)
-class JobApplicationListView(ListView):
+class JobApplicationListView(StaffRequiredMixin, ListView):
     model = JobApplication
     template_name = "main/private/job_application_list.html"
     context_object_name = "applications"
@@ -466,7 +461,7 @@ class JobApplicationListView(ListView):
         context['status_choices'] = JobApplication.STATUS_CHOICES
         return context
 
-class JobApplicationDetailView(DetailView):
+class JobApplicationDetailView(StaffRequiredMixin, DetailView):
     model = JobApplication
     template_name = "main/private/job_application_detail.html"
     context_object_name = "application"
@@ -488,14 +483,3 @@ class JobApplicationDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = JobApplication.STATUS_CHOICES
         return context
-
-# class ReviewCreateView(LoginRequiredMixin, CreateView):
-#     model = Review
-#     form_class = ReviewForm
-#     template_name = "main/review/create.html"
-#     success_url = reverse_lazy("main:landing")
-#     login_url = "/admin/login/"  # или создайте свою страницу входа
-
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super().form_valid(form)
