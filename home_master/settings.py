@@ -164,3 +164,104 @@ EMAIL_HOST_USER = os.getenv("MAIL")
 EMAIL_HOST_PASSWORD = os.getenv("MAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("MAIL")
 SERVER_EMAIL = os.getenv("MAIL")
+
+# Настройки Unfold
+# Настройки Unfold
+UNFOLD = {
+    "SITE_TITLE": "Домашний мастер",
+    "SITE_HEADER": "Админ-панель",
+    "SITE_URL": "/",
+    "SITE_ICON": "speed",
+    "SITE_LOGO": {
+        "light": "/static/images/logo_1.png",
+        "dark": "/static/images/logo_2.png",
+    },
+    "SITE_SYMBOL": "speed",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "COLORS": {
+        "primary": {
+            "50": "250 245 255",
+            "100": "243 232 255", 
+            "200": "233 213 255",
+            "300": "196 181 253",
+            "400": "147 51 234",
+            "500": "124 58 237",
+            "600": "109 40 217",
+            "700": "91 33 182",
+            "800": "76 29 149",
+            "900": "59 7 100",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Навигация",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Главная",
+                        "icon": "dashboard",
+                        "link": "/admin/",
+                    },
+                ],
+            },
+            {
+                "title": "Каталог",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Категории",
+                        "icon": "category",
+                        "link": "/admin/main/category/",
+                    },
+                    {
+                        "title": "Товары",
+                        "icon": "inventory",
+                        "link": "/admin/main/product/",
+                    },
+                    {
+                        "title": "Услуги",
+                        "icon": "build",
+                        "link": "/admin/main/service/",
+                    },
+                ],
+            },
+            {
+                "title": "Заказы и заявки",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Заказы",
+                        "icon": "shopping_cart",
+                        "link": "/admin/main/order/",
+                    },
+                    {
+                        "title": "Заявки на работу",
+                        "icon": "work",
+                        "link": "/admin/main/jobapplication/",
+                    },
+                ],
+            },
+            {
+                "title": "Персонал",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Сотрудники",
+                        "icon": "people",
+                        "link": "/admin/main/employee/",
+                    },
+                    {
+                        "title": "Пользователи",
+                        "icon": "person",
+                        "link": "/admin/users/user/",
+                    },
+                ],
+            },
+        ],
+    },
+}
+
