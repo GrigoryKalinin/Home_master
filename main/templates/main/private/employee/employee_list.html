@@ -51,7 +51,7 @@
                 <i class="bi bi-telephone"></i> {{ employee.phone }}<br>
                 <i class="bi bi-geo-alt"></i> {{ employee.city }}
               </p>
-              <span class="badge bg-primary">{{ employee.get_status_display }}</span>
+              <span class="badge {% if employee.status == 'trainee' %}bg-info text-dark{% elif employee.status == 'active' %}bg-success{% elif employee.status == 'vacation' %}bg-warning text-dark{% elif employee.status == 'sick_leave' %}bg-secondary{% elif employee.status == 'fired' %}bg-danger{% elif employee.status == 'remote' %}bg-primary{% elif employee.status == 'part_time' %}bg-light text-dark{% elif employee.status == 'maternity' %}bg-secondary{% elif employee.status == 'business_trip' %}bg-dark{% else %}bg-secondary{% endif %}">{{ employee.get_status_display }}</span>
               <div class="mt-2">
                 <a href="{% url 'main:employee_detail' employee.slug %}" class="btn btn-sm btn-outline-primary">
                   Подробнее
@@ -77,4 +77,5 @@
   {% endif %}
 </div>
 {% endblock content%}
+
 <!--TODO нужна фильтрация-->

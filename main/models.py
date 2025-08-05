@@ -258,6 +258,22 @@ class Employee(models.Model):
     def get_absolute_url(self):
         return reverse("main:employee_detail", args=[self.slug])
 
+    def get_experience_display(self):
+        """Возвращает опыт работы с правильным склонением"""
+        exp = self.experience
+        last_digit = exp % 10
+        last_two_digits = exp % 100
+        
+        if last_two_digits >= 11 and last_two_digits <= 14:
+            return f"{exp} лет"
+        
+        if last_digit == 1:
+            return f"{exp} год"
+        elif last_digit >= 2 and last_digit <= 4:
+            return f"{exp} года"
+        else:
+            return f"{exp} лет"
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} специализация: {self.specialization} ({self.phone})"
 
@@ -313,6 +329,22 @@ class JobApplication(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", db_index=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new", verbose_name="Статус")
     created_by_client = models.BooleanField(default=False, verbose_name="Создано клиентом")
+
+    def get_age_display(self):
+        """Возвращает возраст с правильным склонением"""
+        age = self.age
+        last_digit = age % 10
+        last_two_digits = age % 100
+        
+        if last_two_digits >= 11 and last_two_digits <= 14:
+            return f"{age} лет"
+        
+        if last_digit == 1:
+            return f"{age} год"
+        elif last_digit >= 2 and last_digit <= 4:
+            return f"{age} года"
+        else:
+            return f"{age} лет"
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.phone}, возвраст: {self.age}, город: {self.city}, специализация: {self.specialization}"

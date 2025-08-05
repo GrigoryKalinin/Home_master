@@ -28,10 +28,18 @@
                 <div class="col-md-6">
                   <h6>Рабочая информация</h6>
                   <p><strong>Специализация:</strong> {{ employee.specialization }}</p>
-                  <p><strong>Опыт работы:</strong> {{ employee.experience }} лет</p>
+                  <p><strong>Опыт работы:</strong> {{ employee.get_experience_display }}</p>
                   <p><strong>Дата приема:</strong> {{ employee.date_hired|default:"Не указана" }}</p>
                   {% if company_experience %}
-                    <p><strong>Стаж в компании:</strong> {{ company_experience }} лет</p>
+                    <p><strong>Стаж в компании:</strong> 
+                      {% if company_experience == 1 %}
+                        {{ company_experience }} год
+                      {% elif company_experience >= 2 and company_experience <= 4 %}
+                        {{ company_experience }} года
+                      {% else %}
+                        {{ company_experience }} лет
+                      {% endif %}
+                    </p>
                   {% endif %}
                   <p><strong>Статус:</strong> {{ employee.get_status_display }}</p>
                 </div>

@@ -40,9 +40,9 @@
               <small class="text-muted">{{ application.specialization }}</small><br>
               <i class="bi bi-telephone"></i> {{ application.phone }}<br>
               <i class="bi bi-geo-alt"></i> {{ application.city }}<br>
-              <i class="bi bi-person"></i> {{ application.age }} лет
+              <i class="bi bi-person"></i> {{ application.get_age_display }}
             </p>
-            <span class="badge bg-primary">{{ application.get_status_display }}</span>
+            <span class="badge {% if application.status == 'rejected' %}bg-danger{% elif application.status == 'spam' %}bg-dark{% elif application.status == 'hired' %}bg-success{% elif application.status == 'invited' %}bg-warning text-dark{% else %}bg-primary{% endif %}">{{ application.get_status_display }}</span>
             <div class="mt-2">
               <a href="{% url 'main:job_application_detail' application.pk %}" class="btn btn-sm btn-outline-primary">
                 Подробнее
