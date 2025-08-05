@@ -15,8 +15,8 @@
     <div class="footer-column">
       <h3>Компания</h3>
       <ul>
-        <li><a href="#">О нас</a></li>
-        <li><a href="#">Отзывы</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#about{% else %}{% url 'main:about_us' %}#about{% endif %}">О нас</a></li>
+        <li><a href="{% if request.resolver_match.url_name == 'landing' %}#reviews{% else %}{% url 'main:landing' %}#reviews{% endif %}">Отзывы</a></li>
         <li><a href="{% url 'main:job_application' %}">Карьера</a></li>
       </ul>
     </div>
