@@ -263,6 +263,54 @@ class EmployeeCreateView(StaffRequiredMixin, CreateView):
         context["title"] = "Добавление сотрудника"
         context["button_text"] = "Добавить сотрудника"
         return context
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        application_id = self.request.GET.get('from_application')
+        if application_id:
+            try:
+                application = JobApplication.objects.get(pk=application_id)
+                # Вычисляем дату рождения из возраста
+                from datetime import date
+                birth_year = date.today().year - application.age
+                birth_date = date(birth_year, 1, 1)  # Примерная дата
+                
+                initial.update({
+                    'first_name': application.first_name,
+                    'last_name': application.last_name,
+                    'phone': application.phone,
+                    'city': application.city,
+                    'birth_date': birth_date,
+                })
+                
+                # Пытаемся найти специализацию
+                try:
+                    specialization = Specialization.objects.get(name=application.specialization)
+                    initial['specialization'] = specialization
+                except Specialization.DoesNotExist:
+                    pass
+                    
+            except JobApplication.DoesNotExist:
+                pass
+        return initial
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        # Если сотрудник создан из заявки, обновляем статус заявки
+        application_id = self.request.GET.get('from_application')
+        if application_id:
+            try:
+                application = JobApplication.objects.get(pk=application_id)
+                application.status = 'hired'
+                application.save()
+                messages.success(self.request, f'Сотрудник {self.object} успешно добавлен. Статус заявки обновлен на "Нанят".')
+            except JobApplication.DoesNotExist:
+                pass
+        else:
+            messages.success(self.request, f'Сотрудник {self.object} успешно добавлен.')
+            
+        return response
 
 class EmployeeListView(StaffRequiredMixin, ListView):
     model = Employee
