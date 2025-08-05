@@ -10,10 +10,10 @@
   <div class="card mb-4">
     <div class="card-body">
       <form method="get" class="row g-3">
-        <div class="col-md-4">
-          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по имени, телефону, городу...">
+        <div class="col-md-6">
+          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по имени, фамилии, телефону, городу, специализации">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <select name="status" class="form-select">
             <option value="">Все статусы</option>
             {% for value, label in status_choices %}
@@ -37,7 +37,7 @@
           <div class="card-body">
             <h5 class="card-title">{{ application.first_name }} {{ application.last_name }}</h5>
             <p class="card-text">
-              <small class="text-muted">{{ application.specialization }}</small><br>
+              {{ application.specialization }}<br><br>
               <i class="bi bi-telephone"></i> {{ application.phone }}<br>
               <i class="bi bi-geo-alt"></i> {{ application.city }}<br>
               <i class="bi bi-person"></i> {{ application.get_age_display }}

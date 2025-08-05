@@ -18,10 +18,10 @@
   <div class="card mb-4">
     <div class="card-body">
       <form method="get" class="row g-3">
-        <div class="col-md-4">
-          <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Поиск товаров...">
+        <div class="col-md-6">
+          <input type="text" name="search" class="form-control" value="{{ search_query }}" placeholder="Поиск по названию">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <select name="available" class="form-select">
             <option value="">Все товары</option>
             <option value="true" {% if current_available == 'true' %}selected{% endif %}>Доступные</option>
