@@ -70,6 +70,19 @@
     margin-top: 20px; 
 }
 
+.modal-link,
+.auth-link a {
+  color: var(--primary-blue) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.modal-link:hover,
+.auth-link a:hover {
+  color: var(--primary-yellow) !important;
+  text-decoration: none;
+}
+
 .error-message { 
     color: #e74c3c; 
     font-size: 14px; 
@@ -136,6 +149,8 @@
     text-align: center;
     font-size: 16px;
 }
+
+/* Стили для ссылок в формах авторизации */
 
 @media (max-width: 576px) {
     .button-group {

@@ -9,6 +9,7 @@ from django.http import JsonResponse
 
 from .models import User
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileUpdateForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
+from main.forms import OrderForm
 
 
 class UserRegisterView(CreateView):
@@ -38,6 +39,7 @@ class UserRegisterView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Регистрация"
+        context["order_from"] = OrderForm()
         return context
 
 def logout_view(request):
@@ -155,3 +157,8 @@ class AjaxLoginView(LoginView):
         if self.request.user.is_staff:
             return reverse_lazy('main:employee_dashboard')
         return reverse_lazy('users:profile')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()
+        return context
