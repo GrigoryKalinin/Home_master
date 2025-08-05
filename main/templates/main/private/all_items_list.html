@@ -1,0 +1,126 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Все услуги, товары и категории{% endblock title%}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Все услуги, товары и категории</h2>
+    <a href="{% url 'main:category_list' %}" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Назад к категориям
+    </a>
+  </div>
+
+  <!-- Поиск -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3">
+        <div class="col-md-10">
+          <input type="text" name="search" class="form-control" value="{{ request.GET.search }}" placeholder="Поиск по названию услуг, товаров и категорий">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary">Поиск</button>
+          <a href="{% url 'main:all_items_list' %}" class="btn btn-outline-secondary">Сброс</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Результаты -->
+  {% if categories or products or services %}
+    
+    <!-- Категории -->
+    {% if categories %}
+    <div class="mb-5">
+      <h4 class="mb-3"><i class="bi bi-grid"></i> Категории ({{ categories|length }})</h4>
+      <div class="row">
+        {% for category in categories %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title text-primary">{{ category.name }}</h6>
+              <p class="card-text small">{{ category.description|truncatechars:50 }}</p>
+              <span class="badge {% if category.available %}bg-success{% else %}bg-secondary{% endif %} mb-2">
+                {% if category.available %}Доступна{% else %}Недоступна{% endif %}
+              </span>
+              <div>
+                <a href="{% url 'main:category_detail' category.slug %}" class="btn btn-sm btn-outline-primary">
+                  <i class="fas fa-eye"></i> Подробнее
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Товары -->
+    {% if products %}
+    <div class="mb-5">
+      <h4 class="mb-3"><i class="bi bi-box"></i> Товары ({{ products|length }})</h4>
+      <div class="row">
+        {% for product in products %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title text-success">{{ product.name }}</h6>
+              <p class="card-text small">Категория: {{ product.category.name }}</p>
+              <p class="card-text small">{{ product.description|truncatechars:50 }}</p>
+              <p class="card-text"><strong>{{ product.price }} руб.</strong></p>
+              <span class="badge {% if product.available %}bg-success{% else %}bg-secondary{% endif %} mb-2">
+                {% if product.available %}Доступен{% else %}Недоступен{% endif %}
+              </span>
+              <div>
+                <a href="{% url 'main:product_detail_admin' product.slug %}" class="btn btn-sm btn-outline-success">
+                  <i class="fas fa-eye"></i> Подробнее
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Услуги -->
+    {% if services %}
+    <div class="mb-5">
+      <h4 class="mb-3"><i class="bi bi-tools"></i> Услуги ({{ services|length }})</h4>
+      <div class="row">
+        {% for service in services %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title text-warning">{{ service.name }}</h6>
+              <p class="card-text small">Товар: {{ service.product.name }}</p>
+              <p class="card-text small">Категория: {{ service.product.category.name }}</p>
+              <p class="card-text small">{{ service.description|truncatechars:50 }}</p>
+              <p class="card-text"><strong>{{ service.price }} руб.</strong></p>
+              <span class="badge {% if service.available %}bg-success{% else %}bg-secondary{% endif %} mb-2">
+                {% if service.available %}Доступна{% else %}Недоступна{% endif %}
+              </span>
+              <div>
+                <a href="{% url 'main:service_detail' service.slug %}" class="btn btn-sm btn-outline-warning">
+                  <i class="fas fa-eye"></i> Подробнее
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-search display-1 text-muted"></i>
+      <h4 class="mt-3">Ничего не найдено</h4>
+      <p class="text-muted">Попробуйте изменить поисковый запрос</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock content%}

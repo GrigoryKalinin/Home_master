@@ -547,3 +547,26 @@ class JobApplicationDetailView(StaffRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = JobApplication.STATUS_CHOICES
         return context
+
+class AllItemsListView(StaffRequiredMixin, TemplateView):
+    template_name = "main/private/all_items_list.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        search = self.request.GET.get('search', '')
+        
+        categories = Category.objects.all()
+        products = Product.objects.select_related('category')
+        services = Service.objects.select_related('product__category')
+        
+        if search:
+            categories = categories.filter(name__icontains=search)
+            products = products.filter(name__icontains=search)
+            services = services.filter(name__icontains=search)
+        
+        context['categories'] = categories.order_by('name')
+        context['products'] = products.order_by('name')
+        context['services'] = services.order_by('name')
+        context['search_query'] = search
+        
+        return context

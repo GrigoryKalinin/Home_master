@@ -12,6 +12,7 @@ urlpatterns = [
 
     # Управление
     path('dashboard/', views.DashboardView.as_view(), name='employee_dashboard'),
+    path('dashboard/all-items/', views.AllItemsListView.as_view(), name='all_items_list'),
         # Заказы
     path('dashboard/orders/', views.OrderListView.as_view(), name='order_list'),
     path('dashboard/order/<int:pk>/status/', views.OrderStatusUpdateView.as_view(), name='order_status_update'),
