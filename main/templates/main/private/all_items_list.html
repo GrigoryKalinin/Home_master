@@ -44,7 +44,7 @@
                 {% if category.available %}Доступна{% else %}Недоступна{% endif %}
               </span>
               <div>
-                <a href="{% url 'main:category_detail' category.slug %}" class="btn btn-sm btn-outline-primary">
+                <a href="{% url 'main:category_detail' category.slug %}?from_all_items=1" class="btn btn-sm btn-outline-primary">
                   <i class="fas fa-eye"></i> Подробнее
                 </a>
               </div>
@@ -73,7 +73,7 @@
                 {% if product.available %}Доступен{% else %}Недоступен{% endif %}
               </span>
               <div>
-                <a href="{% url 'main:product_detail_admin' product.slug %}" class="btn btn-sm btn-outline-success">
+                <a href="{% url 'main:product_detail_admin' product.slug %}?from_all_items=1" class="btn btn-sm btn-outline-success">
                   <i class="fas fa-eye"></i> Подробнее
                 </a>
               </div>
@@ -103,7 +103,7 @@
                 {% if service.available %}Доступна{% else %}Недоступна{% endif %}
               </span>
               <div>
-                <a href="{% url 'main:service_detail' service.slug %}" class="btn btn-sm btn-outline-warning">
+                <a href="{% url 'main:service_detail' service.slug %}?from_all_items=1" class="btn btn-sm btn-outline-warning">
                   <i class="fas fa-eye"></i> Подробнее
                 </a>
               </div>
