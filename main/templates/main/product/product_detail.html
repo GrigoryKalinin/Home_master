@@ -58,10 +58,10 @@
         {% endif %}
 
         <div class="product-actions">
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
+          <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
             <i class="fas fa-phone"></i>
             Заказать услугу
-          </button>
+          </a>
           <a href="{{ category.get_absolute_url }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i>
             Назад к услугам

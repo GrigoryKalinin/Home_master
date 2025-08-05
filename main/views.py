@@ -334,11 +334,11 @@ class OrderCreateView(CreateView):
     model = Order
     form_class = OrderForm
     template_name = "main/order/order_create.html"
+    success_url = reverse_lazy('main:landing')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Оформление заказа"
-        context["button_text"] = "Оформить заказ"
+        context["title"] = "Заказать услугу"
         return context
 
     def form_valid(self, form):
@@ -352,7 +352,10 @@ class OrderCreateView(CreateView):
                     "order_id": order.id,
                 }
             )
-        return super().form_valid(form)
+        # Для обычных запросов
+        response = super().form_valid(form)
+        messages.success(self.request, 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.')
+        return response
 
     def form_invalid(self, form):
         if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -360,13 +363,10 @@ class OrderCreateView(CreateView):
                 {
                     "success": False,
                     "errors": form.errors,
-                    "form_html": render_to_string(
-                        "main/order/order_create.html",
-                        {"form": form},
-                        request=self.request,
-                    ),
                 }
             )
+        # Для обычных запросов
+        messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
         return super().form_invalid(form)
 
 class OrderListView(StaffRequiredMixin, ListView):

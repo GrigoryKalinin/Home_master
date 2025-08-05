@@ -9,19 +9,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const modalTitle = document.getElementById("orderModalLabel");
 
   // ===== 1. Обработчик для динамического изменения заголовка модального окна =====
-  // Находим все кнопки, которые открывают это модальное окно
+  // Находим все ссылки/кнопки, которые открывают это модальное окно
   const modalButtons = document.querySelectorAll(
     '[data-bs-toggle="modal"][data-bs-target="#orderModal"]'
   );
 
-  // Для каждой кнопки добавляем обработчик клика
+  // Для каждой ссылки/кнопки добавляем обработчик клика
   modalButtons.forEach((button) => {
-    button.addEventListener("click", function () {
+    button.addEventListener("click", function (e) {
+      e.preventDefault(); // Предотвращаем переход по ссылке
+      
       // Получаем название услуги из data-атрибута или текст кнопки
       const serviceName = this.dataset.serviceName || this.textContent.trim();
 
       // Устанавливаем заголовок модального окна
       modalTitle.textContent = serviceName;
+      
+      // Показываем модальное окно
+      modal.show();
     });
   });
 

@@ -14,7 +14,7 @@
 <div class="container">
   <h1>Профессиональный ремонт и обслуживание</h1>
   <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
-  <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</button>
+  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</a>
 </div>
 </section>
 
@@ -141,7 +141,7 @@
 <div class="container">
   <h2>Готовы помочь вам прямо сейчас!</h2>
   <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
-  <button class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Оставить заявку</button>
+  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Оставить заявку</a>
 </div>
 </section>
 

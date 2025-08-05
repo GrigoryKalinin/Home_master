@@ -37,7 +37,7 @@
             </a>
           </div>
           <a href="{{ product.get_absolute_url }}" class="btn-detail">Подробнее</a>
-          <button class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</button>
+          <a href="{% url 'main:order_create' %}" class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</a>
         </div>
       </div>
       {% empty %}
