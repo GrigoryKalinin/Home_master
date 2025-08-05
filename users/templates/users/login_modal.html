@@ -1,0 +1,40 @@
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel"><i class="fas fa-sign-in-alt"></i> Вход</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <form id="loginForm" method="post" action="{% url 'users:login' %}">
+        <div class="modal-body">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label">Email</label>
+            <input type="email" class="form-control" id="id_username" name="username" placeholder="Ваш Email" required>
+            <div class="text-danger" id="username-error"></div>
+          </div>
+          <div class="mb-3">
+            <label for="id_password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="id_password" name="password" placeholder="Пароль" required>
+            <div class="text-danger" id="password-error"></div>
+          </div>
+          <div id="login-messages"></div>
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <button type="submit" class="btn btn-primary w-100" id="loginSubmitBtn">
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+              Войти
+            </button>
+            <div class="text-center mt-3">
+              <a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
+            </div>
+            <div class="text-center mt-2">
+              <span>Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрироваться</a></span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

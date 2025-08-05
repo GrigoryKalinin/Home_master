@@ -5,6 +5,7 @@ from django.views.generic import CreateView, DetailView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordChangeView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.http import JsonResponse
 
 from .models import User
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileUpdateForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomSetPasswordForm
@@ -38,31 +39,6 @@ class UserRegisterView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Регистрация"
         return context
-
-
-class UserLoginView(LoginView):
-    form_class = CustomAuthenticationForm
-    template_name = 'users/login.html'
-    redirect_authenticated_user = True
-
-    def get_success_url(self):
-        next_url = self.request.GET.get('next')
-        if next_url and next_url != reverse_lazy('users:login'):
-            return next_url
-        if self.request.user.is_staff:
-            return reverse_lazy('main:employee_dashboard')
-        return reverse_lazy('users:profile')
-    
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        messages.error(self.request, 'Неверное имя пользователя или пароль. Попробуйте снова.')
-        return response
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = "Авторизация"
-        return context
-
 
 def logout_view(request):
     if request.user.is_authenticated:
@@ -144,3 +120,38 @@ class UserPasswordResetConfirmView(PasswordResetConfirmView):
 
 class UserPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
+
+
+class AjaxLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+    template_name = 'users/login.html'
+    redirect_authenticated_user = True
+    
+    def form_valid(self, form):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            login(self.request, form.get_user())
+            return JsonResponse({
+                'success': True,
+                'message': f'Добро пожаловать, {form.get_user().get_full_name()}!',
+                'redirect_url': self.get_success_url()
+            })
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            errors = dict(form.errors)
+            if form.non_field_errors():
+                errors['__all__'] = form.non_field_errors()
+            return JsonResponse({
+                'success': False,
+                'errors': errors
+            })
+        return super().form_invalid(form)
+    
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url and next_url != reverse_lazy('users:login'):
+            return next_url
+        if self.request.user.is_staff:
+            return reverse_lazy('main:employee_dashboard')
+        return reverse_lazy('users:profile')
