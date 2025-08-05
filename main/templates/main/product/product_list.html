@@ -36,8 +36,14 @@
               <p>от {{ product.price }} руб.</p>
             </a>
           </div>
-          <a href="{{ product.get_absolute_url }}" class="btn-detail">Подробнее</a>
-          <a href="{% url 'main:order_create' %}" class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">Заказать</a>
+          <a href="{{ product.get_absolute_url }}" class="btn-detail">
+            <i class="fas fa-eye"></i>
+            Подробнее
+          </a>
+          <a href="{% url 'main:order_create' %}" class="btn-order" data-bs-toggle="modal" data-bs-target="#orderModal">
+            <i class="fas fa-shopping-cart"></i>
+            Заказать
+          </a>
         </div>
       </div>
       {% empty %}

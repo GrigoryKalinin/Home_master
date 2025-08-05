@@ -14,7 +14,10 @@
 <div class="container">
   <h1>Профессиональный ремонт и обслуживание</h1>
   <p>Мы предоставляем качественные услуги по ремонту и обслуживанию для вашего дома и офиса. Наши мастера с многолетним опытом готовы помочь вам в любое время.</p>
-  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Заказать услугу</a>
+  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>
+    <i class="fas fa-tools"></i>
+    Заказать услугу
+  </a>
 </div>
 </section>
 
@@ -66,7 +69,10 @@
       <p>Наши мастера проходят строгий отбор и регулярное обучение, чтобы предоставлять вам услуги высочайшего качества. Мы используем только проверенные материалы и инструменты от ведущих производителей.</p>
       <p>Гарантия на все виды работ - 1 год. Мы дорожим своей репутацией и всегда отвечаем за качество наших услуг.</p>
       <a href="{% url 'main:about_us' %}">
-        <button class="btn btn-outline">Узнать больше</button>
+        <button class="btn btn-outline">
+          <i class="fas fa-info-circle"></i>
+          Узнать больше
+        </button>
       </a>
     </div>
     <div class="about-image" style="background-image: url('https://example.com/about-team.jpg');"></div>
@@ -141,7 +147,10 @@
 <div class="container">
   <h2>Готовы помочь вам прямо сейчас!</h2>
   <p>Оставьте заявку и наш мастер свяжется с вами в течение 15 минут для уточнения деталей и согласования времени визита.</p>
-  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>Оставить заявку</a>
+  <a href="{% url 'main:order_create' %}" class="btn btn-primary" data-bs-toggle='modal' data-bs-target='#orderModal'>
+    <i class="fas fa-paper-plane"></i>
+    Оставить заявку
+  </a>
 </div>
 </section>
 
