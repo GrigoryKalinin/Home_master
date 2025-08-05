@@ -1,0 +1,34 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Добавление специализации{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Добавление специализации</h4>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              {{ form.name.label_tag }}
+              {{ form.name }}
+            </div>
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-lg"></i> Добавить
+              </button>
+              <a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Назад
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

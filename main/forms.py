@@ -356,6 +356,15 @@ class JobApplicationForm(forms.ModelForm):
         # Устанавливаем стандартный российский регион для всех номеров
         self.fields["phone"].initial = "+7"
 
+class SpecializationForm(forms.ModelForm):
+    class Meta:
+        model = Specialization
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите название специализации'})
+        }
+
+
 
 # class ReviewForm(forms.ModelForm):
 #     RATING_CHOICES = [

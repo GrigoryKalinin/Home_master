@@ -9,8 +9,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from datetime import date
 
-from .models import Category, Product, Service, Order, JobApplication, Employee
-from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm
+from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization
+from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm, SpecializationForm
 
 # Миксин для проверки принадлежности к сотрудникам
 class StaffRequiredMixin(UserPassesTestMixin):
@@ -322,6 +322,13 @@ class EmployeeDetailView(StaffRequiredMixin, DetailView):
             context['company_experience'] = years
         
         return context
+    
+class SpecializationCreateView(StaffRequiredMixin, CreateView):
+    model = Specialization
+    form_class = SpecializationForm
+    template_name = "main/private/employee/specialization_form.html"
+    success_url = reverse_lazy("main:employee_list")
+
 
 class OrderCreateView(CreateView):
     model = Order

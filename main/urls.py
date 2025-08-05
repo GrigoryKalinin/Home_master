@@ -19,6 +19,7 @@ urlpatterns = [
     path('dashboard/job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),
     path('dashboard/job_application/<int:pk>/', views.JobApplicationDetailView.as_view(), name='job_application_detail'),
         # Сотрудники
+    path('dashboard/specialization/create/', views.SpecializationCreateView.as_view(), name='specialization_create'),
     path('dashboard/employees/', views.EmployeeListView.as_view(), name='employee_list'),
     path('dashboard/employee/create/', views.EmployeeCreateView.as_view(), name='employee_create'),
     path('dashboard/employee/<slug:employee_slug>/', views.EmployeeDetailView.as_view(), name='employee_detail'),

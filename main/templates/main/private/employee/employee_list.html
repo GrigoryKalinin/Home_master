@@ -6,9 +6,14 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Список сотрудников</h2>
-    <a href="{% url 'main:employee_create' %}" class="btn btn-success">
-      <i class="bi bi-person-plus"></i> Добавить сотрудника
-    </a>
+    <div>
+      <a href="{% url 'main:specialization_create' %}" class="btn btn-outline-primary me-2">
+        <i class="bi bi-plus-circle"></i> Добавить специализацию
+      </a>
+      <a href="{% url 'main:employee_create' %}" class="btn btn-success">
+        <i class="bi bi-person-plus"></i> Добавить сотрудника
+      </a>
+    </div>
   </div>
 
   <!-- Форма поиска и фильтрации -->
