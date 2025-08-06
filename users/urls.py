@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', views.AjaxLoginView.as_view(), name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.UserProfileView.as_view(), name='profile'),
+    path('profile/orders/', views.UserOrdersView.as_view(), name='user_orders'),
     path('profile/edit/', views.ProfileUpdateView.as_view(), name='profile_edit'),
     path('profile/password_change/', views.UserPasswordChangeView.as_view(), name='password_change'),
     path('profile/password_reset/', views.UserPasswordResetView.as_view(), name='password_reset'),

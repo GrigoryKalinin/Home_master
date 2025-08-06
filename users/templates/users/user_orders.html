@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="profile-page">
+  <div class="container">
+    <div class="form-container">
+      <div class="form-header">
+        <h1><i class="fas fa-list-alt"></i> Мои заказы</h1>
+      </div>
+      
+      {% if orders %}
+        {% for order in orders %}
+          <div class="order-item" style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--primary-blue);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <h4 style="margin: 0; color: var(--primary-blue);">Заказ #{{ order.id }}</h4>
+              <span style="padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;
+                {% if order.status == 'pending' %}background: #fff3cd; color: #856404;
+                {% elif order.status == 'in_progress' %}background: #d1ecf1; color: #0c5460;
+                {% elif order.status == 'completed' %}background: #d4edda; color: #155724;
+                {% elif order.status == 'cancelled' %}background: #f8d7da; color: #721c24;
+                {% endif %}">
+                {% if order.status == 'pending' %}Ожидает
+                {% elif order.status == 'in_progress' %}В работе
+                {% elif order.status == 'completed' %}Выполнен
+                {% elif order.status == 'cancelled' %}Отменен
+                {% endif %}
+              </span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+              <div><strong>Услуга:</strong> {{ order.service.name }}</div>
+              <div><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</div>
+              <div><strong>Телефон:</strong> {{ order.phone }}</div>
+              <div><strong>Адрес:</strong> {{ order.address }}</div>
+            </div>
+            
+            {% if order.description %}
+              <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #dee2e6;">
+                <strong>Описание:</strong> {{ order.description }}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        
+        {% if is_paginated %}
+          <div style="text-align: center; margin: 30px 0;">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline">Предыдущая</a>
+            {% endif %}
+            <span style="margin: 0 15px;">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline">Следующая</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        <div style="text-align: center; padding: 40px; color: #6c757d;">
+          <i class="fas fa-inbox fa-3x" style="margin-bottom: 20px; opacity: 0.5;"></i>
+          <h3>У вас пока нет заказов</h3>
+        </div>
+      {% endif %}
+      
+      <div style="text-align: center; margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
+          <i class="fas fa-plus"></i> Оформить заказ
+        </button>
+        <a href="{% url 'users:profile' %}" class="btn btn-outline">
+          <i class="fas fa-arrow-left"></i> Назад
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "main/order/modal.html" %}
+{% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/phone_mask.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+{% endblock script %}

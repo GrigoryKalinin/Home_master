@@ -3,8 +3,9 @@
 
 {% block content %}
 <div class="profile-page">
-  <div class="container">
+  <div class="container" style="max-width: 600px;">
     <div class="profile-container">
+      
       <div class="profile-header">
         {% if user.avatar %}
           <img src="{{ user.avatar.url }}" alt="Аватар" class="profile-avatar">
@@ -14,7 +15,6 @@
           </div>
         {% endif %}
         <h1>{{ user.get_full_name|default:user.email }}</h1>
-        <p>Участник с {{ user.date_joined|date:"d.m.Y" }}</p>
       </div>
       
       <div class="profile-content">
@@ -35,21 +35,24 @@
             <strong>Город:</strong><br>
             {{ user.city|default:"Не указан" }}
           </div>
-          <div class="info-item">
-            <strong>Адрес:</strong><br>
-            {{ user.address|default:"Не указан" }}
-          </div>
         </div>
         
-        <div class="button-group">
-          <a href="{% url 'users:profile_edit' %}" class="btn btn-primary">
-            <i class="fas fa-edit"></i> Редактировать профиль
+        <div class="profile-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;">
+          <a href="{% url 'users:user_orders' %}" class="profile-btn primary" style="display: flex; align-items: center; justify-content: center; padding: 15px; background: linear-gradient(135deg, #6c757d 0%, #495057 100%); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s; box-shadow: 0 3px 10px rgba(108, 117, 125, 0.3);">
+            <i class="fas fa-list-alt" style="margin-right: 8px; font-size: 16px;"></i>
+            Мои заказы
           </a>
-          <a href="{% url 'users:password_change' %}" class="btn btn-secondary">
-            <i class="fas fa-key"></i> Сменить пароль
+          <a href="{% url 'users:profile_edit' %}" class="profile-btn secondary" style="display: flex; align-items: center; justify-content: center; padding: 15px; background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s; box-shadow: 0 3px 10px rgba(23, 162, 184, 0.3);">
+            <i class="fas fa-edit" style="margin-right: 8px; font-size: 16px;"></i>
+            Редактировать
+          </a>
+          <a href="{% url 'users:password_change' %}" class="profile-btn outline" style="display: flex; align-items: center; justify-content: center; padding: 15px; background: white; color: #6c757d; border: 2px solid #6c757d; border-radius: 10px; text-decoration: none; font-weight: 600; transition: all 0.3s; grid-column: 1 / -1; box-shadow: 0 3px 10px rgba(108, 117, 125, 0.2);">
+            <i class="fas fa-key" style="margin-right: 8px; font-size: 16px;"></i>
+            Сменить пароль
           </a>
         </div>
       </div>
+      
     </div>
   </div>
 </div>
@@ -60,4 +63,27 @@
 {% block script %}
   <script src="{% static 'js/phone_mask.js' %}"></script>
   <script src="{% static 'js/modal.js' %}"></script>
+  <style>
+    .profile-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+    }
+    .profile-btn.primary:hover {
+      background: linear-gradient(135deg, #495057 0%, #343a40 100%) !important;
+    }
+    .profile-btn.secondary:hover {
+      background: linear-gradient(135deg, #138496 0%, #117a8b 100%) !important;
+    }
+    .profile-btn.outline:hover {
+      background: rgba(108, 117, 125, 0.1) !important;
+    }
+    @media (max-width: 576px) {
+      .profile-buttons {
+        grid-template-columns: 1fr !important;
+      }
+      .profile-btn.outline {
+        grid-column: 1 !important;
+      }
+    }
+  </style>
 {% endblock script %}
