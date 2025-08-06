@@ -5,9 +5,16 @@ from phonenumber_field.formfields import PhoneNumberField
 from .models import Order, JobApplication, Employee, Category, Product, Service, Specialization
 
 class CategoryForm(forms.ModelForm):
+    specializations = forms.ModelMultipleChoiceField(
+        queryset=Specialization.objects.all(),
+        label="Специализации",
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5'})
+    )
+    
     class Meta:
         model = Category
-        fields = ["name", "description", "image", "available"]
+        fields = ["name", "description", "image", "available", "specializations"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),

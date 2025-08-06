@@ -29,6 +29,8 @@ class Category(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     popularity = models.PositiveIntegerField(default=0, verbose_name="Популярность", blank=True)  # популярность товара
+    specializations = models.ManyToManyField('Specialization', blank=True, verbose_name="Специализации")
+    specializations = models.ManyToManyField('Specialization', blank=True, verbose_name="Специализации")
 
     class Meta:
         ordering = ("name",)

@@ -22,6 +22,9 @@ class CategoryAdmin(ModelAdmin):
         ('Основная информация', {
             'fields': ('name', 'slug', 'description', 'image')
         }),
+        ('Специализации', {
+            'fields': ('specializations',)
+        }),
         ('Настройки', {
             'fields': ('available', 'popularity')
         }),

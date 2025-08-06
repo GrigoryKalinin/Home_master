@@ -35,6 +35,12 @@
               {{ form.image }}
             </div>
             
+            <div class="mb-3">
+              {{ form.specializations.label_tag }}
+              {{ form.specializations }}
+              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких специализаций</small>
+            </div>
+            
             <div class="mb-3 form-check">
               {{ form.available }}
               {{ form.available.label_tag }}
