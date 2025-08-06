@@ -563,6 +563,38 @@ def get_services_by_products(request):
         return JsonResponse({'services': list(services)})
     return JsonResponse({'services': []})
 
+def get_products_by_categories(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return JsonResponse({'products': []})
+        
+    category_ids = request.GET.getlist('category_ids[]')
+    if category_ids:
+        products = Product.objects.filter(category__in=category_ids, available=True).values('id', 'name')
+        return JsonResponse({'products': list(products)})
+    return JsonResponse({'products': []})
+
+def get_employees_by_categories(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return JsonResponse({'employees': []})
+        
+    category_ids = request.GET.getlist('category_ids[]')
+    if category_ids:
+        employees = Employee.objects.filter(
+            categories__in=category_ids, 
+            available=True, 
+            status='active'
+        ).distinct().values('id', 'first_name', 'last_name')
+        
+        employees_list = []
+        for emp in employees:
+            employees_list.append({
+                'id': emp['id'],
+                'name': f"{emp['first_name']} {emp['last_name']}"
+            })
+        
+        return JsonResponse({'employees': employees_list})
+    return JsonResponse({'employees': []})
+
 class JobApplicationCreateFormView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm

@@ -312,9 +312,14 @@ class Order(models.Model):
     address = models.CharField(max_length=200, blank=True, verbose_name="Полный адрес")
     work_description = models.TextField(blank=True, verbose_name="Описание работ")
     additional_images = models.ImageField(upload_to="images/orders/additional/", blank=True, verbose_name="Дополнительные фото")
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Категория")
-    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Товар/Услуга")
-    assigned_employee = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Назначенный мастер")
+    categories = models.ManyToManyField('Category', blank=True, related_name='orders_new', verbose_name="Категории")
+    products = models.ManyToManyField('Product', blank=True, related_name='orders_new', verbose_name="Товары")
+    assigned_employees = models.ManyToManyField('Employee', blank=True, related_name='orders_new', verbose_name="Назначенные мастера")
+    
+    # Оставляем старые поля для совместимости
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Категория (старое)")
+    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Товар (старый)")
+    assigned_employee = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Мастер (старый)")
 
     def get_display_name(self):
         """Возвращает полное имя если есть, иначе обычное имя"""

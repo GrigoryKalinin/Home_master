@@ -139,8 +139,14 @@ class OrderAdmin(ModelAdmin):
     readonly_fields = ['date_created']
     
     fieldsets = (
-        ('Информация о заказе', {
-            'fields': ('name', 'phone', 'city', 'comment', 'image')
+        ('Основная информация', {
+            'fields': ('name', 'last_name', 'middle_name', 'phone', 'city', 'address', 'comment', 'work_description', 'image')
+        }),
+        ('Категории и товары', {
+            'fields': ('categories', 'products')
+        }),
+        ('Мастера', {
+            'fields': ('assigned_employees',)
         }),
         ('Статус', {
             'fields': ('status', 'created_by_client')

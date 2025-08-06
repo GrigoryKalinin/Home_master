@@ -451,33 +451,30 @@ class OrderEditForm(forms.ModelForm):
     
 
     
-    category = forms.ModelChoiceField(
+    categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.filter(available=True),
-        label="Категория",
+        label="Категории",
         required=False,
-        empty_label="Выберите категорию",
-        widget=forms.Select(attrs={'class': 'form-select', 'id': 'categorySelect'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'categoriesSelect'})
     )
     
-    product = forms.ModelChoiceField(
+    products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.none(),
-        label="Товар/Услуга",
+        label="Товары",
         required=False,
-        empty_label="Сначала выберите категорию",
-        widget=forms.Select(attrs={'class': 'form-select', 'id': 'productSelect'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'productsSelect'})
     )
     
-    assigned_employee = forms.ModelChoiceField(
+    assigned_employees = forms.ModelMultipleChoiceField(
         queryset=Employee.objects.none(),
-        label="Назначить мастера",
+        label="Назначенные мастера",
         required=False,
-        empty_label="Сначала выберите категорию",
-        widget=forms.Select(attrs={'class': 'form-select', 'id': 'employeeSelect'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'employeesSelect'})
     )
     
     class Meta:
         model = Order
-        fields = ['name', 'last_name', 'middle_name', 'phone', 'work_description', 'city', 'address', 'category', 'product', 'assigned_employee']
+        fields = ['name', 'last_name', 'middle_name', 'phone', 'work_description', 'city', 'address', 'categories', 'products', 'assigned_employees']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -486,26 +483,27 @@ class OrderEditForm(forms.ModelForm):
             if not self.instance.address:
                 self.fields['address'].initial = self.instance.city
             
-            # Если у заказа уже есть категория, загружаем соответствующие товары и мастеров
-            if self.instance.category:
-                self.fields['product'].queryset = Product.objects.filter(category=self.instance.category, available=True)
-                self.fields['assigned_employee'].queryset = Employee.objects.filter(
-                    categories=self.instance.category, 
+            # Если у заказа уже есть категории, загружаем соответствующие товары и мастеров
+            if self.instance.categories.exists():
+                categories = self.instance.categories.all()
+                self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
+                self.fields['assigned_employees'].queryset = Employee.objects.filter(
+                    categories__in=categories, 
                     available=True, 
                     status='active'
-                )
+                ).distinct()
         
         # Обновляем queryset на основе POST данных
         if self.data:
             try:
-                category_id = int(self.data.get('category'))
-                if category_id:
-                    self.fields['product'].queryset = Product.objects.filter(category_id=category_id, available=True)
-                    self.fields['assigned_employee'].queryset = Employee.objects.filter(
-                        categories=category_id, 
+                category_ids = self.data.getlist('categories')
+                if category_ids:
+                    self.fields['products'].queryset = Product.objects.filter(category__in=category_ids, available=True)
+                    self.fields['assigned_employees'].queryset = Employee.objects.filter(
+                        categories__in=category_ids, 
                         available=True, 
                         status='active'
-                    )
+                    ).distinct()
             except (ValueError, TypeError):
                 pass
 

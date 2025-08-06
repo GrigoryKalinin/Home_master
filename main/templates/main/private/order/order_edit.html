@@ -94,27 +94,30 @@
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.category.id_for_label }}" class="form-label">{{ form.category.label }}</label>
-                  {{ form.category }}
-                  {% if form.category.errors %}
-                    <div class="text-danger small">{{ form.category.errors.0 }}</div>
+                  <label for="{{ form.categories.id_for_label }}" class="form-label">{{ form.categories.label }}</label>
+                  {{ form.categories }}
+                  {% if form.categories.errors %}
+                    <div class="text-danger small">{{ form.categories.errors.0 }}</div>
                   {% endif %}
+                  <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких категорий</small>
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.product.id_for_label }}" class="form-label">{{ form.product.label }}</label>
-                  {{ form.product }}
-                  {% if form.product.errors %}
-                    <div class="text-danger small">{{ form.product.errors.0 }}</div>
+                  <label for="{{ form.products.id_for_label }}" class="form-label">{{ form.products.label }}</label>
+                  {{ form.products }}
+                  {% if form.products.errors %}
+                    <div class="text-danger small">{{ form.products.errors.0 }}</div>
                   {% endif %}
+                  <small class="form-text text-muted">Товары загружаются на основе выбранных категорий</small>
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.assigned_employee.id_for_label }}" class="form-label">{{ form.assigned_employee.label }}</label>
-                  {{ form.assigned_employee }}
-                  {% if form.assigned_employee.errors %}
-                    <div class="text-danger small">{{ form.assigned_employee.errors.0 }}</div>
+                  <label for="{{ form.assigned_employees.id_for_label }}" class="form-label">{{ form.assigned_employees.label }}</label>
+                  {{ form.assigned_employees }}
+                  {% if form.assigned_employees.errors %}
+                    <div class="text-danger small">{{ form.assigned_employees.errors.0 }}</div>
                   {% endif %}
+                  <small class="form-text text-muted">Мастера загружаются на основе выбранных категорий</small>
                 </div>
               </div>
             </div>
@@ -138,65 +141,70 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const categorySelect = document.getElementById('categorySelect');
-    const productSelect = document.getElementById('productSelect');
-    const employeeSelect = document.getElementById('employeeSelect');
+    const categoriesSelect = document.getElementById('categoriesSelect');
+    const productsSelect = document.getElementById('productsSelect');
+    const employeesSelect = document.getElementById('employeesSelect');
     
-    // Функция для загрузки товаров по категории
-    function loadProductsByCategory(categoryId) {
-        if (!categoryId) {
-            productSelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
-            productSelect.disabled = true;
+    // Функция для загрузки товаров по категориям
+    function loadProductsByCategories() {
+        const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
+        
+        if (selectedCategories.length === 0) {
+            productsSelect.innerHTML = '';
             return;
         }
         
-        fetch(`{% url 'main:get_products_by_category' %}?category_id=${categoryId}`)
+        const params = new URLSearchParams();
+        selectedCategories.forEach(id => params.append('category_ids[]', id));
+        
+        fetch(`{% url 'main:get_products_by_categories' %}?${params}`)
             .then(response => response.json())
             .then(data => {
-                productSelect.innerHTML = '<option value="">Выберите товар/услугу</option>';
+                productsSelect.innerHTML = '';
                 data.products.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.id;
                     option.textContent = product.name;
-                    productSelect.appendChild(option);
+                    productsSelect.appendChild(option);
                 });
-                productSelect.disabled = false;
             });
     }
     
-    // Функция для загрузки мастеров по категории
-    function loadEmployeesByCategory(categoryId) {
-        if (!categoryId) {
-            employeeSelect.innerHTML = '<option value="">Сначала выберите категорию</option>';
-            employeeSelect.disabled = true;
+    // Функция для загрузки мастеров по категориям
+    function loadEmployeesByCategories() {
+        const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
+        
+        if (selectedCategories.length === 0) {
+            employeesSelect.innerHTML = '';
             return;
         }
         
-        fetch(`{% url 'main:get_employees_by_category' %}?category_id=${categoryId}`)
+        const params = new URLSearchParams();
+        selectedCategories.forEach(id => params.append('category_ids[]', id));
+        
+        fetch(`{% url 'main:get_employees_by_categories' %}?${params}`)
             .then(response => response.json())
             .then(data => {
-                employeeSelect.innerHTML = '<option value="">Выберите мастера</option>';
+                employeesSelect.innerHTML = '';
                 data.employees.forEach(employee => {
                     const option = document.createElement('option');
                     option.value = employee.id;
                     option.textContent = employee.name;
-                    employeeSelect.appendChild(option);
+                    employeesSelect.appendChild(option);
                 });
-                employeeSelect.disabled = false;
             });
     }
     
-    // Обработчик изменения категории
-    categorySelect.addEventListener('change', function() {
-        const categoryId = this.value;
-        loadProductsByCategory(categoryId);
-        loadEmployeesByCategory(categoryId);
+    // Обработчик изменения категорий
+    categoriesSelect.addEventListener('change', function() {
+        loadProductsByCategories();
+        loadEmployeesByCategories();
     });
     
     // Инициализация при загрузке страницы
-    if (categorySelect.value) {
-        loadProductsByCategory(categorySelect.value);
-        loadEmployeesByCategory(categorySelect.value);
+    if (categoriesSelect.selectedOptions.length > 0) {
+        loadProductsByCategories();
+        loadEmployeesByCategories();
     }
 });
 </script>

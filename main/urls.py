@@ -21,6 +21,10 @@ urlpatterns = [
     path('ajax/get-employees-by-category/', views.get_employees_by_category, name='get_employees_by_category'),
     path('ajax/get-products-by-specialization/', views.get_products_by_specialization, name='get_products_by_specialization'),
     path('ajax/get-services-by-products/', views.get_services_by_products, name='get_services_by_products'),
+    path('ajax/get-products-by-categories/', views.get_products_by_categories, name='get_products_by_categories'),
+    path('ajax/get-employees-by-categories/', views.get_employees_by_categories, name='get_employees_by_categories'),
+    path('ajax/get-products-by-categories/', views.get_products_by_categories, name='get_products_by_categories'),
+    path('ajax/get-employees-by-categories/', views.get_employees_by_categories, name='get_employees_by_categories'),
         # Резюме
     path('dashboard/job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),
     path('dashboard/job_application/<int:pk>/', views.JobApplicationDetailView.as_view(), name='job_application_detail'),
