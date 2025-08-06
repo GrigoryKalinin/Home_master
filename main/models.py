@@ -217,6 +217,8 @@ class Employee(models.Model):
     city = models.CharField(max_length=100, verbose_name="Город", db_index=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="Специализация")
     categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории работ")
+    products = models.ManyToManyField('Product', blank=True, verbose_name="Товары")
+    services = models.ManyToManyField('Service', blank=True, verbose_name="Услуги")
     experience = models.PositiveIntegerField(verbose_name="Опыт работы", help_text="В годах")
     image = models.ImageField(upload_to="images/employees/", blank=True, verbose_name="Фото")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")

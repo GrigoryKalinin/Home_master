@@ -142,7 +142,21 @@ class EmployeeForm(forms.ModelForm):
     specialization = forms.ModelChoiceField(
         queryset=Specialization.objects.all(),
         label="Специализация",
-        widget=forms.Select(attrs={"class": "form-control"})
+        widget=forms.Select(attrs={"class": "form-control", "id": "specializationSelect"})
+    )
+    
+    products = forms.ModelMultipleChoiceField(
+        queryset=Product.objects.none(),
+        label="Товары",
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'productsSelect'})
+    )
+    
+    services = forms.ModelMultipleChoiceField(
+        queryset=Service.objects.none(),
+        label="Услуги",
+        required=False,
+        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'servicesSelect'})
     )
 
     experience = forms.IntegerField(
@@ -203,6 +217,8 @@ class EmployeeForm(forms.ModelForm):
             "email",
             "city",
             "specialization",
+            "products",
+            "services",
             "experience",
             "date_hired",
             "status",
@@ -211,8 +227,31 @@ class EmployeeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Устанавливаем стандартный российский регион для всех номеров
         self.fields["phone"].initial = "+7"
+        
+        if self.data:
+            try:
+                specialization_id = int(self.data.get('specialization'))
+                if specialization_id:
+                    categories = Category.objects.filter(specializations=specialization_id)
+                    self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
+                    
+                    selected_products = self.data.getlist('products')
+                    if selected_products:
+                        self.fields['services'].queryset = Service.objects.filter(
+                            product__in=selected_products, available=True
+                        )
+            except (ValueError, TypeError):
+                pass
+        elif self.instance and self.instance.pk:
+            if self.instance.specialization:
+                categories = Category.objects.filter(specializations=self.instance.specialization)
+                self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
+                
+            if self.instance.products.exists():
+                self.fields['services'].queryset = Service.objects.filter(
+                    product__in=self.instance.products.all(), available=True
+                )
 
 
 class OrderForm(forms.ModelForm):

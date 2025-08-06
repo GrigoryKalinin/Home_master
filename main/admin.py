@@ -122,7 +122,7 @@ class EmployeeAdmin(ModelAdmin):
             'fields': ('phone', 'email', 'city')
         }),
         ('Работа', {
-            'fields': ('specialization', 'experience', 'date_hired', 'status', 'available')
+            'fields': ('specialization', 'products', 'services', 'experience', 'date_hired', 'status', 'available')
         }),
         ('Системная информация', {
             'fields': ('slug', 'date_created', 'date_updated'),

@@ -19,6 +19,8 @@ urlpatterns = [
     path('dashboard/order/<int:pk>/edit/', views.OrderEditView.as_view(), name='order_edit'),
     path('ajax/get-products-by-category/', views.get_products_by_category, name='get_products_by_category'),
     path('ajax/get-employees-by-category/', views.get_employees_by_category, name='get_employees_by_category'),
+    path('ajax/get-products-by-specialization/', views.get_products_by_specialization, name='get_products_by_specialization'),
+    path('ajax/get-services-by-products/', views.get_services_by_products, name='get_services_by_products'),
         # Резюме
     path('dashboard/job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),
     path('dashboard/job_application/<int:pk>/', views.JobApplicationDetailView.as_view(), name='job_application_detail'),

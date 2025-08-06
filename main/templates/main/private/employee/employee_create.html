@@ -59,15 +59,26 @@
 							</div>
 						</div>
 
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								{{ form.specialization.label_tag }}
-								{{ form.specialization }}
-							</div>
-							<div class="col-md-6 mb-3">
-								{{ form.experience.label_tag }}
-								{{ form.experience }}
-							</div>
+						<div class="mb-3">
+							{{ form.specialization.label_tag }}
+							{{ form.specialization }}
+						</div>
+						
+						<div class="mb-3">
+							{{ form.products.label_tag }}
+							{{ form.products }}
+							<small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
+						</div>
+						
+						<div class="mb-3">
+							{{ form.services.label_tag }}
+							{{ form.services }}
+							<small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
+						</div>
+						
+						<div class="mb-3">
+							{{ form.experience.label_tag }}
+							{{ form.experience }}
 						</div>
 
 						<div class="row">
@@ -81,6 +92,40 @@
 							</div>
 						</div>
 
+            <div class="mb-3">
+              {{ form.specialization.label_tag }}
+              {{ form.specialization }}
+            </div>
+            
+            <div class="mb-3">
+              {{ form.products.label_tag }}
+              {{ form.products }}
+              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.services.label_tag }}
+              {{ form.services }}
+              <small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.experience.label_tag }}
+              {{ form.experience }}
+            </div>
+            
+            <div class="mb-3">
+              {{ form.products.label_tag }}
+              {{ form.products }}
+              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.services.label_tag }}
+              {{ form.services }}
+              <small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
+            </div>
+            
             <div class="mb-3">
               {{ form.image.label_tag }}
               {{ form.image }}
@@ -111,4 +156,82 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
   <script src="{% static 'js/phone_mask.js' %}"></script>
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const specializationSelect = document.getElementById('specializationSelect');
+      const productsSelect = document.getElementById('productsSelect');
+      const servicesSelect = document.getElementById('servicesSelect');
+      
+      // Функция для загрузки товаров по специализации
+      function loadProductsBySpecialization(specializationId) {
+          if (!specializationId) {
+              productsSelect.innerHTML = '<option value="">Сначала выберите специализацию</option>';
+              servicesSelect.innerHTML = '<option value="">Сначала выберите товары</option>';
+              return;
+          }
+          
+          fetch(`{% url 'main:get_products_by_specialization' %}?specialization_id=${specializationId}`)
+              .then(response => response.json())
+              .then(data => {
+                  productsSelect.innerHTML = '';
+                  data.products.forEach(product => {
+                      const option = document.createElement('option');
+                      option.value = product.id;
+                      option.textContent = product.name;
+                      productsSelect.appendChild(option);
+                  });
+                  
+                  // Автоматически выбираем все товары
+                  for (let i = 0; i < productsSelect.options.length; i++) {
+                      productsSelect.options[i].selected = true;
+                  }
+                  
+                  // Загружаем услуги для выбранных товаров
+                  loadServicesByProducts();
+              });
+      }
+      
+      // Функция для загрузки услуг по товарам
+      function loadServicesByProducts() {
+          const selectedProducts = Array.from(productsSelect.selectedOptions).map(option => option.value);
+          
+          if (selectedProducts.length === 0) {
+              servicesSelect.innerHTML = '<option value="">Выберите товары</option>';
+              return;
+          }
+          
+          const params = new URLSearchParams();
+          selectedProducts.forEach(id => params.append('product_ids[]', id));
+          
+          fetch(`{% url 'main:get_services_by_products' %}?${params}`)
+              .then(response => response.json())
+              .then(data => {
+                  servicesSelect.innerHTML = '';
+                  data.services.forEach(service => {
+                      const option = document.createElement('option');
+                      option.value = service.id;
+                      option.textContent = service.name;
+                      option.selected = true; // Автоматически выбираем все услуги
+                      servicesSelect.appendChild(option);
+                  });
+              });
+      }
+      
+      // Обработчик изменения специализации
+      specializationSelect.addEventListener('change', function() {
+          loadProductsBySpecialization(this.value);
+      });
+      
+      // Обработчик изменения товаров
+      productsSelect.addEventListener('change', function() {
+          loadServicesByProducts();
+      });
+      
+      // Инициализация при загрузке страницы
+      if (specializationSelect.value) {
+          loadProductsBySpecialization(specializationSelect.value);
+      }
+  });
+  </script>
 {% endblock script%}
