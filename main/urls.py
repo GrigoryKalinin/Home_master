@@ -17,6 +17,7 @@ urlpatterns = [
     path('dashboard/orders/', views.OrderListView.as_view(), name='order_list'),
     path('dashboard/order/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
     path('dashboard/order/<int:pk>/edit/', views.OrderEditView.as_view(), name='order_edit'),
+    path('dashboard/order/create/', views.OrderCreateAdminView.as_view(), name='order_create_admin'),
     path('ajax/get-products-by-category/', views.get_products_by_category, name='get_products_by_category'),
     path('ajax/get-employees-by-category/', views.get_employees_by_category, name='get_employees_by_category'),
     path('ajax/get-products-by-specialization/', views.get_products_by_specialization, name='get_products_by_specialization'),

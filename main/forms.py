@@ -243,7 +243,7 @@ class EmployeeForm(forms.ModelForm):
                         )
             except (ValueError, TypeError):
                 pass
-        elif self.instance and self.instance.pk:
+        if self.instance and self.instance.pk:
             if self.instance.specialization:
                 categories = Category.objects.filter(specializations=self.instance.specialization)
                 self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
@@ -455,21 +455,21 @@ class OrderEditForm(forms.ModelForm):
         queryset=Category.objects.filter(available=True),
         label="Категории",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'categoriesSelect'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.none(),
         label="Товары",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'productsSelect'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     assigned_employees = forms.ModelMultipleChoiceField(
         queryset=Employee.objects.none(),
         label="Назначенные мастера",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'employeesSelect'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     class Meta:

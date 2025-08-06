@@ -94,30 +94,40 @@
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.categories.id_for_label }}" class="form-label">{{ form.categories.label }}</label>
-                  {{ form.categories }}
+                  <label class="form-label">{{ form.categories.label }}</label>
+                  <div id="categoriesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                    {% for choice in form.categories %}
+                      <div class="form-check">
+                        {{ choice.tag }}
+                        <label class="form-check-label" for="{{ choice.id_for_label }}">
+                          {{ choice.choice_label }}
+                        </label>
+                      </div>
+                    {% endfor %}
+                  </div>
                   {% if form.categories.errors %}
                     <div class="text-danger small">{{ form.categories.errors.0 }}</div>
                   {% endif %}
-                  <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких категорий</small>
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.products.id_for_label }}" class="form-label">{{ form.products.label }}</label>
-                  {{ form.products }}
+                  <label class="form-label">{{ form.products.label }}</label>
+                  <div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                    <div class="text-muted">Сначала выберите категории</div>
+                  </div>
                   {% if form.products.errors %}
                     <div class="text-danger small">{{ form.products.errors.0 }}</div>
                   {% endif %}
-                  <small class="form-text text-muted">Товары загружаются на основе выбранных категорий</small>
                 </div>
                 
                 <div class="mb-3">
-                  <label for="{{ form.assigned_employees.id_for_label }}" class="form-label">{{ form.assigned_employees.label }}</label>
-                  {{ form.assigned_employees }}
+                  <label class="form-label">{{ form.assigned_employees.label }}</label>
+                  <div id="employeesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                    <div class="text-muted">Сначала выберите категории</div>
+                  </div>
                   {% if form.assigned_employees.errors %}
                     <div class="text-danger small">{{ form.assigned_employees.errors.0 }}</div>
                   {% endif %}
-                  <small class="form-text text-muted">Мастера загружаются на основе выбранных категорий</small>
                 </div>
               </div>
             </div>
@@ -125,7 +135,7 @@
             <hr>
             
             <div class="d-flex justify-content-between">
-              <a href="{% url 'main:order_detail' object.pk %}" class="btn btn-outline-secondary">
+              <a href="{% if object.pk %}{% url 'main:order_detail' object.pk %}{% else %}{% url 'main:order_list' %}{% endif %}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Отмена
               </a>
               <button type="submit" class="btn btn-primary">
@@ -141,16 +151,22 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const categoriesSelect = document.getElementById('categoriesSelect');
-    const productsSelect = document.getElementById('productsSelect');
-    const employeesSelect = document.getElementById('employeesSelect');
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const productsContainer = document.getElementById('productsContainer');
+    const employeesContainer = document.getElementById('employeesContainer');
+    
+    // Функция для получения выбранных категорий
+    function getSelectedCategories() {
+        const checkboxes = categoriesContainer.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkboxes).map(cb => cb.value);
+    }
     
     // Функция для загрузки товаров по категориям
     function loadProductsByCategories() {
-        const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
+        const selectedCategories = getSelectedCategories();
         
         if (selectedCategories.length === 0) {
-            productsSelect.innerHTML = '';
+            productsContainer.innerHTML = '<div class="text-muted">Сначала выберите категории</div>';
             return;
         }
         
@@ -160,22 +176,27 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`{% url 'main:get_products_by_categories' %}?${params}`)
             .then(response => response.json())
             .then(data => {
-                productsSelect.innerHTML = '';
+                productsContainer.innerHTML = '';
                 data.products.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product.id;
-                    option.textContent = product.name;
-                    productsSelect.appendChild(option);
+                    const div = document.createElement('div');
+                    div.className = 'form-check';
+                    div.innerHTML = `
+                        <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}">
+                        <label class="form-check-label" for="product_${product.id}">
+                            ${product.name}
+                        </label>
+                    `;
+                    productsContainer.appendChild(div);
                 });
             });
     }
     
     // Функция для загрузки мастеров по категориям
     function loadEmployeesByCategories() {
-        const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(option => option.value);
+        const selectedCategories = getSelectedCategories();
         
         if (selectedCategories.length === 0) {
-            employeesSelect.innerHTML = '';
+            employeesContainer.innerHTML = '<div class="text-muted">Сначала выберите категории</div>';
             return;
         }
         
@@ -185,24 +206,31 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`{% url 'main:get_employees_by_categories' %}?${params}`)
             .then(response => response.json())
             .then(data => {
-                employeesSelect.innerHTML = '';
+                employeesContainer.innerHTML = '';
                 data.employees.forEach(employee => {
-                    const option = document.createElement('option');
-                    option.value = employee.id;
-                    option.textContent = employee.name;
-                    employeesSelect.appendChild(option);
+                    const div = document.createElement('div');
+                    div.className = 'form-check';
+                    div.innerHTML = `
+                        <input class="form-check-input" type="checkbox" name="assigned_employees" value="${employee.id}" id="employee_${employee.id}">
+                        <label class="form-check-label" for="employee_${employee.id}">
+                            ${employee.name}
+                        </label>
+                    `;
+                    employeesContainer.appendChild(div);
                 });
             });
     }
     
     // Обработчик изменения категорий
-    categoriesSelect.addEventListener('change', function() {
-        loadProductsByCategories();
-        loadEmployeesByCategories();
+    categoriesContainer.addEventListener('change', function(e) {
+        if (e.target.type === 'checkbox') {
+            loadProductsByCategories();
+            loadEmployeesByCategories();
+        }
     });
     
     // Инициализация при загрузке страницы
-    if (categoriesSelect.selectedOptions.length > 0) {
+    if (getSelectedCategories().length > 0) {
         loadProductsByCategories();
         loadEmployeesByCategories();
     }

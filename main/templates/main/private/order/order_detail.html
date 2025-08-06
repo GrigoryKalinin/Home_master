@@ -20,14 +20,26 @@
               <p><strong>Имя:</strong> {{ order.get_display_name }}</p>
               <p><strong>Телефон:</strong> {{ order.phone }}</p>
               <p><strong>Адрес:</strong> {{ order.get_display_address|default:"Не указан" }}</p>
-              {% if order.category %}
-                <p><strong>Категория:</strong> {{ order.category.name }}</p>
+              {% if order.categories.all %}
+                <p><strong>Категории:</strong>
+                  {% for category in order.categories.all %}
+                    <span class="badge bg-info me-1">{{ category.name }}</span>
+                  {% endfor %}
+                </p>
               {% endif %}
-              {% if order.product %}
-                <p><strong>Товар/Услуга:</strong> {{ order.product.name }}</p>
+              {% if order.products.all %}
+                <p><strong>Товары:</strong>
+                  {% for product in order.products.all %}
+                    <span class="badge bg-secondary me-1">{{ product.name }}</span>
+                  {% endfor %}
+                </p>
               {% endif %}
-              {% if order.assigned_employee %}
-                <p><strong>Назначенный мастер:</strong> {{ order.assigned_employee }}</p>
+              {% if order.assigned_employees.all %}
+                <p><strong>Назначенные мастера:</strong>
+                  {% for employee in order.assigned_employees.all %}
+                    <span class="badge bg-success me-1">{{ employee.first_name }} {{ employee.last_name }}</span>
+                  {% endfor %}
+                </p>
               {% endif %}
             </div>
             <div class="col-md-6">

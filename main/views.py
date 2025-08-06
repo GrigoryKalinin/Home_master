@@ -490,7 +490,7 @@ class OrderEditView(StaffRequiredMixin, UpdateView):
     template_name = "main/private/order/order_edit.html"
     
     def get_success_url(self):
-        return reverse_lazy('main:order_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy('main:order_list')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -506,6 +506,29 @@ class OrderEditView(StaffRequiredMixin, UpdateView):
             OrderImage.objects.create(order=self.object, image=file)
         
         messages.success(self.request, 'Информация о заказе успешно обновлена.')
+        return response
+
+class OrderCreateAdminView(StaffRequiredMixin, CreateView):
+    model = Order
+    form_class = OrderEditForm
+    template_name = "main/private/order/order_edit.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('main:order_list')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Создание новой заявки'
+        return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        files = self.request.FILES.getlist('additional_images')
+        for file in files:
+            OrderImage.objects.create(order=self.object, image=file)
+        
+        messages.success(self.request, 'Заявка успешно создана.')
         return response
 
 
