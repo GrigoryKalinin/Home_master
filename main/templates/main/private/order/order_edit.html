@@ -113,7 +113,18 @@
                 <div class="mb-3">
                   <label class="form-label">{{ form.products.label }}</label>
                   <div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-                    <div class="text-muted">Сначала выберите категории</div>
+                    {% if object.products.exists %}
+                      {% for product in object.products.all %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="products" value="{{ product.id }}" id="product_{{ product.id }}" checked>
+                          <label class="form-check-label" for="product_{{ product.id }}">
+                            {{ product.name }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <div class="text-muted">Сначала выберите категории</div>
+                    {% endif %}
                   </div>
                   {% if form.products.errors %}
                     <div class="text-danger small">{{ form.products.errors.0 }}</div>
@@ -123,7 +134,18 @@
                 <div class="mb-3">
                   <label class="form-label">{{ form.assigned_employees.label }}</label>
                   <div id="employeesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-                    <div class="text-muted">Сначала выберите категории</div>
+                    {% if object.assigned_employees.exists %}
+                      {% for employee in object.assigned_employees.all %}
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" name="assigned_employees" value="{{ employee.id }}" id="employee_{{ employee.id }}" checked>
+                          <label class="form-check-label" for="employee_{{ employee.id }}">
+                            {{ employee.first_name }} {{ employee.last_name }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <div class="text-muted">Сначала выберите категории</div>
+                    {% endif %}
                   </div>
                   {% if form.assigned_employees.errors %}
                     <div class="text-danger small">{{ form.assigned_employees.errors.0 }}</div>
@@ -170,6 +192,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Получаем уже выбранные товары
+        const currentlySelected = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const initialSelected = window.initialProducts || [];
+        
         const params = new URLSearchParams();
         selectedCategories.forEach(id => params.append('category_ids[]', id));
         
@@ -178,10 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 productsContainer.innerHTML = '';
                 data.products.forEach(product => {
+                    const isSelected = currentlySelected.includes(product.id.toString()) || initialSelected.includes(product.id.toString());
                     const div = document.createElement('div');
                     div.className = 'form-check';
                     div.innerHTML = `
-                        <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}">
+                        <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" ${isSelected ? 'checked' : ''}>
                         <label class="form-check-label" for="product_${product.id}">
                             ${product.name}
                         </label>
@@ -200,6 +227,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Получаем уже выбранных мастеров
+        const currentlySelected = Array.from(employeesContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const initialSelected = window.initialEmployees || [];
+        
         const params = new URLSearchParams();
         selectedCategories.forEach(id => params.append('category_ids[]', id));
         
@@ -208,10 +239,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 employeesContainer.innerHTML = '';
                 data.employees.forEach(employee => {
+                    const isSelected = currentlySelected.includes(employee.id.toString()) || initialSelected.includes(employee.id.toString());
                     const div = document.createElement('div');
                     div.className = 'form-check';
                     div.innerHTML = `
-                        <input class="form-check-input" type="checkbox" name="assigned_employees" value="${employee.id}" id="employee_${employee.id}">
+                        <input class="form-check-input" type="checkbox" name="assigned_employees" value="${employee.id}" id="employee_${employee.id}" ${isSelected ? 'checked' : ''}>
                         <label class="form-check-label" for="employee_${employee.id}">
                             ${employee.name}
                         </label>
@@ -231,6 +263,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Инициализация при загрузке страницы
     if (getSelectedCategories().length > 0) {
+        // Сохраняем изначально выбранные значения
+        window.initialProducts = Array.from(document.querySelectorAll('input[name="products"]:checked')).map(cb => cb.value);
+        window.initialEmployees = Array.from(document.querySelectorAll('input[name="assigned_employees"]:checked')).map(cb => cb.value);
+        
         loadProductsByCategories();
         loadEmployeesByCategories();
     }

@@ -489,7 +489,7 @@ class OrderEditForm(forms.ModelForm):
                 categories = self.instance.categories.all()
                 self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
                 self.fields['assigned_employees'].queryset = Employee.objects.filter(
-                    categories__in=categories, 
+                    specialization__categories__in=categories, 
                     available=True, 
                     status='active'
                 ).distinct()
@@ -501,7 +501,7 @@ class OrderEditForm(forms.ModelForm):
                 if category_ids:
                     self.fields['products'].queryset = Product.objects.filter(category__in=category_ids, available=True)
                     self.fields['assigned_employees'].queryset = Employee.objects.filter(
-                        categories__in=category_ids, 
+                        specialization__categories__in=category_ids, 
                         available=True, 
                         status='active'
                     ).distinct()
