@@ -98,8 +98,22 @@ class ServiceAdmin(ModelAdmin):
 
 @admin.register(Specialization)
 class SpecializationAdmin(ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'get_categories_count']
     search_fields = ['name']
+    filter_horizontal = ['categories']
+    
+    def get_categories_count(self, obj):
+        return obj.categories.count()
+    get_categories_count.short_description = 'Количество категорий'
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('name',)
+        }),
+        ('Категории', {
+            'fields': ('categories',)
+        }),
+    )
 
 @admin.register(Employee)
 class EmployeeAdmin(ModelAdmin):

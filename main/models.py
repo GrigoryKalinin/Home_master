@@ -30,7 +30,6 @@ class Category(models.Model):
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     popularity = models.PositiveIntegerField(default=0, verbose_name="Популярность", blank=True)  # популярность товара
     specializations = models.ManyToManyField('Specialization', blank=True, verbose_name="Специализации")
-    specializations = models.ManyToManyField('Specialization', blank=True, verbose_name="Специализации")
 
     class Meta:
         ordering = ("name",)
@@ -185,6 +184,7 @@ class Service(models.Model):
 
 class Specialization(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Специализация")
+    categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории", related_name='specialization_set')
     
     class Meta:
         verbose_name = "Специализация"

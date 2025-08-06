@@ -571,9 +571,13 @@ def get_products_by_specialization(request):
         
     specialization_id = request.GET.get('specialization_id')
     if specialization_id:
-        categories = Category.objects.filter(specializations=specialization_id)
-        products = Product.objects.filter(category__in=categories, available=True).values('id', 'name')
-        return JsonResponse({'products': list(products)})
+        try:
+            specialization = Specialization.objects.get(id=specialization_id)
+            categories = specialization.categories.all()
+            products = Product.objects.filter(category__in=categories, available=True).values('id', 'name')
+            return JsonResponse({'products': list(products)})
+        except Specialization.DoesNotExist:
+            pass
     return JsonResponse({'products': []})
 
 def get_services_by_products(request):
@@ -603,7 +607,7 @@ def get_employees_by_categories(request):
     category_ids = request.GET.getlist('category_ids[]')
     if category_ids:
         employees = Employee.objects.filter(
-            categories__in=category_ids, 
+            specialization__categories__in=category_ids, 
             available=True, 
             status='active'
         ).distinct().values('id', 'first_name', 'last_name')

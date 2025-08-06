@@ -66,14 +66,16 @@
 						
 						<div class="mb-3">
 							{{ form.products.label_tag }}
-							{{ form.products }}
-							<small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
+							<div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+								<div class="text-muted">Сначала выберите специализацию</div>
+							</div>
 						</div>
 						
 						<div class="mb-3">
 							{{ form.services.label_tag }}
-							{{ form.services }}
-							<small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
+							<div id="servicesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+								<div class="text-muted">Сначала выберите товары</div>
+							</div>
 						</div>
 						
 						<div class="mb-3">
@@ -92,40 +94,6 @@
 							</div>
 						</div>
 
-            <div class="mb-3">
-              {{ form.specialization.label_tag }}
-              {{ form.specialization }}
-            </div>
-            
-            <div class="mb-3">
-              {{ form.products.label_tag }}
-              {{ form.products }}
-              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
-            </div>
-            
-            <div class="mb-3">
-              {{ form.services.label_tag }}
-              {{ form.services }}
-              <small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
-            </div>
-            
-            <div class="mb-3">
-              {{ form.experience.label_tag }}
-              {{ form.experience }}
-            </div>
-            
-            <div class="mb-3">
-              {{ form.products.label_tag }}
-              {{ form.products }}
-              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких товаров</small>
-            </div>
-            
-            <div class="mb-3">
-              {{ form.services.label_tag }}
-              {{ form.services }}
-              <small class="form-text text-muted">Услуги автоматически выбираются на основе товаров</small>
-            </div>
-            
             <div class="mb-3">
               {{ form.image.label_tag }}
               {{ form.image }}
@@ -159,33 +127,33 @@
   
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-      const specializationSelect = document.getElementById('specializationSelect');
-      const productsSelect = document.getElementById('productsSelect');
-      const servicesSelect = document.getElementById('servicesSelect');
+      const specializationSelect = document.querySelector('select[name="specialization"]');
+      const productsContainer = document.getElementById('productsContainer');
+      const servicesContainer = document.getElementById('servicesContainer');
       
       // Функция для загрузки товаров по специализации
       function loadProductsBySpecialization(specializationId) {
           if (!specializationId) {
-              productsSelect.innerHTML = '<option value="">Сначала выберите специализацию</option>';
-              servicesSelect.innerHTML = '<option value="">Сначала выберите товары</option>';
+              productsContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
+              servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
               return;
           }
           
           fetch(`{% url 'main:get_products_by_specialization' %}?specialization_id=${specializationId}`)
               .then(response => response.json())
               .then(data => {
-                  productsSelect.innerHTML = '';
+                  productsContainer.innerHTML = '';
                   data.products.forEach(product => {
-                      const option = document.createElement('option');
-                      option.value = product.id;
-                      option.textContent = product.name;
-                      productsSelect.appendChild(option);
+                      const div = document.createElement('div');
+                      div.className = 'form-check';
+                      div.innerHTML = `
+                          <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" checked>
+                          <label class="form-check-label" for="product_${product.id}">
+                              ${product.name}
+                          </label>
+                      `;
+                      productsContainer.appendChild(div);
                   });
-                  
-                  // Автоматически выбираем все товары
-                  for (let i = 0; i < productsSelect.options.length; i++) {
-                      productsSelect.options[i].selected = true;
-                  }
                   
                   // Загружаем услуги для выбранных товаров
                   loadServicesByProducts();
@@ -194,10 +162,10 @@
       
       // Функция для загрузки услуг по товарам
       function loadServicesByProducts() {
-          const selectedProducts = Array.from(productsSelect.selectedOptions).map(option => option.value);
+          const selectedProducts = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
           
           if (selectedProducts.length === 0) {
-              servicesSelect.innerHTML = '<option value="">Выберите товары</option>';
+              servicesContainer.innerHTML = '<div class="text-muted">Выберите товары</div>';
               return;
           }
           
@@ -207,13 +175,17 @@
           fetch(`{% url 'main:get_services_by_products' %}?${params}`)
               .then(response => response.json())
               .then(data => {
-                  servicesSelect.innerHTML = '';
+                  servicesContainer.innerHTML = '';
                   data.services.forEach(service => {
-                      const option = document.createElement('option');
-                      option.value = service.id;
-                      option.textContent = service.name;
-                      option.selected = true; // Автоматически выбираем все услуги
-                      servicesSelect.appendChild(option);
+                      const div = document.createElement('div');
+                      div.className = 'form-check';
+                      div.innerHTML = `
+                          <input class="form-check-input" type="checkbox" name="services" value="${service.id}" id="service_${service.id}" checked>
+                          <label class="form-check-label" for="service_${service.id}">
+                              ${service.name}
+                          </label>
+                      `;
+                      servicesContainer.appendChild(div);
                   });
               });
       }
@@ -224,8 +196,10 @@
       });
       
       // Обработчик изменения товаров
-      productsSelect.addEventListener('change', function() {
-          loadServicesByProducts();
+      productsContainer.addEventListener('change', function(e) {
+          if (e.target.type === 'checkbox') {
+              loadServicesByProducts();
+          }
       });
       
       // Инициализация при загрузке страницы

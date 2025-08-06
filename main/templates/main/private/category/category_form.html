@@ -37,8 +37,16 @@
             
             <div class="mb-3">
               {{ form.specializations.label_tag }}
-              {{ form.specializations }}
-              <small class="form-text text-muted">Удерживайте Ctrl для выбора нескольких специализаций</small>
+              <div class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                {% for choice in form.specializations %}
+                  <div class="form-check">
+                    {{ choice.tag }}
+                    <label class="form-check-label" for="{{ choice.id_for_label }}">
+                      {{ choice.choice_label }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
             </div>
             
             <div class="mb-3 form-check">

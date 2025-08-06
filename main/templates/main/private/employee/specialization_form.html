@@ -17,6 +17,21 @@
               {{ form.name.label_tag }}
               {{ form.name }}
             </div>
+            
+            <div class="mb-3">
+              {{ form.categories.label_tag }}
+              <div class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                {% for choice in form.categories %}
+                  <div class="form-check">
+                    {{ choice.tag }}
+                    <label class="form-check-label" for="{{ choice.id_for_label }}">
+                      {{ choice.choice_label }}
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-success">
                 <i class="bi bi-check-lg"></i> Добавить

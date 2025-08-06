@@ -9,7 +9,7 @@ class CategoryForm(forms.ModelForm):
         queryset=Specialization.objects.all(),
         label="Специализации",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     class Meta:
@@ -149,14 +149,14 @@ class EmployeeForm(forms.ModelForm):
         queryset=Product.objects.none(),
         label="Товары",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'productsSelect'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input', 'id': 'productsSelect'})
     )
     
     services = forms.ModelMultipleChoiceField(
         queryset=Service.objects.none(),
         label="Услуги",
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'form-select', 'size': '5', 'id': 'servicesSelect'})
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input', 'id': 'servicesSelect'})
     )
 
     experience = forms.IntegerField(
@@ -233,7 +233,8 @@ class EmployeeForm(forms.ModelForm):
             try:
                 specialization_id = int(self.data.get('specialization'))
                 if specialization_id:
-                    categories = Category.objects.filter(specializations=specialization_id)
+                    specialization = Specialization.objects.get(id=specialization_id)
+                    categories = specialization.categories.all()
                     self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
                     
                     selected_products = self.data.getlist('products')
@@ -241,11 +242,11 @@ class EmployeeForm(forms.ModelForm):
                         self.fields['services'].queryset = Service.objects.filter(
                             product__in=selected_products, available=True
                         )
-            except (ValueError, TypeError):
+            except (ValueError, TypeError, Specialization.DoesNotExist):
                 pass
         if self.instance and self.instance.pk:
             if self.instance.specialization:
-                categories = Category.objects.filter(specializations=self.instance.specialization)
+                categories = self.instance.specialization.categories.all()
                 self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
                 
             if self.instance.products.exists():
@@ -508,9 +509,16 @@ class OrderEditForm(forms.ModelForm):
                 pass
 
 class SpecializationForm(forms.ModelForm):
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.filter(available=True),
+        label="Категории",
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    
     class Meta:
         model = Specialization
-        fields = ['name']
+        fields = ['name', 'categories']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введите название специализации'})
         }
