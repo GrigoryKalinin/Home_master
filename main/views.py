@@ -493,6 +493,39 @@ class OrderStatusUpdateView(StaffRequiredMixin, View):
         
         return JsonResponse({'success': False})
 
+def get_products_by_category(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return JsonResponse({'products': []})
+        
+    category_id = request.GET.get('category_id')
+    if category_id:
+        products = Product.objects.filter(category_id=category_id, available=True).values('id', 'name')
+        return JsonResponse({'products': list(products)})
+    return JsonResponse({'products': []})
+
+def get_employees_by_category(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return JsonResponse({'employees': []})
+        
+    category_id = request.GET.get('category_id')
+    if category_id:
+        employees = Employee.objects.filter(
+            categories=category_id, 
+            available=True, 
+            status='active'
+        ).values('id', 'first_name', 'last_name')
+        
+        # Формируем полное имя
+        employees_list = []
+        for emp in employees:
+            employees_list.append({
+                'id': emp['id'],
+                'name': f"{emp['first_name']} {emp['last_name']}"
+            })
+        
+        return JsonResponse({'employees': employees_list})
+    return JsonResponse({'employees': []})
+
 class JobApplicationCreateFormView(CreateView):
     model = JobApplication
     form_class = JobApplicationForm

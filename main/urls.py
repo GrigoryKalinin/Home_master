@@ -18,6 +18,8 @@ urlpatterns = [
     path('dashboard/order/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
     path('dashboard/order/<int:pk>/edit/', views.OrderEditView.as_view(), name='order_edit'),
     path('dashboard/order/<int:pk>/status/', views.OrderStatusUpdateView.as_view(), name='order_status_update'),
+    path('ajax/get-products-by-category/', views.get_products_by_category, name='get_products_by_category'),
+    path('ajax/get-employees-by-category/', views.get_employees_by_category, name='get_employees_by_category'),
         # Резюме
     path('dashboard/job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),
     path('dashboard/job_application/<int:pk>/', views.JobApplicationDetailView.as_view(), name='job_application_detail'),

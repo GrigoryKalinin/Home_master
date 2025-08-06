@@ -214,6 +214,7 @@ class Employee(models.Model):
     email = models.EmailField(verbose_name="Email", blank=True)
     city = models.CharField(max_length=100, verbose_name="Город", db_index=True)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="Специализация")
+    categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории работ")
     experience = models.PositiveIntegerField(verbose_name="Опыт работы", help_text="В годах")
     image = models.ImageField(upload_to="images/employees/", blank=True, verbose_name="Фото")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
@@ -308,6 +309,7 @@ class Order(models.Model):
     work_description = models.TextField(blank=True, verbose_name="Описание работ")
     additional_images = models.ImageField(upload_to="images/orders/additional/", blank=True, verbose_name="Дополнительные фото")
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Категория")
+    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Товар/Услуга")
     assigned_employee = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Назначенный мастер")
 
     def get_display_name(self):

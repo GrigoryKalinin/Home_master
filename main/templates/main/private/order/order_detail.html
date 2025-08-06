@@ -23,6 +23,9 @@
               {% if order.category %}
                 <p><strong>Категория:</strong> {{ order.category.name }}</p>
               {% endif %}
+              {% if order.product %}
+                <p><strong>Товар/Услуга:</strong> {{ order.product.name }}</p>
+              {% endif %}
               {% if order.assigned_employee %}
                 <p><strong>Назначенный мастер:</strong> {{ order.assigned_employee }}</p>
               {% endif %}

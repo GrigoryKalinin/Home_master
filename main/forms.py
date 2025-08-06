@@ -413,17 +413,25 @@ class OrderEditForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-select', 'id': 'categorySelect'})
     )
     
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.none(),
+        label="Товар/Услуга",
+        required=False,
+        empty_label="Сначала выберите категорию",
+        widget=forms.Select(attrs={'class': 'form-select', 'id': 'productSelect'})
+    )
+    
     assigned_employee = forms.ModelChoiceField(
-        queryset=Employee.objects.filter(available=True, status='active'),
+        queryset=Employee.objects.none(),
         label="Назначить мастера",
         required=False,
-        empty_label="Выберите мастера",
+        empty_label="Сначала выберите категорию",
         widget=forms.Select(attrs={'class': 'form-select', 'id': 'employeeSelect'})
     )
     
     class Meta:
         model = Order
-        fields = ['name', 'last_name', 'middle_name', 'phone', 'work_description', 'city', 'address', 'category', 'assigned_employee']
+        fields = ['name', 'last_name', 'middle_name', 'phone', 'work_description', 'city', 'address', 'category', 'product', 'assigned_employee']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -431,6 +439,29 @@ class OrderEditForm(forms.ModelForm):
         if self.instance and self.instance.pk:
             if not self.instance.address:
                 self.fields['address'].initial = self.instance.city
+            
+            # Если у заказа уже есть категория, загружаем соответствующие товары и мастеров
+            if self.instance.category:
+                self.fields['product'].queryset = Product.objects.filter(category=self.instance.category, available=True)
+                self.fields['assigned_employee'].queryset = Employee.objects.filter(
+                    categories=self.instance.category, 
+                    available=True, 
+                    status='active'
+                )
+        
+        # Обновляем queryset на основе POST данных
+        if self.data:
+            try:
+                category_id = int(self.data.get('category'))
+                if category_id:
+                    self.fields['product'].queryset = Product.objects.filter(category_id=category_id, available=True)
+                    self.fields['assigned_employee'].queryset = Employee.objects.filter(
+                        categories=category_id, 
+                        available=True, 
+                        status='active'
+                    )
+            except (ValueError, TypeError):
+                pass
 
 class SpecializationForm(forms.ModelForm):
     class Meta:
