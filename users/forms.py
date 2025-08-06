@@ -39,7 +39,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password1', 'password2', 'marketing_consent1', 'marketing_consent2')
+        fields = ('email', 'first_name', 'last_name', 'phone', 'password1', 'password2', 'marketing_consent1', 'marketing_consent2')
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -55,6 +55,7 @@ class CustomUserCreationForm(UserCreationForm):
     
     def save(self, commit=True):
         user = super().save(commit=False)
+        user.phone = self.cleaned_data.get('phone')
         user.marketing_consent1 = self.cleaned_data['marketing_consent1']
         user.marketing_consent2 = self.cleaned_data['marketing_consent2']
         if commit:
@@ -88,6 +89,19 @@ class CustomAuthenticationForm(AuthenticationForm):
     
 
 class UserProfileUpdateForm(forms.ModelForm):
+    phone = PhoneNumberField(
+        region="RU",
+        label="Телефон",
+        required=False,
+        widget=forms.TextInput(attrs={
+            "placeholder": "+7 (999) 123-45-67", 
+            "class": "form-control phone-mask", 
+            "data-mask": "+7 (000) 000-00-00", 
+            "autocomplete": "off",  
+            "inputmode": "tel"
+        }),
+    )
+    
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone', 'city', 'address', 'avatar')
@@ -95,10 +109,9 @@ class UserProfileUpdateForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Телефон'}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Город'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Адрес'}),
-            'avatar': forms.FileInput(attrs={'class': 'form-control', 'placeholder': 'Аватар'}),
+            'avatar': forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
         }
 
     def clean_email(self):

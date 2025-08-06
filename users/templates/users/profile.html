@@ -25,7 +25,11 @@
           </div>
           <div class="info-item">
             <strong>Телефон:</strong><br>
-            {{ user.phone|default:"Не указан" }}
+            {% if user.phone %}
+              {{ user.phone.as_national }}
+            {% else %}
+              Не указан
+            {% endif %}
           </div>
           <div class="info-item">
             <strong>Город:</strong><br>
@@ -49,4 +53,11 @@
     </div>
   </div>
 </div>
+
+{% include "main/order/modal.html" %}
 {% endblock %}
+
+{% block script %}
+  <script src="{% static 'js/phone_mask.js' %}"></script>
+  <script src="{% static 'js/modal.js' %}"></script>
+{% endblock script %}

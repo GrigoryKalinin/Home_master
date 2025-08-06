@@ -60,6 +60,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f"Профиль: {self.object.get_full_name()}"
+        context["order_from"] = OrderForm()
         return context
 
 
@@ -84,6 +85,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Редактирование профиля"
+        context["order_from"] = OrderForm()
         return context
     
 
@@ -103,6 +105,7 @@ class UserPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Смена пароля"
+        context["order_from"] = OrderForm()
         return context
     
 
@@ -111,17 +114,37 @@ class UserPasswordResetView(PasswordResetView):
     email_template_name = 'users/password_reset_email.html'
     form_class = CustomPasswordResetForm
     success_url = reverse_lazy('users:password_reset_done')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()
+        return context
 
 class UserPasswordResetDoneView(PasswordResetDoneView):
     template_name = 'users/password_reset_done.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()
+        return context
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = 'users/password_reset_confirm.html'
     form_class = CustomSetPasswordForm
     success_url = reverse_lazy('users:password_reset_complete')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()
+        return context
 
 class UserPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["order_from"] = OrderForm()
+        return context
 
 
 class AjaxLoginView(LoginView):
