@@ -358,6 +358,20 @@ class EmployeeDetailView(StaffRequiredMixin, DetailView):
     context_object_name = "employee"
     slug_url_kwarg = 'employee_slug'
 
+    def post(self, request, *args, **kwargs):
+        employee = self.get_object()
+        new_status = request.POST.get('status')
+        
+        if new_status in dict(Employee.STATUS_CHOICES):
+            employee.status = new_status
+            employee.save()
+            
+        return JsonResponse({
+            'success': True,
+            'new_status': employee.get_status_display()
+        })
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         employee = self.object
@@ -369,8 +383,10 @@ class EmployeeDetailView(StaffRequiredMixin, DetailView):
                 years -= 1
             context['company_experience'] = years
         
+        context['status_choices'] = Employee.STATUS_CHOICES
         return context
-    
+
+
 class SpecializationCreateView(StaffRequiredMixin, CreateView):
     model = Specialization
     form_class = SpecializationForm
@@ -449,6 +465,20 @@ class OrderDetailView(StaffRequiredMixin, DetailView):
     template_name = "main/private/order/order_detail.html"
     context_object_name = "order"
     
+    def post(self, request, *args, **kwargs):
+        order = self.get_object()
+        new_status = request.POST.get('status')
+        
+        if new_status in dict(Order.STATUS_CHOICES):
+            order.status = new_status
+            order.save()
+            
+        return JsonResponse({
+            'success': True,
+            'new_status': order.get_status_display()
+        })
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = Order.STATUS_CHOICES
@@ -478,20 +508,6 @@ class OrderEditView(StaffRequiredMixin, UpdateView):
         messages.success(self.request, 'Информация о заказе успешно обновлена.')
         return response
 
-class OrderStatusUpdateView(StaffRequiredMixin, View):
-    def post(self, request, pk):
-        order = get_object_or_404(Order, pk=pk)
-        new_status = request.POST.get('status')
-        
-        if new_status in dict(Order.STATUS_CHOICES):
-            order.status = new_status
-            order.save()
-            return JsonResponse({
-                'success': True,
-                'new_status': order.get_status_display()
-            })
-        
-        return JsonResponse({'success': False})
 
 def get_products_by_category(request):
     if not (request.user.is_authenticated and request.user.is_staff):

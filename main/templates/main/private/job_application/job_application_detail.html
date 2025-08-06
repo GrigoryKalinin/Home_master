@@ -6,52 +6,72 @@
 {% csrf_token %}
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-8 mx-auto">
+    <div class="col-md-8">
       <div class="card">
-        <div class="card-header">
-          <h4 class="mb-1">{{ application.first_name }} {{ application.last_name }}</h4>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ application.first_name }} {{ application.last_name }}</h4>
+          <span class="badge fs-6 {% if application.status == 'new' %}bg-primary{% elif application.status == 'invited' %}bg-info text-dark{% elif application.status == 'rejected' %}bg-secondary{% elif application.status == 'hired' %}bg-success{% elif application.status == 'spam' %}bg-danger{% else %}bg-primary{% endif %}">
+            {{ application.get_status_display }}
+          </span>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
-              <h6>Личная информация</h6>
+              <h6>Личная информация</h6><br>
               <p><strong>ФИО:</strong> {{ application.first_name }} {{ application.last_name }}</p>
               <p><strong>Возраст:</strong> {{ application.get_age_display }}</p>
               <p><strong>Телефон:</strong> {{ application.phone }}</p>
               <p><strong>Город:</strong> {{ application.city }}</p>
             </div>
             <div class="col-md-6">
-              <h6>Профессиональная информация</h6>
+              <h6>Профессиональная информация</h6><br>
               <p><strong>Специализация:</strong> {{ application.specialization }}</p>
               <p><strong>Дата подачи:</strong> {{ application.date_created|date:"d.m.Y H:i" }}</p>
-              
-              <div class="mt-3">
-                <label class="form-label"><strong>Изменить статус:</strong></label>
-                <select class="form-select" id="status-select">
-                  {% for value, label in status_choices %}
-                    <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>{{ label }}</option>
-                  {% endfor %}
-                </select>
-              </div>
+              <p><strong>Создано клиентом:</strong> {% if application.created_by_client %}Да{% else %}Нет{% endif %}</p>
             </div>
           </div>
           
           {% if application.comment %}
             <div class="mt-3">
-              <h6>Дополнительная информация</h6>
-              <p>{{ application.comment }}</p>
+              <h6>Дополнительная информация</h6><br>
+              <p class="border p-3 bg-light">{{ application.comment }}</p>
             </div>
           {% endif %}
         </div>
-        <div class="card-footer">
-          <a href="{% url 'main:job_application_list' %}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Назад к списку
-          </a>
-          {% if application.status != 'hired' %}
-            <a href="{% url 'main:employee_create' %}?from_application={{ application.pk }}" class="btn btn-success ms-2">
-              <i class="fas fa-user-plus"></i> Принять сотрудника
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Управление заявкой</h6>
+        </div>
+        <div class="card-body">
+          <form method="post" id="statusForm">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="statusSelect" class="form-label">Изменить статус:</label>
+              <select name="status" id="statusSelect" class="form-select">
+                {% for value, label in status_choices %}
+                  <option value="{{ value }}" {% if application.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Обновить статус</button>
+          </form>
+          
+          <hr>
+          
+          <div class="d-grid gap-2">
+            {% if application.status != 'hired' %}
+              <a href="{% url 'main:employee_create' %}?from_application={{ application.pk }}" class="btn btn-success">
+                <i class="fas fa-user-plus"></i> Принять сотрудника
+              </a>
+            {% endif %}
+            <a href="{% url 'main:job_application_list' %}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Назад к списку
             </a>
-          {% endif %}
+          </div>
         </div>
       </div>
     </div>
@@ -59,22 +79,30 @@
 </div>
 
 <script>
-document.getElementById('status-select').addEventListener('change', function() {
-    const newStatus = this.value;
+document.getElementById('statusForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const newStatus = formData.get('status');
     
     fetch('', {
         method: 'POST',
+        body: formData,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value || '{{ csrf_token }}'
-        },
-        body: `status=${newStatus}`
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            document.getElementById('status-badge').textContent = data.new_status;
+            location.reload();
+        } else {
+            alert('Ошибка при изменении статуса');
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ошибка при изменении статуса');
     });
 });
 </script>

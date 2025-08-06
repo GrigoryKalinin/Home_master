@@ -78,7 +78,7 @@
           <h6 class="mb-0">Управление заказом</h6>
         </div>
         <div class="card-body">
-          <form method="post" action="{% url 'main:order_status_update' order.pk %}" id="statusForm">
+          <form method="post" id="statusForm">
             {% csrf_token %}
             <div class="mb-3">
               <label for="statusSelect" class="form-label">Изменить статус:</label>

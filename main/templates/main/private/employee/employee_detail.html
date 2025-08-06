@@ -7,66 +7,125 @@
 {% block content %}
 <div class="container mt-4">
   <div class="row">
-    <div class="col-md-10 mx-auto">
+    <div class="col-md-8">
       <div class="card">
-        <div class="card-header text-center">
-          <h4 class="mb-1">{{ employee.first_name }} {{ employee.last_name }}</h4>
-          <span class="badge bg-primary">{{ employee.get_status_display }}</span>
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ employee.first_name }} {{ employee.last_name }}</h4>
+          <span class="badge fs-6 {% if employee.status == 'active' %}bg-success{% elif employee.status == 'trainee' %}bg-info text-dark{% elif employee.status == 'vacation' %}bg-warning text-dark{% elif employee.status == 'fired' %}bg-danger{% else %}bg-secondary{% endif %}">
+            {{ employee.get_status_display }}
+          </span>
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-md-9">
-              <div class="row">
-                <div class="col-md-6">
-                  <h6>Личная информация</h6>
-                  <p><strong>ФИО:</strong> {{ employee.first_name }} {{ employee.midle_name }} {{ employee.last_name }}</p>
-                  <p><strong>Дата рождения:</strong> {{ employee.birth_date }}</p>
-                  <p><strong>Телефон:</strong> {{ employee.phone }}</p>
-                  <p><strong>Email:</strong> {{ employee.email|default:"Не указан" }}</p>
-                  <p><strong>Город:</strong> {{ employee.city }}</p>
-                </div>
-                <div class="col-md-6">
-                  <h6>Рабочая информация</h6>
-                  <p><strong>Специализация:</strong> {{ employee.specialization }}</p>
-                  <p><strong>Опыт работы:</strong> {{ employee.get_experience_display }}</p>
-                  <p><strong>Дата приема:</strong> {{ employee.date_hired|default:"Не указана" }}</p>
-                  {% if company_experience %}
-                    <p><strong>Стаж в компании:</strong> 
-                      {% if company_experience == 1 %}
-                        {{ company_experience }} год
-                      {% elif company_experience >= 2 and company_experience <= 4 %}
-                        {{ company_experience }} года
-                      {% else %}
-                        {{ company_experience }} лет
-                      {% endif %}
-                    </p>
-                  {% endif %}
-                  <p><strong>Статус:</strong> {{ employee.get_status_display }}</p>
-                </div>
-              </div>
+            <div class="col-md-6">
+              <h6>Личная информация</h6>
+              <p><strong>ФИО:</strong> {{ employee.first_name }} {{ employee.midle_name }} {{ employee.last_name }}</p>
+              <p><strong>Дата рождения:</strong> {{ employee.birth_date }}</p>
+              <p><strong>Телефон:</strong> {{ employee.phone }}</p>
+              <p><strong>Email:</strong> {{ employee.email|default:"Не указан" }}</p>
+              <p><strong>Город:</strong> {{ employee.city }}</p>
             </div>
-            <div class="col-md-3">
-              {% if employee.image %}
-                <img src="{{ employee.image.url }}" alt="{{ employee.first_name }} {{ employee.last_name }}" class="img-fluid rounded" style="width: 100%; height: 250px; object-fit: cover;">
-              {% else %}
-                <div class="bg-secondary d-flex align-items-center justify-content-center rounded" style="width: 100%; height: 250px;">
-                  <i class="bi bi-person-fill text-white" style="font-size: 4rem;"></i>
-                </div>
+            <div class="col-md-6">
+              <h6>Рабочая информация</h6>
+              <p><strong>Специализация:</strong> {{ employee.specialization }}</p>
+              <p><strong>Опыт работы:</strong> {{ employee.get_experience_display }}</p>
+              <p><strong>Дата приема:</strong> {{ employee.date_hired|default:"Не указана" }}</p>
+              {% if company_experience %}
+                <p><strong>Стаж в компании:</strong> 
+                  {% if company_experience == 1 %}
+                    {{ company_experience }} год
+                  {% elif company_experience >= 2 and company_experience <= 4 %}
+                    {{ company_experience }} года
+                  {% else %}
+                    {{ company_experience }} лет
+                  {% endif %}
+                </p>
               {% endif %}
+              <p><strong>Доступность:</strong> {% if employee.available %}Доступен{% else %}Недоступен{% endif %}</p>
             </div>
           </div>
+          
+          {% if employee.categories.all %}
+            <div class="mt-3">
+              <h6>Категории работ</h6>
+              <div>
+                {% for category in employee.categories.all %}
+                  <span class="badge bg-info me-1">{{ category.name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          
+          {% if employee.image %}
+            <div class="mt-3">
+              <h6>Фотография</h6>
+              <img src="{{ employee.image.url }}" alt="{{ employee.first_name }} {{ employee.last_name }}" class="img-fluid rounded" style="max-height: 300px;">
+            </div>
+          {% endif %}
         </div>
-        <div class="card-footer d-flex justify-content-between">
-          <a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Назад к списку
-          </a>
-          <a href="{% url 'main:employee_edit' employee.slug %}" class="btn btn-primary">
-            <i class="bi bi-pencil"></i> Редактировать
-          </a>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Управление сотрудником</h6>
+        </div>
+        <div class="card-body">
+          <form method="post" id="statusForm">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="statusSelect" class="form-label">Изменить статус:</label>
+              <select name="status" id="statusSelect" class="form-select">
+                {% for value, label in status_choices %}
+                  <option value="{{ value }}" {% if employee.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Обновить статус</button>
+          </form>
+          
+          <hr>
+          
+          <div class="d-grid gap-2">
+            <a href="{% url 'main:employee_edit' employee.slug %}" class="btn btn-success">
+              <i class="bi bi-pencil"></i> Редактировать
+            </a>
+            <a href="{% url 'main:employee_list' %}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Назад к списку
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+document.getElementById('statusForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const newStatus = formData.get('status');
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Ошибка при изменении статуса');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ошибка при изменении статуса');
+    });
+});
+</script>
 {% endblock content%}
-<!--TODO нужно добавить информацию о доступности мастера и функцию редактирования прямо в этом шаблоне-->
