@@ -1,0 +1,135 @@
+{% extends 'private/employee_base.html' %}
+
+{% block title %}Заказ #{{ order.id }}{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">Заказ от {{ order.name }}</h4>
+          <span class="badge fs-6 {% if order.status == 'new' %}bg-primary{% elif order.status == 'confirmed' %}bg-info text-dark{% elif order.status == 'canceled' %}bg-secondary{% elif order.status == 'in_work' %}bg-warning text-dark{% elif order.status == 'completed' %}bg-success{% elif order.status == 'spam' %}bg-danger{% else %}bg-primary{% endif %}">
+            {{ order.get_status_display }}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Информация о клиенте</h6><br>
+              <p><strong>Имя:</strong> {{ order.get_display_name }}</p>
+              <p><strong>Телефон:</strong> {{ order.phone }}</p>
+              <p><strong>Адрес:</strong> {{ order.get_display_address|default:"Не указан" }}</p>
+              {% if order.category %}
+                <p><strong>Категория:</strong> {{ order.category.name }}</p>
+              {% endif %}
+              {% if order.assigned_employee %}
+                <p><strong>Назначенный мастер:</strong> {{ order.assigned_employee }}</p>
+              {% endif %}
+            </div>
+            <div class="col-md-6">
+              <h6>Информация о заказе</h6><br>
+              <p><strong>Дата создания:</strong> {{ order.date_created|date:"d.m.Y H:i" }}</p>
+              <p><strong>Создано клиентом:</strong> {% if order.created_by_client %}Да{% else %}Нет{% endif %}</p>
+            </div>
+          </div>
+          
+          {% if order.comment %}
+            <div class="mt-3">
+              <h6>Первоначальный комментарий</h6>
+              <p class="border p-3 bg-light">{{ order.comment }}</p>
+            </div>
+          {% endif %}
+          
+          {% if order.work_description %}
+            <div class="mt-3">
+              <h6>Описание работ</h6>
+              <p class="border p-3 bg-light">{{ order.work_description }}</p>
+            </div>
+          {% endif %}
+          
+          <div class="mt-3">
+            <h6>Фотографии</h6><br>
+            <div class="row">
+              {% if order.additional_images_set.all %}
+                <div class="col-md-6">
+                  {% for img in order.additional_images_set.all %}
+                    <img src="{{ img.image.url }}" alt="Дополнительное фото" class="img-fluid me-2 mb-2" style="max-height: 150px;">
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if not order.image and not order.additional_images_set.all %}
+                <div class="col-12">
+                  <p class="text-muted">Фотографии не прикреплены</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Управление заказом</h6>
+        </div>
+        <div class="card-body">
+          <form method="post" action="{% url 'main:order_status_update' order.pk %}" id="statusForm">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="statusSelect" class="form-label">Изменить статус:</label>
+              <select name="status" id="statusSelect" class="form-select">
+                {% for value, label in status_choices %}
+                  <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Обновить статус</button>
+          </form>
+          
+          <hr>
+          
+          <div class="d-grid gap-2">
+            <a href="{% url 'main:order_edit' order.pk %}" class="btn btn-success">
+              <i class="bi bi-pencil"></i> Редактировать
+            </a>
+            <a href="{% url 'main:order_list' %}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Назад к списку
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('statusForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const newStatus = formData.get('status');
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Ошибка при изменении статуса');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ошибка при изменении статуса');
+    });
+});
+</script>
+{% endblock content %}

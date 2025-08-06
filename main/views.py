@@ -9,8 +9,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 
 from datetime import date
 
-from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization
-from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm, SpecializationForm
+from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization, OrderImage
+from .forms import OrderForm, JobApplicationForm, EmployeeForm, CategoryForm, ProductForm, ServiceForm, SpecializationForm, OrderEditForm
 
 # Миксин для проверки принадлежности к сотрудникам
 class StaffRequiredMixin(UserPassesTestMixin):
@@ -443,6 +443,40 @@ class OrderListView(StaffRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['status_choices'] = Order.STATUS_CHOICES
         return context
+
+class OrderDetailView(StaffRequiredMixin, DetailView):
+    model = Order
+    template_name = "main/private/order/order_detail.html"
+    context_object_name = "order"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status_choices'] = Order.STATUS_CHOICES
+        return context
+
+class OrderEditView(StaffRequiredMixin, UpdateView):
+    model = Order
+    form_class = OrderEditForm
+    template_name = "main/private/order/order_edit.html"
+    
+    def get_success_url(self):
+        return reverse_lazy('main:order_detail', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Редактирование заказа #{self.object.id}'
+        return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        # Обработка множественных изображений
+        files = self.request.FILES.getlist('additional_images')
+        for file in files:
+            OrderImage.objects.create(order=self.object, image=file)
+        
+        messages.success(self.request, 'Информация о заказе успешно обновлена.')
+        return response
 
 class OrderStatusUpdateView(StaffRequiredMixin, View):
     def post(self, request, pk):

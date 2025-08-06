@@ -287,8 +287,11 @@ class Order(models.Model):
         ("in_work", "В работе"),
         ("completed", "Выполнен"),
         ("spam", "Спам"),
+        ("failed", "Не удалось связаться"),
+        ("callback", "Перезвонить"),
     ]
 
+    # Основная информация из заявки
     name = models.CharField(max_length=50, verbose_name="Имя")
     phone = PhoneNumberField(verbose_name="Телефон", db_index=True, region="RU")
     image = models.ImageField(upload_to="images/orders/", blank=True, verbose_name="Фото")
@@ -297,9 +300,31 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания", db_index=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="new", verbose_name="Статус")
     created_by_client = models.BooleanField(default=False, verbose_name="Создано клиентом")
+    
+    # Дополнительная информация (заполняется при редактировании)
+    last_name = models.CharField(max_length=50, blank=True, verbose_name="Фамилия клиента")
+    middle_name = models.CharField(max_length=50, blank=True, verbose_name="Отчество клиента")
+    address = models.CharField(max_length=200, blank=True, verbose_name="Полный адрес")
+    work_description = models.TextField(blank=True, verbose_name="Описание работ")
+    additional_images = models.ImageField(upload_to="images/orders/additional/", blank=True, verbose_name="Дополнительные фото")
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Категория")
+    assigned_employee = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Назначенный мастер")
+
+    def get_display_name(self):
+        """Возвращает полное имя если есть, иначе обычное имя"""
+        if self.last_name:
+            full_name = f"{self.last_name} {self.name}"
+            if self.middle_name:
+                full_name += f" {self.middle_name}"
+            return full_name
+        return self.name
+    
+    def get_display_address(self):
+        """Возвращает полный адрес если есть, иначе город"""
+        return self.address if self.address else self.city
 
     def __str__(self):
-        return f"{self.name} ({self.phone})"
+        return f"{self.get_display_name()} ({self.phone})"
 
     class Meta:
         verbose_name = "Заказ"
@@ -308,6 +333,19 @@ class Order(models.Model):
         indexes = [
             models.Index(fields=["status", "phone", "date_created"]),
         ]
+
+
+class OrderImage(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='additional_images_set', verbose_name="Заказ")
+    image = models.ImageField(upload_to="images/orders/additional/", verbose_name="Изображение")
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
+    
+    class Meta:
+        verbose_name = "Дополнительное изображение заказа"
+        verbose_name_plural = "Дополнительные изображения заказов"
+    
+    def __str__(self):
+        return f"Изображение для заказа #{self.order.id}"
 
 
 class JobApplication(models.Model):

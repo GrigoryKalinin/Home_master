@@ -15,6 +15,8 @@ urlpatterns = [
     path('dashboard/all-items/', views.AllItemsListView.as_view(), name='all_items_list'),
         # Заказы
     path('dashboard/orders/', views.OrderListView.as_view(), name='order_list'),
+    path('dashboard/order/<int:pk>/', views.OrderDetailView.as_view(), name='order_detail'),
+    path('dashboard/order/<int:pk>/edit/', views.OrderEditView.as_view(), name='order_edit'),
     path('dashboard/order/<int:pk>/status/', views.OrderStatusUpdateView.as_view(), name='order_status_update'),
         # Резюме
     path('dashboard/job_applications/', views.JobApplicationListView.as_view(), name='job_application_list'),

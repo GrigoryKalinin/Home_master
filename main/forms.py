@@ -356,6 +356,82 @@ class JobApplicationForm(forms.ModelForm):
         # Устанавливаем стандартный российский регион для всех номеров
         self.fields["phone"].initial = "+7"
 
+class OrderEditForm(forms.ModelForm):
+    name = forms.CharField(
+        label="Имя клиента",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'})
+    )
+    
+    last_name = forms.CharField(
+        label="Фамилия клиента",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'})
+    )
+    
+    middle_name = forms.CharField(
+        label="Отчество клиента",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Отчество'})
+    )
+    
+
+    
+    phone = PhoneNumberField(
+        region="RU",
+        label="Телефон",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control phone-mask',
+            'data-mask': '+7 (000) 000-00-00',
+            'placeholder': '+7 (999) 123-45-67'
+        })
+    )
+    
+    work_description = forms.CharField(
+        label="Описание требуемых работ",
+        required=False,
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Опишите какие работы нужно выполнить'})
+    )
+    
+    city = forms.CharField(
+        label="Город",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Город'})
+    )
+    
+    address = forms.CharField(
+        label="Полный адрес",
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Улица, дом, квартира'})
+    )
+    
+
+    
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.filter(available=True),
+        label="Категория",
+        required=False,
+        empty_label="Выберите категорию",
+        widget=forms.Select(attrs={'class': 'form-select', 'id': 'categorySelect'})
+    )
+    
+    assigned_employee = forms.ModelChoiceField(
+        queryset=Employee.objects.filter(available=True, status='active'),
+        label="Назначить мастера",
+        required=False,
+        empty_label="Выберите мастера",
+        widget=forms.Select(attrs={'class': 'form-select', 'id': 'employeeSelect'})
+    )
+    
+    class Meta:
+        model = Order
+        fields = ['name', 'last_name', 'middle_name', 'phone', 'work_description', 'city', 'address', 'category', 'assigned_employee']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # При создании формы подгружаем данные из основных полей
+        if self.instance and self.instance.pk:
+            if not self.instance.address:
+                self.fields['address'].initial = self.instance.city
+
 class SpecializationForm(forms.ModelForm):
     class Meta:
         model = Specialization
