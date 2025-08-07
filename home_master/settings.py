@@ -29,8 +29,24 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',           # для локальной разработки
+    '127.0.0.1',          # для локальной разработки
+    '193.37.71.16',        # новый публичный IP
+    'vm978745.cloud.nuxt.network',
+    'alliancemaster.ru',
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://193.37.71.16',
+    'https://193.37.71.16',
+    'http://vm978745.cloud.nuxt.network',
+    'https://vm978745.cloud.nuxt.network'
+    'http://alliancemaster.ru',
+    'https://alliancemaster.ru'
+]
 
 # Application definition
 
