@@ -43,7 +43,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://193.37.71.16',
     'https://193.37.71.16',
     'http://vm978745.cloud.nuxt.network',
-    'https://vm978745.cloud.nuxt.network'
+    'https://vm978745.cloud.nuxt.network',
     'http://alliancemaster.ru',
     'https://alliancemaster.ru'
 ]
@@ -70,7 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
         
     'main.apps.MainConfig',
-    'users',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
