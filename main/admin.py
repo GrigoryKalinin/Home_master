@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import RangeDateFilter
-from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization
+from .models import Category, Product, Service, Order, JobApplication, Employee, Specialization, OrderImage
 
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
@@ -130,13 +130,13 @@ class EmployeeAdmin(ModelAdmin):
     
     fieldsets = (
         ('Личная информация', {
-            'fields': ('first_name', 'last_name', 'midle_name', 'birth_date', 'image')
+            'fields': ('first_name', 'last_name', 'middle_name', 'birth_date', 'image')
         }),
         ('Контакты', {
             'fields': ('phone', 'email', 'city')
         }),
         ('Работа', {
-            'fields': ('specialization', 'products', 'services', 'experience', 'date_hired', 'status', 'available')
+            'fields': ('specialization', 'categories', 'products', 'services', 'experience', 'date_hired', 'status', 'available')
         }),
         ('Системная информация', {
             'fields': ('slug', 'date_created', 'date_updated'),
@@ -196,6 +196,24 @@ class JobApplicationAdmin(ModelAdmin):
         }),
         ('Системная информация', {
             'fields': ('date_created',),
+            'classes': ('collapse',)
+        }),
+    )
+
+@admin.register(OrderImage)
+class OrderImageAdmin(ModelAdmin):
+    list_display = ['order', 'uploaded_at']
+    list_filter = [('uploaded_at', RangeDateFilter)]
+    search_fields = ['order__name', 'order__phone']
+    list_select_related = ['order']
+    readonly_fields = ['uploaded_at']
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('order', 'image')
+        }),
+        ('Системная информация', {
+            'fields': ('uploaded_at',),
             'classes': ('collapse',)
         }),
     )

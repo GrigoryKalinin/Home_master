@@ -29,7 +29,6 @@ class Category(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     date_updated = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
     popularity = models.PositiveIntegerField(default=0, verbose_name="Популярность", blank=True)  # популярность товара
-    specializations = models.ManyToManyField('Specialization', blank=True, verbose_name="Специализации")
 
     class Meta:
         ordering = ("name",)
@@ -184,7 +183,7 @@ class Service(models.Model):
 
 class Specialization(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Специализация")
-    categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории", related_name='specialization_set')
+    categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории")
     
     class Meta:
         verbose_name = "Специализация"
@@ -210,7 +209,7 @@ class Employee(models.Model):
 
     first_name = models.CharField(max_length=50, verbose_name="Имя")
     last_name = models.CharField(max_length=50, verbose_name="Фамилия", db_index=True)
-    midle_name = models.CharField(max_length=50, verbose_name="Отчество")
+    middle_name = models.CharField(max_length=50, verbose_name="Отчество")
     birth_date = models.DateField(verbose_name="Дата рождения")
     phone = PhoneNumberField(verbose_name="Телефон", db_index=True, region="RU")
     email = models.EmailField(verbose_name="Email", blank=True)
@@ -231,6 +230,10 @@ class Employee(models.Model):
     class Meta:
         verbose_name = "Сотрудник"
         verbose_name_plural = "Сотрудники"
+        indexes = [
+            models.Index(fields=['status', 'available']),
+            models.Index(fields=['specialization', 'city']),
+        ]
         
     def save(self, *args, **kwargs):
         if not self.slug or self._name_changed():
@@ -311,15 +314,9 @@ class Order(models.Model):
     middle_name = models.CharField(max_length=50, blank=True, verbose_name="Отчество клиента")
     address = models.CharField(max_length=200, blank=True, verbose_name="Полный адрес")
     work_description = models.TextField(blank=True, verbose_name="Описание работ")
-    additional_images = models.ImageField(upload_to="images/orders/additional/", blank=True, verbose_name="Дополнительные фото")
-    categories = models.ManyToManyField('Category', blank=True, related_name='orders_new', verbose_name="Категории")
-    products = models.ManyToManyField('Product', blank=True, related_name='orders_new', verbose_name="Товары")
-    assigned_employees = models.ManyToManyField('Employee', blank=True, related_name='orders_new', verbose_name="Назначенные мастера")
-    
-    # Оставляем старые поля для совместимости
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Категория (старое)")
-    product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Товар (старый)")
-    assigned_employee = models.ForeignKey('Employee', on_delete=models.SET_NULL, null=True, blank=True, related_name='orders_old', verbose_name="Мастер (старый)")
+    categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории")
+    products = models.ManyToManyField('Product', blank=True, verbose_name="Товары")
+    assigned_employees = models.ManyToManyField('Employee', blank=True, verbose_name="Назначенные мастера")
 
     def get_display_name(self):
         """Возвращает полное имя если есть, иначе обычное имя"""
