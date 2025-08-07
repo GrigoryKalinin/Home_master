@@ -172,16 +172,16 @@ LOGIN_REDIRECT_URL = '/users/profile/'
 LOGOUT_REDIRECT_URL = '/users/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# Мэил
 EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 465  
+EMAIL_USE_SSL = True  
+EMAIL_USE_TLS = False  
 EMAIL_HOST_USER = os.getenv("MAIL")
 EMAIL_HOST_PASSWORD = os.getenv("MAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("MAIL")
 SERVER_EMAIL = os.getenv("MAIL")
 
-# Настройки Unfold
+
 # Настройки Unfold
 UNFOLD = {
     "SITE_TITLE": "Домашний мастер",
