@@ -61,7 +61,16 @@
 
 						<div class="mb-3">
 							{{ form.specialization.label_tag }}
-							{{ form.specialization }}
+							<div id="specializationContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+								{% for specialization in form.specialization.field.queryset %}
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}">
+									<label class="form-check-label" for="spec_{{ specialization.id }}">
+										{{ specialization.name }}
+									</label>
+								</div>
+								{% endfor %}
+							</div>
 						</div>
 						
 						<div class="mb-3">
@@ -127,19 +136,24 @@
   
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-      const specializationSelect = document.querySelector('select[name="specialization"]');
+      const specializationContainer = document.getElementById('specializationContainer');
       const productsContainer = document.getElementById('productsContainer');
       const servicesContainer = document.getElementById('servicesContainer');
       
-      // Функция для загрузки товаров по специализации
-      function loadProductsBySpecialization(specializationId) {
-          if (!specializationId) {
+      // Функция для загрузки товаров по специализациям
+      function loadProductsBySpecializations() {
+          const selectedSpecs = Array.from(specializationContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+          
+          if (selectedSpecs.length === 0) {
               productsContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
               servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
               return;
           }
           
-          fetch(`{% url 'main:get_products_by_specialization' %}?specialization_id=${specializationId}`)
+          const params = new URLSearchParams();
+          selectedSpecs.forEach(id => params.append('specialization_ids[]', id));
+          
+          fetch(`{% url 'main:get_products_by_specialization' %}?${params}`)
               .then(response => response.json())
               .then(data => {
                   productsContainer.innerHTML = '';
@@ -155,7 +169,6 @@
                       productsContainer.appendChild(div);
                   });
                   
-                  // Загружаем услуги для выбранных товаров
                   loadServicesByProducts();
               });
       }
@@ -191,8 +204,10 @@
       }
       
       // Обработчик изменения специализации
-      specializationSelect.addEventListener('change', function() {
-          loadProductsBySpecialization(this.value);
+      specializationContainer.addEventListener('change', function(e) {
+          if (e.target.type === 'checkbox') {
+              loadProductsBySpecializations();
+          }
       });
       
       // Обработчик изменения товаров
@@ -201,11 +216,6 @@
               loadServicesByProducts();
           }
       });
-      
-      // Инициализация при загрузке страницы
-      if (specializationSelect.value) {
-          loadProductsBySpecialization(specializationSelect.value);
-      }
   });
   </script>
 {% endblock script%}
