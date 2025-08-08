@@ -1,5 +1,8 @@
 .about-hero {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+  background: linear-gradient(rgba(0, 91, 170, 0.4), rgba(0, 58, 110, 0.5)), url('../../images/hero.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: var(--text-light);
   text-align: center;
   padding: 150px 0 100px;

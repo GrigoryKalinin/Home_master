@@ -1,6 +1,6 @@
 /* Главная секция (герой) с большим заголовком и призывом к действию */
 .hero {
-  background: linear-gradient(rgba(0, 91, 170, 0.4), rgba(0, 58, 110, 0.5)), url('../../images/hero (1).png');
+  background: linear-gradient(rgba(0, 91, 170, 0.4), rgba(0, 58, 110, 0.5)), url('../../images/hero1.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
