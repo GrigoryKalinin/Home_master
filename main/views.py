@@ -287,7 +287,7 @@ class EmployeeCreateView(StaffRequiredMixin, CreateView):
                 # Пытаемся найти специализацию
                 try:
                     specialization = Specialization.objects.get(name=application.specialization)
-                    initial['specialization'] = specialization
+                    initial['specialization'] = [specialization]
                 except Specialization.DoesNotExist:
                     pass
                     
@@ -346,12 +346,18 @@ class EmployeeUpdateView(StaffRequiredMixin, UpdateView):
     form_class = EmployeeForm
     template_name = "main/private/employee/employee_create.html"
     slug_url_kwarg = 'employee_slug'
+    success_url = reverse_lazy("main:employee_list")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Редактирование сотрудника"
         context["button_text"] = "Сохранить изменения"
         return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, f'Данные сотрудника {self.object} успешно обновлены.')
+        return response
 
 class EmployeeDetailView(StaffRequiredMixin, DetailView):
     model = Employee

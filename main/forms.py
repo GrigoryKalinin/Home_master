@@ -157,10 +157,10 @@ class EmployeeForm(forms.ModelForm):
         ),
     )
 
-    specialization = forms.ModelChoiceField(
+    specialization = forms.ModelMultipleChoiceField(
         queryset=Specialization.objects.all(),
-        label="Специализация",
-        widget=forms.Select(attrs={"class": "form-control", "id": "specializationSelect"})
+        label="Специализации",
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     
     categories = forms.ModelMultipleChoiceField(
@@ -257,23 +257,24 @@ class EmployeeForm(forms.ModelForm):
         
         if self.data:
             try:
-                specialization_id = int(self.data.get('specialization'))
-                if specialization_id:
-                    specialization = Specialization.objects.get(id=specialization_id)
-                    categories = specialization.categories.all()
-                    self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
+                selected_categories = self.data.getlist('categories')
+                if selected_categories:
+                    self.fields['products'].queryset = Product.objects.filter(
+                        category__in=selected_categories, available=True
+                    )
                     
                     selected_products = self.data.getlist('products')
                     if selected_products:
                         self.fields['services'].queryset = Service.objects.filter(
                             product__in=selected_products, available=True
                         )
-            except (ValueError, TypeError, Specialization.DoesNotExist):
+            except (ValueError, TypeError):
                 pass
-        if self.instance and self.instance.pk:
-            if self.instance.specialization:
-                categories = self.instance.specialization.categories.all()
-                self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
+        
+        elif self.instance and self.instance.pk:
+            selected_categories = self.instance.categories.all()
+            if selected_categories:
+                self.fields['products'].queryset = Product.objects.filter(category__in=selected_categories, available=True)
                 
             if self.instance.products.exists():
                 self.fields['services'].queryset = Service.objects.filter(

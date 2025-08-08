@@ -64,7 +64,7 @@
               <div id="specializationContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
                 {% for specialization in form.specialization.field.queryset %}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}">
+                  <input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}" {% if specialization in form.specialization.value %}checked{% endif %}>
                   <label class="form-check-label" for="spec_{{ specialization.id }}">
                     {{ specialization.name }}
                   </label>
@@ -74,16 +74,45 @@
             </div>
             
             <div class="mb-3">
+              {{ form.categories.label_tag }}
+              <div id="categoriesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                <div class="text-muted">Сначала выберите специализацию</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
               {{ form.products.label_tag }}
               <div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-                <div class="text-muted">Сначала выберите специализацию</div>
+                {% if form.products.field.queryset %}
+                  {% for product in form.products.field.queryset %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="products" value="{{ product.id }}" id="product_{{ product.id }}" {% if product in form.products.value %}checked{% endif %}>
+                    <label class="form-check-label" for="product_{{ product.id }}">
+                      {{ product.name }}
+                    </label>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-muted">Сначала выберите специализацию</div>
+                {% endif %}
               </div>
             </div>
             
             <div class="mb-3">
               {{ form.services.label_tag }}
               <div id="servicesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-                <div class="text-muted">Сначала выберите товары</div>
+                {% if form.services.field.queryset %}
+                  {% for service in form.services.field.queryset %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="services" value="{{ service.id }}" id="service_{{ service.id }}" {% if service in form.services.value %}checked{% endif %}>
+                    <label class="form-check-label" for="service_{{ service.id }}">
+                      {{ service.name }}
+                    </label>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-muted">Сначала выберите товары</div>
+                {% endif %}
               </div>
             </div>
             
@@ -137,14 +166,31 @@
   <script>
   document.addEventListener('DOMContentLoaded', function() {
     const specializationContainer = document.getElementById('specializationContainer');
+    const categoriesContainer = document.getElementById('categoriesContainer');
     const productsContainer = document.getElementById('productsContainer');
     const servicesContainer = document.getElementById('servicesContainer');
     
-    // Функция для загрузки товаров по специализациям
-    function loadProductsBySpecializations() {
+    let selectedProducts = [];
+    let selectedServices = [];
+    
+    // Инициализация при редактировании
+    const checkedSpecs = specializationContainer.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkedSpecs.length > 0) {
+      loadCategoriesBySpecializations();
+    }
+    
+    productsContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      selectedProducts.push(cb.value);
+    });
+    servicesContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      selectedServices.push(cb.value);
+    });
+    
+    function loadCategoriesBySpecializations() {
       const selectedSpecs = Array.from(specializationContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
       
       if (selectedSpecs.length === 0) {
+        categoriesContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
         productsContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
         servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
         return;
@@ -153,15 +199,46 @@
       const params = new URLSearchParams();
       selectedSpecs.forEach(id => params.append('specialization_ids[]', id));
       
-      fetch(`{% url 'main:get_products_by_specialization' %}?${params}`)
+      fetch(`{% url 'main:get_categories_by_specialization' %}?${params}`)
+        .then(response => response.json())
+        .then(data => {
+          categoriesContainer.innerHTML = '';
+          data.categories.forEach(category => {
+            const div = document.createElement('div');
+            div.className = 'form-check';
+            div.innerHTML = `
+              <input class="form-check-input" type="checkbox" name="categories" value="${category.id}" id="cat_${category.id}">
+              <label class="form-check-label" for="cat_${category.id}">
+                ${category.name}
+              </label>
+            `;
+            categoriesContainer.appendChild(div);
+          });
+        });
+    }
+    
+    function loadProductsByCategories() {
+      const selectedCategories = Array.from(categoriesContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      
+      if (selectedCategories.length === 0) {
+        productsContainer.innerHTML = '<div class="text-muted">Сначала выберите категории</div>';
+        servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
+        return;
+      }
+      
+      const params = new URLSearchParams();
+      selectedCategories.forEach(id => params.append('category_ids[]', id));
+      
+      fetch(`{% url 'main:get_products_by_categories' %}?${params}`)
         .then(response => response.json())
         .then(data => {
           productsContainer.innerHTML = '';
           data.products.forEach(product => {
+            const isSelected = selectedProducts.includes(product.id.toString());
             const div = document.createElement('div');
             div.className = 'form-check';
             div.innerHTML = `
-              <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" checked>
+              <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" ${isSelected ? 'checked' : ''}>
               <label class="form-check-label" for="product_${product.id}">
                 ${product.name}
               </label>
@@ -173,27 +250,27 @@
         });
     }
     
-    // Функция для загрузки услуг по товарам
     function loadServicesByProducts() {
-      const selectedProducts = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const selectedProductsNow = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
       
-      if (selectedProducts.length === 0) {
+      if (selectedProductsNow.length === 0) {
         servicesContainer.innerHTML = '<div class="text-muted">Выберите товары</div>';
         return;
       }
       
       const params = new URLSearchParams();
-      selectedProducts.forEach(id => params.append('product_ids[]', id));
+      selectedProductsNow.forEach(id => params.append('product_ids[]', id));
       
       fetch(`{% url 'main:get_services_by_products' %}?${params}`)
         .then(response => response.json())
         .then(data => {
           servicesContainer.innerHTML = '';
           data.services.forEach(service => {
+            const isSelected = selectedServices.includes(service.id.toString());
             const div = document.createElement('div');
             div.className = 'form-check';
             div.innerHTML = `
-              <input class="form-check-input" type="checkbox" name="services" value="${service.id}" id="service_${service.id}" checked>
+              <input class="form-check-input" type="checkbox" name="services" value="${service.id}" id="service_${service.id}" ${isSelected ? 'checked' : ''}>
               <label class="form-check-label" for="service_${service.id}">
                 ${service.name}
               </label>
@@ -203,14 +280,18 @@
         });
     }
     
-    // Обработчик изменения специализации
     specializationContainer.addEventListener('change', function(e) {
       if (e.target.type === 'checkbox') {
-        loadProductsBySpecializations();
+        loadCategoriesBySpecializations();
       }
     });
     
-    // Обработчик изменения товаров
+    categoriesContainer.addEventListener('change', function(e) {
+      if (e.target.type === 'checkbox') {
+        loadProductsByCategories();
+      }
+    });
+    
     productsContainer.addEventListener('change', function(e) {
       if (e.target.type === 'checkbox') {
         loadServicesByProducts();

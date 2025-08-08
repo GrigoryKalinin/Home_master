@@ -214,7 +214,7 @@ class Employee(models.Model):
     phone = PhoneNumberField(verbose_name="Телефон", db_index=True, region="RU")
     email = models.EmailField(verbose_name="Email", blank=True)
     city = models.CharField(max_length=100, verbose_name="Город", db_index=True)
-    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, verbose_name="Специализация")
+    specialization = models.ManyToManyField(Specialization, verbose_name="Специализации")
     categories = models.ManyToManyField('Category', blank=True, verbose_name="Категории работ")
     products = models.ManyToManyField('Product', blank=True, verbose_name="Товары")
     services = models.ManyToManyField('Service', blank=True, verbose_name="Услуги")
@@ -232,7 +232,7 @@ class Employee(models.Model):
         verbose_name_plural = "Сотрудники"
         indexes = [
             models.Index(fields=['status', 'available']),
-            models.Index(fields=['specialization', 'city']),
+            models.Index(fields=['city']),
         ]
         
     def save(self, *args, **kwargs):

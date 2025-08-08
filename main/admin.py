@@ -144,16 +144,20 @@ class SpecializationAdmin(ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(ModelAdmin):
-    list_display = ['get_full_name', 'phone', 'city', 'specialization', 'status', 'available', 'experience', 'date_hired']
-    list_filter = ['status', 'city', 'specialization', ('date_hired', RangeDateFilter)]
+    list_display = ['get_full_name', 'phone', 'city', 'get_specializations', 'status', 'available', 'experience', 'date_hired']
+    list_filter = ['status', 'city', ('date_hired', RangeDateFilter)]
     list_editable = ['status', 'experience', 'available']
-    search_fields = ['first_name', 'last_name', 'phone', 'specialization']
+    search_fields = ['first_name', 'last_name', 'phone']
     readonly_fields = ['date_created', 'date_updated', 'slug']
     
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
     get_full_name.short_description = 'ФИО'
     get_full_name.admin_order_field = 'last_name'
+    
+    def get_specializations(self, obj):
+        return ", ".join([spec.name for spec in obj.specialization.all()])
+    get_specializations.short_description = 'Специализации'
     
     fieldsets = (
         ('Личная информация', {
