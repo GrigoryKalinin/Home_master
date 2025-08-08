@@ -19,7 +19,7 @@
           <div class="row">
             <div class="col-md-6">
               <h6>Личная информация</h6>
-              <p><strong>ФИО:</strong> {{ employee.first_name }} {{ employee.midle_name }} {{ employee.last_name }}</p>
+              <p><strong>ФИО:</strong> {{ employee.last_name }} {{ employee.first_name }} {{ employee.middle_name }} </p>
               <p><strong>Дата рождения:</strong> {{ employee.birth_date }}</p>
               <p><strong>Телефон:</strong> {{ employee.phone }}</p>
               <p><strong>Email:</strong> {{ employee.email|default:"Не указан" }}</p>
@@ -51,6 +51,28 @@
               <div>
                 {% for category in employee.categories.all %}
                   <span class="badge bg-info me-1">{{ category.name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          
+          {% if employee.products.all %}
+            <div class="mt-3">
+              <h6>Товары</h6>
+              <div>
+                {% for product in employee.products.all %}
+                  <span class="badge bg-secondary me-1">{{ product.name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+          
+          {% if employee.services.all %}
+            <div class="mt-3">
+              <h6>Услуги</h6>
+              <div>
+                {% for service in employee.services.all %}
+                  <span class="badge bg-warning text-dark me-1">{{ service.name }}</span>
                 {% endfor %}
               </div>
             </div>
@@ -88,7 +110,7 @@
           <hr>
           
           <div class="d-grid gap-2">
-            <a href="{% url 'main:employee_edit' employee.slug %}" class="btn btn-success">
+            <a href="{% url 'main:employee_edit' employee_slug=employee.slug %}" class="btn btn-success">
               <i class="bi bi-pencil"></i> Редактировать
             </a>
             <a href="{% url 'main:employee_list' %}" class="btn btn-outline-secondary">

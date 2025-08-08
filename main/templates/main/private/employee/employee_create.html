@@ -5,127 +5,127 @@
 
 {% block content %}
 <div class="container mt-4">
-	<div class="row justify-content-center">
-		<div class="col-md-8">
-			<div class="card">
-				<div class="card-header">
-					<h4 class="mb-0">
-						{% if form.instance.pk %}
-							Редактирование {{ form.instance.first_name }} {{ form.instance.last_name }}
-						{% else %}
-							Добавление нового сотрудника
-						{% endif %}
-					</h4>
-				</div>
-				<div class="card-body">
-					<form method="post" enctype="multipart/form-data">
-						{% csrf_token %}
-						
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								{{ form.first_name.label_tag }}
-								{{ form.first_name }}
-							</div>
-							<div class="col-md-6 mb-3">
-								{{ form.last_name.label_tag }}
-								{{ form.last_name }}
-							</div>
-						</div>
-						
-						<div class="mb-3">
-							{{ form.midle_name.label_tag }}
-							{{ form.midle_name }}
-						</div>
-
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								{{ form.birth_date.label_tag }}
-								{{ form.birth_date }}
-							</div>
-							<div class="col-md-6 mb-3">
-								{{ form.phone.label_tag }}
-								{{ form.phone }}
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								{{ form.email.label_tag }}
-								{{ form.email }}
-							</div>
-							<div class="col-md-6 mb-3">
-								{{ form.city.label_tag }}
-								{{ form.city }}
-							</div>
-						</div>
-
-						<div class="mb-3">
-							{{ form.specialization.label_tag }}
-							<div id="specializationContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-								{% for specialization in form.specialization.field.queryset %}
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}">
-									<label class="form-check-label" for="spec_{{ specialization.id }}">
-										{{ specialization.name }}
-									</label>
-								</div>
-								{% endfor %}
-							</div>
-						</div>
-						
-						<div class="mb-3">
-							{{ form.products.label_tag }}
-							<div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-								<div class="text-muted">Сначала выберите специализацию</div>
-							</div>
-						</div>
-						
-						<div class="mb-3">
-							{{ form.services.label_tag }}
-							<div id="servicesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-								<div class="text-muted">Сначала выберите товары</div>
-							</div>
-						</div>
-						
-						<div class="mb-3">
-							{{ form.experience.label_tag }}
-							{{ form.experience }}
-						</div>
-
-						<div class="row">
-							<div class="col-md-6 mb-3">
-								{{ form.date_hired.label_tag }}
-								{{ form.date_hired }}
-							</div>
-							<div class="col-md-6 mb-3">
-								{{ form.status.label_tag }}
-								{{ form.status }}
-							</div>
-						</div>
-
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">
+            {% if form.instance.pk %}
+              Редактирование {{ form.instance.first_name }} {{ form.instance.last_name }}
+            {% else %}
+              Добавление нового сотрудника
+            {% endif %}
+          </h4>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+              </div>
+            </div>
+            
             <div class="mb-3">
-              {{ form.image.label_tag }}
-              {{ form.image }}
+							{{ form.middle_name.label_tag }}
+							{{ form.middle_name }}
             </div>
 
-						<div class="d-flex justify-content-between">
-							<button type="submit" class="btn btn-success">
-								<i class="bi bi-check-lg"></i> 
-								{% if form.instance.pk %}
-									Сохранить
-								{% else %}
-									Добавить
-								{% endif %}
-							</button>
-							<a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
-								<i class="bi bi-arrow-left"></i> Назад
-							</a>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.birth_date.label_tag }}
+                {{ form.birth_date }}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.phone.label_tag }}
+                {{ form.phone }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.city.label_tag }}
+                {{ form.city }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              {{ form.specialization.label_tag }}
+              <div id="specializationContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                {% for specialization in form.specialization.field.queryset %}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}">
+                  <label class="form-check-label" for="spec_{{ specialization.id }}">
+                    {{ specialization.name }}
+                  </label>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.products.label_tag }}
+              <div id="productsContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                <div class="text-muted">Сначала выберите специализацию</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.services.label_tag }}
+              <div id="servicesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
+                <div class="text-muted">Сначала выберите товары</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              {{ form.experience.label_tag }}
+              {{ form.experience }}
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                {{ form.date_hired.label_tag }}
+                {{ form.date_hired }}
+              </div>
+              <div class="col-md-6 mb-3">
+                {{ form.status.label_tag }}
+                {{ form.status }}
+              </div>
+            </div>
+
+      <div class="mb-3">
+        {{ form.image.label_tag }}
+        {{ form.image }}
+      </div>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-lg"></i> 
+                {% if form.instance.pk %}
+                  Сохранить
+                {% else %}
+                  Добавить
+                {% endif %}
+              </button>
+              <a href="{% url 'main:employee_list' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Назад
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock content%}
 
@@ -136,86 +136,86 @@
   
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-      const specializationContainer = document.getElementById('specializationContainer');
-      const productsContainer = document.getElementById('productsContainer');
-      const servicesContainer = document.getElementById('servicesContainer');
+    const specializationContainer = document.getElementById('specializationContainer');
+    const productsContainer = document.getElementById('productsContainer');
+    const servicesContainer = document.getElementById('servicesContainer');
+    
+    // Функция для загрузки товаров по специализациям
+    function loadProductsBySpecializations() {
+      const selectedSpecs = Array.from(specializationContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
       
-      // Функция для загрузки товаров по специализациям
-      function loadProductsBySpecializations() {
-          const selectedSpecs = Array.from(specializationContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-          
-          if (selectedSpecs.length === 0) {
-              productsContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
-              servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
-              return;
-          }
-          
-          const params = new URLSearchParams();
-          selectedSpecs.forEach(id => params.append('specialization_ids[]', id));
-          
-          fetch(`{% url 'main:get_products_by_specialization' %}?${params}`)
-              .then(response => response.json())
-              .then(data => {
-                  productsContainer.innerHTML = '';
-                  data.products.forEach(product => {
-                      const div = document.createElement('div');
-                      div.className = 'form-check';
-                      div.innerHTML = `
-                          <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" checked>
-                          <label class="form-check-label" for="product_${product.id}">
-                              ${product.name}
-                          </label>
-                      `;
-                      productsContainer.appendChild(div);
-                  });
-                  
-                  loadServicesByProducts();
-              });
+      if (selectedSpecs.length === 0) {
+        productsContainer.innerHTML = '<div class="text-muted">Сначала выберите специализацию</div>';
+        servicesContainer.innerHTML = '<div class="text-muted">Сначала выберите товары</div>';
+        return;
       }
       
-      // Функция для загрузки услуг по товарам
-      function loadServicesByProducts() {
-          const selectedProducts = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const params = new URLSearchParams();
+      selectedSpecs.forEach(id => params.append('specialization_ids[]', id));
+      
+      fetch(`{% url 'main:get_products_by_specialization' %}?${params}`)
+        .then(response => response.json())
+        .then(data => {
+          productsContainer.innerHTML = '';
+          data.products.forEach(product => {
+            const div = document.createElement('div');
+            div.className = 'form-check';
+            div.innerHTML = `
+              <input class="form-check-input" type="checkbox" name="products" value="${product.id}" id="product_${product.id}" checked>
+              <label class="form-check-label" for="product_${product.id}">
+                ${product.name}
+              </label>
+            `;
+            productsContainer.appendChild(div);
+          });
           
-          if (selectedProducts.length === 0) {
-              servicesContainer.innerHTML = '<div class="text-muted">Выберите товары</div>';
-              return;
-          }
-          
-          const params = new URLSearchParams();
-          selectedProducts.forEach(id => params.append('product_ids[]', id));
-          
-          fetch(`{% url 'main:get_services_by_products' %}?${params}`)
-              .then(response => response.json())
-              .then(data => {
-                  servicesContainer.innerHTML = '';
-                  data.services.forEach(service => {
-                      const div = document.createElement('div');
-                      div.className = 'form-check';
-                      div.innerHTML = `
-                          <input class="form-check-input" type="checkbox" name="services" value="${service.id}" id="service_${service.id}" checked>
-                          <label class="form-check-label" for="service_${service.id}">
-                              ${service.name}
-                          </label>
-                      `;
-                      servicesContainer.appendChild(div);
-                  });
-              });
+          loadServicesByProducts();
+        });
+    }
+    
+    // Функция для загрузки услуг по товарам
+    function loadServicesByProducts() {
+      const selectedProducts = Array.from(productsContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      
+      if (selectedProducts.length === 0) {
+        servicesContainer.innerHTML = '<div class="text-muted">Выберите товары</div>';
+        return;
       }
       
-      // Обработчик изменения специализации
-      specializationContainer.addEventListener('change', function(e) {
-          if (e.target.type === 'checkbox') {
-              loadProductsBySpecializations();
-          }
-      });
+      const params = new URLSearchParams();
+      selectedProducts.forEach(id => params.append('product_ids[]', id));
       
-      // Обработчик изменения товаров
-      productsContainer.addEventListener('change', function(e) {
-          if (e.target.type === 'checkbox') {
-              loadServicesByProducts();
-          }
-      });
+      fetch(`{% url 'main:get_services_by_products' %}?${params}`)
+        .then(response => response.json())
+        .then(data => {
+          servicesContainer.innerHTML = '';
+          data.services.forEach(service => {
+            const div = document.createElement('div');
+            div.className = 'form-check';
+            div.innerHTML = `
+              <input class="form-check-input" type="checkbox" name="services" value="${service.id}" id="service_${service.id}" checked>
+              <label class="form-check-label" for="service_${service.id}">
+                ${service.name}
+              </label>
+            `;
+            servicesContainer.appendChild(div);
+          });
+        });
+    }
+    
+    // Обработчик изменения специализации
+    specializationContainer.addEventListener('change', function(e) {
+      if (e.target.type === 'checkbox') {
+        loadProductsBySpecializations();
+      }
+    });
+    
+    // Обработчик изменения товаров
+    productsContainer.addEventListener('change', function(e) {
+      if (e.target.type === 'checkbox') {
+        loadServicesByProducts();
+      }
+    });
   });
   </script>
 {% endblock script%}

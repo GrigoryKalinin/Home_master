@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin
 from unfold.contrib.filters.admin import RangeDateFilter
@@ -33,6 +34,32 @@ class CategoryAdmin(ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    
+    def get_form(self, request, obj=None, **kwargs):
+        # Убираем specializations из fields если оно там есть
+        if 'fields' in kwargs and 'specializations' in kwargs['fields']:
+            kwargs['fields'] = [f for f in kwargs['fields'] if f != 'specializations']
+        
+        form = super().get_form(request, obj, **kwargs)
+        
+        # Добавляем поле специализаций
+        form.base_fields['specializations'] = forms.ModelMultipleChoiceField(
+            queryset=Specialization.objects.all(),
+            initial=obj.specialization_set.all() if obj else [],
+            required=False,
+            widget=admin.widgets.FilteredSelectMultiple('Специализации', False)
+        )
+        return form
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if 'specializations' in form.cleaned_data:
+            # Обновляем связи
+            for spec in Specialization.objects.all():
+                if spec in form.cleaned_data['specializations']:
+                    spec.categories.add(obj)
+                else:
+                    spec.categories.remove(obj)
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):

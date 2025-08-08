@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.db import models
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -569,14 +570,20 @@ def get_products_by_specialization(request):
     if not (request.user.is_authenticated and request.user.is_staff):
         return JsonResponse({'products': []})
         
+    # Поддерживаем как одиночный ID, так и массив ID
     specialization_id = request.GET.get('specialization_id')
+    specialization_ids = request.GET.getlist('specialization_ids[]')
+    
     if specialization_id:
+        specialization_ids = [specialization_id]
+    
+    if specialization_ids:
         try:
-            specialization = Specialization.objects.get(id=specialization_id)
-            categories = specialization.categories.all()
+            specializations = Specialization.objects.filter(id__in=specialization_ids)
+            categories = Category.objects.filter(specialization__in=specializations).distinct()
             products = Product.objects.filter(category__in=categories, available=True).values('id', 'name')
             return JsonResponse({'products': list(products)})
-        except Specialization.DoesNotExist:
+        except Exception:
             pass
     return JsonResponse({'products': []})
 
@@ -600,14 +607,30 @@ def get_products_by_categories(request):
         return JsonResponse({'products': list(products)})
     return JsonResponse({'products': []})
 
+def get_categories_by_specialization(request):
+    if not (request.user.is_authenticated and request.user.is_staff):
+        return JsonResponse({'categories': []})
+        
+    specialization_ids = request.GET.getlist('specialization_ids[]')
+    if specialization_ids:
+        try:
+            specializations = Specialization.objects.filter(id__in=specialization_ids)
+            categories = Category.objects.filter(specialization__in=specializations).distinct().values('id', 'name')
+            return JsonResponse({'categories': list(categories)})
+        except Exception:
+            pass
+    return JsonResponse({'categories': []})
+
 def get_employees_by_categories(request):
     if not (request.user.is_authenticated and request.user.is_staff):
         return JsonResponse({'employees': []})
         
     category_ids = request.GET.getlist('category_ids[]')
     if category_ids:
+        # Получаем сотрудников по категориям (через специализацию и напрямую)
         employees = Employee.objects.filter(
-            specialization__categories__in=category_ids, 
+            Q(specialization__categories__in=category_ids) |
+            Q(categories__in=category_ids),
             available=True, 
             status='active'
         ).distinct().values('id', 'first_name', 'last_name')

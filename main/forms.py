@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models import Q
 
 from phonenumber_field.formfields import PhoneNumberField
 from .models import Order, JobApplication, Employee, Category, Product, Service, Specialization
@@ -14,13 +15,30 @@ class CategoryForm(forms.ModelForm):
     
     class Meta:
         model = Category
-        fields = ["name", "description", "image", "available", "specializations"]
+        fields = ["name", "description", "image", "available"]
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 3}),
             "image": forms.FileInput(attrs={"class": "form-control"}),
             "available": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['specializations'].initial = self.instance.specialization_set.all()
+    
+    def save(self, commit=True):
+        category = super().save(commit)
+        if commit:
+            specializations = self.cleaned_data['specializations']
+            # Обновляем связи
+            for spec in Specialization.objects.all():
+                if spec in specializations:
+                    spec.categories.add(category)
+                else:
+                    spec.categories.remove(category)
+        return category
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -73,7 +91,7 @@ class EmployeeForm(forms.ModelForm):
         ),
     )
 
-    midle_name = forms.CharField(
+    middle_name = forms.CharField(
         label="Ваше отчество",
         widget=forms.TextInput(
             attrs={
@@ -145,6 +163,13 @@ class EmployeeForm(forms.ModelForm):
         widget=forms.Select(attrs={"class": "form-control", "id": "specializationSelect"})
     )
     
+    categories = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        label="Категории работ",
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.none(),
         label="Товары",
@@ -211,12 +236,13 @@ class EmployeeForm(forms.ModelForm):
         fields = [
             "first_name",
             "last_name",
-            "midle_name",
+            "middle_name",
             "birth_date",
             "phone",
             "email",
             "city",
             "specialization",
+            "categories",
             "products",
             "services",
             "experience",
@@ -489,7 +515,8 @@ class OrderEditForm(forms.ModelForm):
                 categories = self.instance.categories.all()
                 self.fields['products'].queryset = Product.objects.filter(category__in=categories, available=True)
                 self.fields['assigned_employees'].queryset = Employee.objects.filter(
-                    specialization__categories__in=categories, 
+                    Q(specialization__categories__in=categories) |
+                    Q(categories__in=categories),
                     available=True, 
                     status='active'
                 ).distinct()
@@ -501,7 +528,8 @@ class OrderEditForm(forms.ModelForm):
                 if category_ids:
                     self.fields['products'].queryset = Product.objects.filter(category__in=category_ids, available=True)
                     self.fields['assigned_employees'].queryset = Employee.objects.filter(
-                        specialization__categories__in=category_ids, 
+                        Q(specialization__categories__in=category_ids) |
+                        Q(categories__in=category_ids),
                         available=True, 
                         status='active'
                     ).distinct()

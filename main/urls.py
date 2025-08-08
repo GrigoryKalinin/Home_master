@@ -21,6 +21,7 @@ urlpatterns = [
     path('ajax/get-products-by-category/', views.get_products_by_category, name='get_products_by_category'),
     path('ajax/get-employees-by-category/', views.get_employees_by_category, name='get_employees_by_category'),
     path('ajax/get-products-by-specialization/', views.get_products_by_specialization, name='get_products_by_specialization'),
+    path('ajax/get-categories-by-specialization/', views.get_categories_by_specialization, name='get_categories_by_specialization'),
     path('ajax/get-services-by-products/', views.get_services_by_products, name='get_services_by_products'),
     path('ajax/get-products-by-categories/', views.get_products_by_categories, name='get_products_by_categories'),
     path('ajax/get-employees-by-categories/', views.get_employees_by_categories, name='get_employees_by_categories'),
