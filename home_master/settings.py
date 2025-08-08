@@ -46,7 +46,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://vm978745.cloud.nuxt.network',
     'https://vm978745.cloud.nuxt.network',
     'http://alliancemaster.ru',
-    'https://alliancemaster.ru'
+    'https://alliancemaster.ru',
     'http://www.alliancemaster.ru',   
     'https://www.alliancemaster.ru',
 ]
