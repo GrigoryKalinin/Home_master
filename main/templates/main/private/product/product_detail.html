@@ -54,7 +54,7 @@
                 {% if service.available %}Доступна{% else %}Недоступна{% endif %}
               </span>
             </div>
-            <div class="mt-auto">
+            <div class="mt-auto btn-inline-group">
               <a href="{% url 'main:service_detail' service.slug %}" class="btn btn-sm btn-outline-primary">
                 <i class="bi bi-eye"></i> Подробнее
               </a>
