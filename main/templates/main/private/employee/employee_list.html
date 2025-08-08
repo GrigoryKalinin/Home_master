@@ -47,7 +47,11 @@
             <div class="w-50 p-3 d-flex flex-column">
               <h5 class="card-title">{{ employee.first_name }} {{ employee.last_name }}</h5>
               <p class="card-text flex-grow-1">
-                {{ employee.specialization }}<br><br>
+                {% for spec in employee.specialization.all %}
+                  {{ spec.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                  Не указана
+                {% endfor %}<br><br>
                 <i class="bi bi-telephone"></i> {{ employee.phone }}<br>
                 <i class="bi bi-geo-alt"></i> {{ employee.city }}
               </p>

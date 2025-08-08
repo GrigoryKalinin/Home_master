@@ -64,7 +64,7 @@
               <div id="specializationContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
                 {% for specialization in form.specialization.field.queryset %}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}" {% if specialization in form.specialization.value %}checked{% endif %}>
+                  <input class="form-check-input" type="checkbox" name="specialization" value="{{ specialization.id }}" id="spec_{{ specialization.id }}" {% if specialization.id in form.specialization.value %}checked{% endif %}>
                   <label class="form-check-label" for="spec_{{ specialization.id }}">
                     {{ specialization.name }}
                   </label>
@@ -76,7 +76,18 @@
             <div class="mb-3">
               {{ form.categories.label_tag }}
               <div id="categoriesContainer" class="border p-3" style="max-height: 200px; overflow-y: auto;">
-                <div class="text-muted">Сначала выберите специализацию</div>
+                {% if form.categories.field.queryset %}
+                  {% for category in form.categories.field.queryset %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="categories" value="{{ category.id }}" id="cat_{{ category.id }}" {% if category.id in form.categories.value %}checked{% endif %}>
+                    <label class="form-check-label" for="cat_{{ category.id }}">
+                      {{ category.name }}
+                    </label>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-muted">Сначала выберите специализацию</div>
+                {% endif %}
               </div>
             </div>
             
@@ -86,7 +97,7 @@
                 {% if form.products.field.queryset %}
                   {% for product in form.products.field.queryset %}
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="products" value="{{ product.id }}" id="product_{{ product.id }}" {% if product in form.products.value %}checked{% endif %}>
+                    <input class="form-check-input" type="checkbox" name="products" value="{{ product.id }}" id="product_{{ product.id }}" {% if product.id in form.products.value %}checked{% endif %}>
                     <label class="form-check-label" for="product_{{ product.id }}">
                       {{ product.name }}
                     </label>
@@ -104,7 +115,7 @@
                 {% if form.services.field.queryset %}
                   {% for service in form.services.field.queryset %}
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="services" value="{{ service.id }}" id="service_{{ service.id }}" {% if service in form.services.value %}checked{% endif %}>
+                    <input class="form-check-input" type="checkbox" name="services" value="{{ service.id }}" id="service_{{ service.id }}" {% if service.id in form.services.value %}checked{% endif %}>
                     <label class="form-check-label" for="service_{{ service.id }}">
                       {{ service.name }}
                     </label>
@@ -173,18 +184,19 @@
     let selectedProducts = [];
     let selectedServices = [];
     
-    // Инициализация при редактировании
-    const checkedSpecs = specializationContainer.querySelectorAll('input[type="checkbox"]:checked');
-    if (checkedSpecs.length > 0) {
-      loadCategoriesBySpecializations();
-    }
-    
+    // Сохраняем выбранные значения при редактировании
     productsContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
       selectedProducts.push(cb.value);
     });
     servicesContainer.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
       selectedServices.push(cb.value);
     });
+    
+    // Инициализация при редактировании - если есть выбранные категории, загружаем товары
+    const checkedCategories = categoriesContainer.querySelectorAll('input[type="checkbox"]:checked');
+    if (checkedCategories.length > 0) {
+      loadProductsByCategories();
+    }
     
     function loadCategoriesBySpecializations() {
       const selectedSpecs = Array.from(specializationContainer.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
@@ -213,7 +225,7 @@
               </label>
             `;
             categoriesContainer.appendChild(div);
-          });
+          })
         });
     }
     

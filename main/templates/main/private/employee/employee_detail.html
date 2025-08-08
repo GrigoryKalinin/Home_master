@@ -27,7 +27,13 @@
             </div>
             <div class="col-md-6">
               <h6>Рабочая информация</h6>
-              <p><strong>Специализация:</strong> {{ employee.specialization }}</p>
+              <p><strong>Специализация:</strong> 
+                {% for spec in employee.specialization.all %}
+                  {{ spec.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                  Не указана
+                {% endfor %}
+              </p>
               <p><strong>Опыт работы:</strong> {{ employee.get_experience_display }}</p>
               <p><strong>Дата приема:</strong> {{ employee.date_hired|default:"Не указана" }}</p>
               {% if company_experience %}
