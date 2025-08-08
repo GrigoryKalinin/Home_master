@@ -189,8 +189,8 @@ UNFOLD = {
     "SITE_URL": "/",
     "SITE_ICON": "speed",
     "SITE_LOGO": {
-        "light": "/static/images/logo_1.png",
-        "dark": "/static/images/logo_2.png",
+        "light": "/static/images/logo_alliance.png",
+        "dark": "/static/images/logo_alliance.png",
     },
     "SITE_SYMBOL": "speed",
     "SHOW_HISTORY": True,
