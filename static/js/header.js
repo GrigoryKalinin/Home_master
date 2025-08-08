@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (this.closest('.services-dropdown') || this.closest('.user-menu-item')) {
         return;
       }
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 862) {
         menu.classList.remove('mobile-menu-open');
       }
     });
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Функция для сброса мобильного меню при изменении размера экрана
   function handleResize() {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 862) {
       menu.classList.remove('mobile-menu-open');
     }
   }

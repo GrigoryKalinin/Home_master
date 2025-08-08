@@ -153,7 +153,7 @@
     <div class="team-grid">
       <div class="team-member">
         <div class="member-photo">
-          <img src="{% static 'images/team-1.jpg' %}" alt="Алексей Иванов">
+          <img src="{% static 'images/alex.png' %}" alt="Алексей Иванов">
         </div>
         <div class="member-info">
           <h3>Алексей Иванов</h3>
@@ -167,7 +167,7 @@
       </div>
       <div class="team-member">
         <div class="member-photo">
-          <img src="{% static 'images/team-2.jpg' %}" alt="Михаил Петров">
+          <img src="{% static 'images/mihail.png' %}" alt="Михаил Петров">
         </div>
         <div class="member-info">
           <h3>Михаил Петров</h3>
@@ -181,7 +181,7 @@
       </div>
       <div class="team-member">
         <div class="member-photo">
-          <img src="{% static 'images/team-3.jpg' %}" alt="Дмитрий Сидоров">
+          <img src="{% static 'images/dima.png' %}" alt="Дмитрий Сидоров">
         </div>
         <div class="member-info">
           <h3>Дмитрий Сидоров</h3>
@@ -211,16 +211,12 @@
           <li>Постоянный поток заказов</li>
         </ul>
       </div>
-      <div class="join-actions">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#joinModal">
-          <i class="fas fa-user-plus"></i>
-          Присоединиться к команде
-        </button>
-        <a href="tel:+74951234567" class="btn btn-outline">
-          <i class="fas fa-phone"></i>
-          Позвонить HR
-        </a>
-      </div>
+    </div>
+    <div class="join-actions">
+      <a href="{% url 'main:job_application' %}" class="btn btn-secondary">
+        <i class="fas fa-info-circle"></i>
+        Узнать подробнее
+      </a>
     </div>
   </div>
 </section>
