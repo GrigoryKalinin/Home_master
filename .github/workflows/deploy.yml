@@ -1,13 +1,13 @@
 # Название нашего workflow для отображения в интерфейсе GitHub
 name: Deploy to VPS
 
-# # Указываем когда запускать - при push в main ветку
-# on:
-#   push:
-#     branches: [ master ]
-
+# Указываем когда запускать - при push в main ветку
 on:
-  workflow_dispatch:  # Ручной запуск через интерфейс GitHub
+  push:
+    branches: [ master ]
+
+# on:
+#   workflow_dispatch:  # Ручной запуск через интерфейс GitHub
 
 # Определяем задачи для выполнения 
 jobs:
