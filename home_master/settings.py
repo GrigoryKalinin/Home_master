@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     '193.37.71.16',        # новый публичный IP
     'vm978745.cloud.nuxt.network',
     'alliancemaster.ru',
+    'www.alliancemaster.ru',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -46,6 +47,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://vm978745.cloud.nuxt.network',
     'http://alliancemaster.ru',
     'https://alliancemaster.ru'
+    'http://www.alliancemaster.ru',   
+    'https://www.alliancemaster.ru',
 ]
 
 # Application definition
