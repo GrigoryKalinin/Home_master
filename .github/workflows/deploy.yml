@@ -1,10 +1,13 @@
 # Название нашего workflow для отображения в интерфейсе GitHub
 name: Deploy to VPS
 
-# Указываем когда запускать - при push в main ветку
+# # Указываем когда запускать - при push в main ветку
+# on:
+#   push:
+#     branches: [ master ]
+
 on:
-  push:
-    branches: [ master ]
+  workflow_dispatch:  # Ручной запуск через интерфейс GitHub
 
 # Определяем задачи для выполнения 
 jobs:
@@ -34,7 +37,7 @@ jobs:
             echo "${{ secrets.PASSWORD }}" | sudo -S systemctl stop home_master
             
             # Обновляем код из репозитория (с sudo и передачей пароля)
-            echo "${{ secrets.PASSWORD }}" | git pull
+            echo "${{ secrets.PASSWORD }}" | git pull origin master
             
             # Если у вас PIP
             # Активируем виртуальное окружение
@@ -46,17 +49,24 @@ jobs:
             # Если у вас Poetry (Можно определить путь до poetry which poetry)
             /home/v/.local/bin/poetry install --no-root 
 
-            # Создаём новые миграции (если есть изменения в моделях)
-            /home/v/.local/bin/poetry run python manage.py makemigrations
-
             # Миграции
             /home/v/.local/bin/poetry run python manage.py migrate
             
             # Создаем файл .env из секрета где записано все его содержимое
             echo "${{ secrets.ENV_FILE }}" > .env
 
+            # Создаем директории (медиа может уже существовать с файлами)
+            mkdir -p /home/v/Home_master/staticfiles 
+            mkdir -p /home/v/Home_master/media
+
             # Собираем статику 
             /home/v/.local/bin/poetry run python manage.py collectstatic --noinput
+
+            # Устанавливаем права (важно для существующих медиафайлов)
+            chmod 755 /home/v/Home_master/staticfiles
+            chmod 775 /home/v/Home_master/media
+            echo "${{ secrets.PASSWORD }}" | sudo -S chown -R v:www-data /home/v/Home_master/staticfiles
+            echo "${{ secrets.PASSWORD }}" | sudo -S chown -R v:www-data /home/v/Home_master/media
 
             # Перезапускаем systemd сервис (с sudo и передачей пароля)
             echo "${{ secrets.PASSWORD }}" | sudo -S systemctl start home_master
