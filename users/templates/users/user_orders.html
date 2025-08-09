@@ -13,7 +13,7 @@
         {% for order in orders %}
           <div class="order-item" style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 15px; border-left: 4px solid var(--primary-blue);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <h4 style="margin: 0; color: var(--primary-blue);">Заказ #{{ order.id }}</h4>
+              <h4 style="margin: 0; color: var(--primary-blue);">Заказ от {{ order.date_created }}</h4>
               <span style="padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;
                 {% if order.status == 'pending' %}background: #fff3cd; color: #856404;
                 {% elif order.status == 'in_progress' %}background: #d1ecf1; color: #0c5460;
