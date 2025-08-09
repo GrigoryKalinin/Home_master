@@ -43,7 +43,7 @@ def send_job_application_message(sender, instance, created, **kwargs):
     
     if created and instance.created_by_client:
 
-        url = f'https://alliancemaster.ru/dashboard/job_applications/{instance.id}/'
+        url = f'https://alliancemaster.ru/dashboard/job_application/{instance.id}/'
         date_created = instance.date_created.strftime("%d.%m.%Y %H:%M")
         message = f"""
 *Новая заявка!*
